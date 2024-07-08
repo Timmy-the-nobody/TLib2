@@ -1,0 +1,230 @@
+local PANEL = {}
+local sFADelete = TLib2.GetFAIcon("f1f8")
+
+function PANEL:Init()
+    local iScrH = ScrH()
+    local dPanel = self
+
+    self.lines = {}
+
+    self.title = self:Add("ZoneCreator:Title")
+    self.title:Dock(TOP)
+    self.title:SetText("")
+    self.title:SetVisible(false)
+
+    self.subtitle = self:Add("ZoneCreator:Subtitle")
+    self.subtitle:Dock(TOP)
+    self.subtitle:DockMargin(0, 0, 0, ZoneCreator.Padding2)
+    self.subtitle:SetText("")
+    self.subtitle:SetVisible(false)
+
+    self.header = self:Add("DPanel")
+    self.header:Dock(TOP)
+    self.header:SetTall(iScrH * 0.03)
+    self.header.Paint = nil
+
+    self.search_bar = self.header:Add("ZoneCreator:TextEntry")
+    self.search_bar:Dock(FILL)
+    self.search_bar:DockMargin(0, 0, ZoneCreator.Padding3, 0)
+
+    function self.search_bar:OnValueChange(sValue)
+        sValue = sValue:lower()
+        for _, dLine in ipairs(dPanel.lines) do
+            local bVisible = (sValue == "") and true or (dLine:GetText():lower():find(sValue) ~= nil)
+            dLine:SetVisible(bVisible)
+        end
+
+        local dList = dPanel:GetList()
+        dList:InvalidateChildren(true)
+        dList:InvalidateLayout(true)
+    end
+
+    self.button = self.header:Add("ZoneCreator:Button")
+    self.button:Dock(RIGHT)
+    self.button:SetText("")
+    self.button:SetFAIcon("f0c0", "TLib2.FA.6", true, true)
+    
+    function self.button:DoClick()
+        if (type(dPanel.OnClickButton) ~= "function") then return end
+        dPanel:OnClickButton()
+    end
+
+    self.list = self:Add("ZoneCreator:Scroll")
+    self.list:Dock(TOP)
+    self.list:DockMargin(0, ZoneCreator.Padding2, 0, 0)
+    self.list:SetTall(iScrH * 0.24)
+end
+
+function PANEL:Paint()
+end
+
+---`🔸 Client`<br>
+---Returns the header's search bar
+---@return ZoneCreator:TextEntry @The search bar
+function PANEL:GetSearchBar()
+    return self.search_bar
+end
+
+---`🔸 Client`<br>
+---Returns the header's button
+---@return ZoneCreator:Button @The button
+function PANEL:GetButton()
+    return self.button
+end
+
+---`🔸 Client`<br>
+---Returns the list
+---@return ZoneCreator:Scroll @The list
+function PANEL:GetList()
+    return self.list
+end
+
+---`🔸 Client`<br>
+---Clears the list
+function PANEL:Clear()
+    self:GetList():Clear()
+    self:InvalidateLayout()
+
+    self.lines = {}
+    self:__OnLinesUpdate()
+end
+
+---`🔸 Client`<br>
+---Sets the title
+---@param sTitle string @The title
+function PANEL:SetTitle(sTitle)
+    self.title:SetText(sTitle)
+    self.title:SetVisible(true)
+
+    if not self.subtitle:IsVisible() then
+        self.title:DockMargin(0, 0, 0, ZoneCreator.Padding2)
+    end
+end
+
+---`🔸 Client`<br>
+---Sets the subtitle
+---@param sSubtitle string @The subtitle
+function PANEL:SetSubtitle(sSubtitle)
+    self.subtitle:SetText(sSubtitle)
+    self.subtitle:SetVisible(true)
+
+    if self.title:IsVisible() then
+        self.title:DockMargin(0, 0, 0, 0)
+    end
+
+    self.subtitle:DockMargin(0, 0, 0, ZoneCreator.Padding2)
+end
+
+---`🔸 Client`<br>
+---Adds a line to the list
+---@param sLabel string @The label of the line
+---@param xValue any @The value of the line
+function PANEL:AddLine(sLabel, xValue)
+    local iScrH = ScrH()
+    local dPanel = self
+    local dList = self:GetList()
+    local iLine = (#self.lines + 1)
+
+    self.lines[iLine] = dList:Add("ZoneCreator:Button")
+
+    local dLine = self.lines[iLine]
+    dLine:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+    dLine:SetContentAlignment(4)
+    dLine:SetTextInset(ZoneCreator.Padding2, 0)
+    dLine:SetText(sLabel)
+    dLine:Dock(TOP)
+    dLine.value = xValue
+    dLine.index = iLine
+
+    function dLine:IsHovered()
+        local dHovered = vgui.GetHoveredPanel()
+        if not dHovered then return false end
+        if (dHovered == self) then return true end
+        return self:IsChildHovered(false)
+    end
+
+    function dLine:Paint(iW, iH)
+        if not self:IsHovered() then return end
+        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, ZoneCreator.Cfg.Colors.Base1)
+    end
+
+    function dLine:DoClick()
+        dList:ScrollToChild(self)
+    end
+
+    local dDelete = dLine:Add("DButton")
+    dDelete:Dock(RIGHT)
+    dDelete:SetText("")
+    dDelete:SetWide(dLine:GetTall())
+
+    function dDelete:Paint(iW, iH)
+        draw.SimpleText(sFADelete, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), self:IsHovered() and ZoneCreator.Cfg.Colors.Warn or ZoneCreator.Cfg.Colors.Base3, 1, 1)
+    end
+
+    function dDelete:DoClick()
+        if (type(dPanel.OnClickRemove) == "function") then
+            local bRemove = dPanel:OnClickRemove(dLine, iLine, xValue)
+            if (bRemove == false) then return end
+        end
+        dPanel:RemoveLine(iLine)
+    end
+
+    self:__OnLinesUpdate()
+
+    return dLine, iLine
+end
+
+---`🔸 Client`<br>
+---Removes a line by index
+---@param iIndex number @Index of the line
+function PANEL:RemoveLine(iIndex)
+    if not self.lines[iIndex] then return end
+    if not self.lines[iIndex]:IsValid() then return end
+
+    self.lines[iIndex]:Remove()
+    self.lines[iIndex] = nil
+
+    for k, v in pairs(self.lines) do
+        if (v.index ~= k) then
+            self.lines[k] = v
+            v.index = k
+        end
+    end
+
+    self.list:InvalidateLayout()
+    self:__OnLinesUpdate()
+end
+
+---`🔸 Client`<br>
+---Called when the lines of the list are updated, used internally
+---@private
+function PANEL:__OnLinesUpdate()
+    if (#self.lines == 0) then
+        self:GetList():SetBackgroundInfo(ZoneCreator:I18n("generic.empty_list"), TLib2.GetFAIcon("f071"))
+    else
+        self:GetList():SetBackgroundInfo()
+    end
+end
+
+---`🔸 Client`<br>
+---Returns a line by index
+---@param iIndex number @Index of the line
+---@return ZoneCreator:Button? @The line panel
+function PANEL:GetLine(iIndex)
+    return self.lines[iIndex]
+end
+
+---`🔸 Client`<br>
+---Called when the button of the header is clicked
+function PANEL:OnClickButton()
+end
+
+---`🔸 Client`<br>
+---Called when the remove button of a line is clicked
+---@param dLine ZoneCreator:Button @The line panel
+---@param iLine number @Index of the line
+---@param xValue any @Value of the line
+function PANEL:OnClickRemove(dLine, iLine, xValue)
+end
+
+vgui.Register("ZoneCreator:List", PANEL, "DPanel")

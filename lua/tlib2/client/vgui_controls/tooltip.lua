@@ -1,0 +1,59 @@
+local PANEL = {}
+
+function PANEL:Init()
+    self:SetDrawOnTop(true)
+    self:SetFont("TLib2.7")
+    self:SetContentAlignment(5)
+    self:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+    self:SetWrap(true)
+    self:SetAutoStretchVertical(true)
+
+    self.padding = ZoneCreator.Padding2
+end
+
+function PANEL:SetAnchor(dPanel)
+    self.anchor = dPanel
+    
+    local dTooltip = self
+    local fnOldOnRemove = dPanel.OnRemove
+
+    function dPanel:OnRemove()
+        dTooltip:Remove()
+
+        if (type(fnOldOnRemove) == "function") then
+            fnOldOnRemove(self)
+        end
+    end
+end
+
+function PANEL:Paint(iW, iH)
+    local bOldDisableClipping = DisableClipping(true)
+
+    local iBoxW, iBoxH = (iW + self.padding), (iH + self.padding)
+    local iBoxX, iBoxY = (iW - iBoxW) * 0.5, (iH - iBoxH) * 0.5
+
+    draw.RoundedBox(TLib2.BorderRadius, iBoxX, iBoxY, iBoxW, iBoxH, ZoneCreator.Cfg.Colors.Base2)
+    draw.RoundedBox(TLib2.BorderRadius - 2, iBoxX + 1, iBoxY + 1, iBoxW - 2, iBoxH - 2, ZoneCreator.Cfg.Colors.Base0)
+
+    DisableClipping(bOldDisableClipping)
+end
+
+function PANEL:PerformLayout(iW, iH)
+    surface.SetFont(self:GetFont())
+    local iTextW, iTextH = surface.GetTextSize(self:GetText())
+
+    if (iTextW > (ScrH() * 0.2)) then
+        self:SetWide(ScrH() * 0.2)
+    else
+        self:SetWide(iTextW)
+    end
+
+    if not self.anchor or not self.anchor:IsValid() then return end
+
+    local iX, iY = self.anchor:LocalToScreen(0, 0)
+    iX = iX + (self.anchor:GetWide() * 0.5)
+
+    self:SetPos(iX - (self:GetWide() * 0.5), iY - self:GetTall() - (ZoneCreator.Padding3 * 2))
+end
+
+vgui.Register("ZoneCreator:Tooltip", PANEL, "DLabel")
