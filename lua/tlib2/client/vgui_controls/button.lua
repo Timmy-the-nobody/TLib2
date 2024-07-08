@@ -5,16 +5,16 @@ local surface = surface
 
 function PANEL:Init()
     self:SetFont("TLib2.6")
-    self:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+    self:SetTextColor(TLib2.Colors.Base4)
     self:SetCursor("hand")
     self:SizeToContentsY()
     self:SetTall(ScrH() * 0.03)
 
-    self.bg_color = ZoneCreator.Cfg.Colors.Base1
-    self.outline_color = ZoneCreator.Cfg.Colors.Base2
+    self.bg_color = TLib2.Colors.Base1
+    self.outline_color = TLib2.Colors.Base2
 
-    self.bg_color_hover = ZoneCreator.Cfg.Colors.Base2
-    self.outline_color_hover = ZoneCreator.Cfg.Colors.Base3
+    self.bg_color_hover = TLib2.Colors.Base2
+    self.outline_color_hover = TLib2.Colors.Base3
 end
 
 function PANEL:SetBackgroundColor(tCol)
@@ -48,13 +48,13 @@ function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)
     local iFAIconW, iFAIconH = surface.GetTextSize(self.fa_icon)
     local iTextW, iTextH = self:GetTextSize()
 
-    self:SetWide(iTextW + iFAIconW + (ZoneCreator.Padding2 * 2.5))
+    self:SetWide(iTextW + iFAIconW + (TLib2.Padding3 * 2.5))
 
     self:SetContentAlignment(4)
     if self.fa_align_right then
-        self:SetTextInset(ZoneCreator.Padding2, 0)
+        self:SetTextInset(TLib2.Padding3, 0)
     else
-        self:SetTextInset(iFAIconW + (ZoneCreator.Padding2 * 1.5), 0)
+        self:SetTextInset(iFAIconW + (TLib2.Padding3 * 1.5), 0)
     end
 end
 
@@ -91,4 +91,4 @@ function PANEL:Paint(iW, iH)
     end
 end
 
-vgui.Register("ZoneCreator:Button", PANEL, "DButton")
+vgui.Register("TLib2:Button", PANEL, "DButton")

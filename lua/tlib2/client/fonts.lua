@@ -45,10 +45,10 @@ local function handleScreenSizeChange()
 
     TLib2.BorderRadius = math.Round(iH * 0.006)
 
-    tPadding[1] = math.Round(iH * 0.06)
-    tPadding[2] = math.Round(iH * 0.03)
-    tPadding[3] = math.Round(iH * 0.01)
-    tPadding[4] = math.Round(iH * 0.005)
+    TLib2.Padding1 = math.Round(iH * 0.06)
+    TLib2.Padding2 = math.Round(iH * 0.03)
+    TLib2.Padding3 = math.Round(iH * 0.01)
+    TLib2.Padding4 = math.Round(iH * 0.005)
 end
 
 handleScreenSizeChange()

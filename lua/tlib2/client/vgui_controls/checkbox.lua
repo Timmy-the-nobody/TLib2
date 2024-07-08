@@ -12,7 +12,7 @@ function PANEL:Init()
     self.Button.check_approach = 0
 
     self.Label:SetFont("TLib2.6")
-    self.Label:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+    self.Label:SetTextColor(TLib2.Colors.Base4)
     self.Label:SetCursor("hand")
 
     function self.Button:Paint(iW, iH)
@@ -21,19 +21,19 @@ function PANEL:Init()
         self.check_approach = math.Approach(self.check_approach, bChecked and 1 or 0, RealFrameTime() * 4)
 
         if (self.check_approach ~= 1) then
-            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, ZoneCreator.Cfg.Colors.Base3)
-            draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, ZoneCreator.Cfg.Colors.Base1)
+            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base3)
+            draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base1)
         end
 
         if bChecked then
-            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, ZoneCreator.Cfg.Colors.Accent)
+            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Accent)
         end
 
         if (self.check_approach > 0) then
             local iX, iY = self:LocalToScreen(0, 0)
 
             render.SetScissorRect(iX, iY, iX + (iW * self.check_approach), (iY + iH), true)
-                draw.SimpleText(sFACheck, "TLib2.FA.7", (iW * 0.5), (iH * 0.5), ZoneCreator.Cfg.Colors.Base4, 1, 1)
+                draw.SimpleText(sFACheck, "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base4, 1, 1)
             render.SetScissorRect(0, 0, 0, 0, false)
         end
     end
@@ -53,7 +53,7 @@ function PANEL:SetDescription(sText)
     if not self.Description then
         self.Description = self:Add("DLabel")
         self.Description:SetFont("TLib2.7")
-        self.Description:SetTextColor(ZoneCreator.Cfg.Colors.Base3)
+        self.Description:SetTextColor(TLib2.Colors.Base3)
         self.Description:SetTall(ScrH() * 0.03)
         self.Description:SetContentAlignment(7)
         self.Description:SetCursor("hand")
@@ -71,13 +71,13 @@ function PANEL:PerformLayout(iW, iH)
 	self.Button:SetPos(0, 0)
 
 	self.Label:SizeToContents()
-	self.Label:SetPos(self.Button:GetWide() + ZoneCreator.Padding2, math.floor((self.Button:GetTall() - self.Label:GetTall()) * 0.5))
+	self.Label:SetPos(self.Button:GetWide() + TLib2.Padding3, math.floor((self.Button:GetTall() - self.Label:GetTall()) * 0.5))
 
     local iTall = math.max(self.Button:GetTall(), self.Label:GetTall())
 
     if self.Description and self.Description:IsValid() then
         self.Description:SetWide(iW)
-        self.Description:SetPos(self.Button:GetWide() + ZoneCreator.Padding2, iTall)
+        self.Description:SetPos(self.Button:GetWide() + TLib2.Padding3, iTall)
         self.Description:InvalidateLayout(true)
 
         iTall = (iTall + self.Description:GetTall())
@@ -86,4 +86,4 @@ function PANEL:PerformLayout(iW, iH)
     self:SetTall(iTall)
 end
 
-vgui.Register("ZoneCreator:Checkbox", PANEL, "DCheckBoxLabel")
+vgui.Register("TLib2:Checkbox", PANEL, "DCheckBoxLabel")

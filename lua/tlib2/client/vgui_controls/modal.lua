@@ -8,7 +8,7 @@ function PANEL:Init()
 
     self:SetSize(ScrH() * 0.36, 0)
     self:ShowCloseButton(false)
-    self:DockPadding(ZoneCreator.Padding1, ZoneCreator.Padding1, ZoneCreator.Padding1, ZoneCreator.Padding1)
+    self:DockPadding(TLib2.Padding2, TLib2.Padding2, TLib2.Padding2, TLib2.Padding2)
     self:Center()
     self:SetAlpha(0)
     self:AlphaTo(255, 0.5, 0.1)
@@ -26,8 +26,8 @@ function PANEL:Init()
     self.title:SetFont("TLib2.4")
     self.title:SetWrap(true)
     self.title:SetAutoStretchVertical(true)
-    self.title:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
-    self.title:DockMargin(0, 0, 0, ZoneCreator.Padding2)
+    self.title:SetTextColor(TLib2.Colors.Base4)
+    self.title:DockMargin(0, 0, 0, TLib2.Padding3)
 
     self.subtitle = self:Add("DLabel")
     self.subtitle:Dock(TOP)
@@ -35,8 +35,8 @@ function PANEL:Init()
     self.subtitle:SetText("")
     self.subtitle:SetWrap(true)
     self.subtitle:SetAutoStretchVertical(true)
-    self.subtitle:SetTextColor(ZoneCreator.Cfg.Colors.Base3)
-    self.subtitle:DockMargin(0, 0, 0, ZoneCreator.Padding2)
+    self.subtitle:SetTextColor(TLib2.Colors.Base3)
+    self.subtitle:DockMargin(0, 0, 0, TLib2.Padding3)
 
     self.content_container = self:Add("DPanel")
     self.content_container:Dock(TOP)
@@ -72,15 +72,17 @@ function PANEL:SetShowCloseButton(bShowCloseButton)
 
     if self.close_button and self.close_button:IsValid() then return end
 
-    self.close_button_container:DockMargin(0, 0, 0, ZoneCreator.Padding2)
-    self.close_button = self.close_button_container:Add("ZoneCreator:Button")
+    self.close_button_container:DockMargin(0, 0, 0, TLib2.Padding3)
+
+    self.close_button = self.close_button_container:Add("TLib2:Button")
     self.close_button:Dock(RIGHT)
     self.close_button:DockMargin(0, 0, 0, 0)
     self.close_button:SetFont("TLib2.6")
-    self.close_button:SetText(ZoneCreator:I18n("generic.close"))
+    self.close_button:SetText("")
     self.close_button:SetTall(ScrH() * 0.024)
     self.close_button:SetFAIcon("f00d", "TLib2.FA.6", true)
-    self.close_button:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+    self.close_button:SetTextColor(TLib2.Colors.Base4)
+    self.close_button:SetWide(self.close_button:GetTall())
 
     local dModal = self
     function self.close_button:DoClick()
@@ -91,8 +93,8 @@ end
 function PANEL:Paint(iW, iH)
     Derma_DrawBackgroundBlur(self, self.startTime)
 
-    draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, ZoneCreator.Cfg.Colors.Base2)
-    draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, ZoneCreator.Cfg.Colors.Base0)
+    draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
+    draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base0)
 end
 
 function PANEL:PerformLayout(iW, iH)
@@ -117,17 +119,17 @@ function PANEL:PerformLayout(iW, iH)
 end
 
 function PANEL:AddSeparator()
-    local dSeparator = self.content_container:Add("ZoneCreator:Separator")
-    dSeparator:DockMargin(0, ZoneCreator.Padding2, 0, ZoneCreator.Padding2)
+    local dSeparator = self.content_container:Add("TLib2:Separator")
+    dSeparator:DockMargin(0, TLib2.Padding3, 0, TLib2.Padding3)
 
     return dSeparator
 end
 
 function PANEL:AddButton(sLabel, fnCallback)
     local dModal = self
-    local dBtn = self.content_container:Add("ZoneCreator:Button")
+    local dBtn = self.content_container:Add("TLib2:Button")
     dBtn:Dock(TOP)
-    dBtn:DockMargin(0, ZoneCreator.Padding2, 0, 0)
+    dBtn:DockMargin(0, TLib2.Padding3, 0, 0)
     dBtn:SetText(sLabel)
 
     function dBtn:DoClick()
@@ -142,17 +144,17 @@ function PANEL:AddButton(sLabel, fnCallback)
 end
 
 function PANEL:AddTextEntry()
-    local dTextEntry = self.content_container:Add("ZoneCreator:TextEntry")
+    local dTextEntry = self.content_container:Add("TLib2:TextEntry")
     dTextEntry:Dock(TOP)
-    dTextEntry:DockMargin(0, ZoneCreator.Padding2, 0, 0)
+    dTextEntry:DockMargin(0, TLib2.Padding3, 0, 0)
     dTextEntry:SetTall(ScrH() * 0.03)
 
     return dTextEntry
 end
 
-vgui.Register("ZoneCreator:Modal", PANEL, "DFrame")
+vgui.Register("TLib2:Modal", PANEL, "DFrame")
 
--- local modal = vgui.Create("ZoneCreator:Modal")
+-- local modal = vgui.Create("TLib2:Modal")
 -- modal:SetShowCloseButton(true)
 -- modal:SetTitle("Delete zone?")
 -- modal:SetSubtitle("Are you sure you want to delte this zone? This Action cannot be undone.")

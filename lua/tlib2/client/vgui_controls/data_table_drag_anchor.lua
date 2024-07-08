@@ -27,8 +27,8 @@ function PANEL:__SetDragOver(dOver)
 
     self.drag_over = dOver
     if dOver.separator and dOver.separator:IsValid() then
-        dOver.separator:SetBackgroundColor(ZoneCreator.Cfg.Colors.Accent)
-        dOver.separator:SetTall(ZoneCreator.Padding3)
+        dOver.separator:SetBackgroundColor(TLib2.Colors.Accent)
+        dOver.separator:SetTall(TLib2.Padding4)
     end
 end
 
@@ -36,7 +36,7 @@ function PANEL:__ClearDragOver()
     if not self.drag_over then return end
 
     if self.drag_over:IsValid() and self.drag_over.separator and self.drag_over.separator:IsValid() then
-        self.drag_over.separator:SetBackgroundColor(ZoneCreator.Cfg.Colors.Base1)
+        self.drag_over.separator:SetBackgroundColor(TLib2.Colors.Base1)
         self.drag_over.separator:SetTall(0)
     end
 
@@ -50,18 +50,18 @@ end
 
 function PANEL:Paint(iW, iH)
     if self.dragging then
-        draw.SimpleText(sFADrag, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), ZoneCreator.Cfg.Colors.Accent, 1, 1)
+        draw.SimpleText(sFADrag, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
         return
     end
 
     if not self:GetParent():IsHovered() then return end
 
-    draw.SimpleText(sFADrag, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), self:IsHovered() and ZoneCreator.Cfg.Colors.Base4 or ZoneCreator.Cfg.Colors.Base3, 1, 1)
+    draw.SimpleText(sFADrag, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base3, 1, 1)
 end
 
 function PANEL:StopDrag(bShouldDrop)
-    hook.Remove("PlayerButtonUp", "ZoneCreator:DataTable:PlayerButtonUp")
-    hook.Remove("DrawOverlay", "ZoneCreator:DataTable:DrawOverlay")
+    hook.Remove("PlayerButtonUp", "TLib2:DataTable:PlayerButtonUp")
+    hook.Remove("DrawOverlay", "TLib2:DataTable:DrawOverlay")
 
     if bShouldDrop then
         local dHovered = findParentRowHoverRecursive(vgui.GetHoveredPanel())
@@ -82,7 +82,7 @@ function PANEL:OnMousePressed(iButton)
 
     self.dragging = true
 
-    hook.Add("PlayerButtonUp", "ZoneCreator:DataTable:PlayerButtonUp", function(_, iButton)
+    hook.Add("PlayerButtonUp", "TLib2:DataTable:PlayerButtonUp", function(_, iButton)
         if not IsFirstTimePredicted() then return end
         if (iButton ~= MOUSE_LEFT) then return end
         if not self:IsValid() then return end
@@ -90,10 +90,10 @@ function PANEL:OnMousePressed(iButton)
         self:StopDrag(true)
     end)
 
-    hook.Add("DrawOverlay", "ZoneCreator:DataTable:DrawOverlay", function()
+    hook.Add("DrawOverlay", "TLib2:DataTable:DrawOverlay", function()
         if not self:IsValid() then
-            hook.Remove("PlayerButtonUp", "ZoneCreator:DataTable:PlayerButtonUp")
-            hook.Remove("DrawOverlay", "ZoneCreator:DataTable:DrawOverlay")
+            hook.Remove("PlayerButtonUp", "TLib2:DataTable:PlayerButtonUp")
+            hook.Remove("DrawOverlay", "TLib2:DataTable:DrawOverlay")
             return
         end
 
@@ -116,4 +116,4 @@ function PANEL:OnMousePressed(iButton)
     end)
 end
 
-vgui.Register("ZoneCreator:DataTableDragAnchor", PANEL, "DPanel")
+vgui.Register("TLib2:DataTableDragAnchor", PANEL, "DPanel")

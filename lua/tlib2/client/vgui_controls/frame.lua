@@ -21,41 +21,41 @@ function PANEL:Init()
     self.header.last_click = 0
 
     function self.header:Paint(iW, iH)
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base1)
+        surface.SetDrawColor(TLib2.Colors.Base1)
         surface.DrawRect(0, 0, iW, iH)
 
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base0)
+        surface.SetDrawColor(TLib2.Colors.Base0)
         surface.SetMaterial(matGradD)
         surface.DrawTexturedRect(0, 0, iW, iH)
 
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base2)
+        surface.SetDrawColor(TLib2.Colors.Base2)
         surface.DrawLine(0, (iH - 1), iW, (iH - 1))
 
-        local iTitleX = ZoneCreator.Padding3
+        local iTitleX = TLib2.Padding4
         if dPanel.title_faicon then
-            draw.SimpleText(dPanel.title_faicon, "TLib2.FA.6", (iH + ZoneCreator.Padding3) * 0.5, (iH * 0.5), ZoneCreator.Cfg.Colors.Base4, 1, 1)
-            iTitleX = iH + ZoneCreator.Padding3
+            draw.SimpleText(dPanel.title_faicon, "TLib2.FA.6", (iH + TLib2.Padding4) * 0.5, (iH * 0.5), TLib2.Colors.Base4, 1, 1)
+            iTitleX = iH + TLib2.Padding4
         end
 
         if dPanel.title then
-            draw.SimpleText(dPanel.title, "TLib2.6", iTitleX, (iH * 0.5), ZoneCreator.Cfg.Colors.Base4, 0, 1)
+            draw.SimpleText(dPanel.title, "TLib2.6", iTitleX, (iH * 0.5), TLib2.Colors.Base4, 0, 1)
         end
     end
 
     function self.header:OnMousePressed(...)
         local fTime = CurTime()
         if ((fTime - self.last_click) < 0.3) then
-            ZoneCreator.Menu:ToggleExpand()
+            dPanel:ToggleExpand()
         end
         self.last_click = fTime
 
-        if ZoneCreator.Menu:IsExpanded() then return end
-        ZoneCreator.Menu:OnMousePressed(...)
+        if dPanel:IsExpanded() then return end
+        dPanel:OnMousePressed(...)
     end
 
     function self.header:OnMouseReleased(...)
-        if ZoneCreator.Menu:IsExpanded() then return end
-        ZoneCreator.Menu:OnMouseReleased(...)
+        if dPanel:IsExpanded() then return end
+        dPanel:OnMouseReleased(...)
     end
 
     self.close_btn = self.header:Add("DButton")
@@ -68,16 +68,16 @@ function PANEL:Init()
     local sCloseBtnFA = TLib2.GetFAIcon("f057")
     function self.close_btn:Paint(iW, iH)
         if self:IsHovered() then
-            surface.SetDrawColor(ZoneCreator.Cfg.Colors.Warn)
+            surface.SetDrawColor(TLib2.Colors.Warn)
             surface.DrawRect(0, 0, iW, iH)
 
-            draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), ZoneCreator.Cfg.Colors.Base4, 1, 1)
+            draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base4, 1, 1)
         else
-            draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), ZoneCreator.Cfg.Colors.Base3, 1, 1)
+            draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
         end
     end
     function self.close_btn:DoClick()
-        ZoneCreator.Menu:Remove()
+        dPanel:Remove()
     end
 
     self.expand_btn = self.header:Add("DButton")
@@ -89,16 +89,16 @@ function PANEL:Init()
     local sExpandBtnFA = TLib2.GetFAIcon("f2d0")
     function self.expand_btn:Paint(iW, iH)
         if self:IsHovered() then
-            surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base2)
+            surface.SetDrawColor(TLib2.Colors.Base2)
             surface.DrawRect(0, 0, iW, iH)
 
-            draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), ZoneCreator.Cfg.Colors.Base4, 1, 1)
+            draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base4, 1, 1)
         else
-            draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), ZoneCreator.Cfg.Colors.Base3, 1, 1)
+            draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
         end
     end
     function self.expand_btn:DoClick()
-        ZoneCreator.Menu:ToggleExpand()
+        dPanel:ToggleExpand()
     end
 end
 
@@ -148,7 +148,7 @@ function PANEL:SetAnimationTime(fTime)
 end
 
 function PANEL:Paint(iW, iH)
-    surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base0)
+    surface.SetDrawColor(TLib2.Colors.Base0)
     surface.DrawRect(0, 0, iW, iH)
 end
 
@@ -169,4 +169,4 @@ function PANEL:PerformLayout()
     end
 end
 
-vgui.Register("ZoneCreator:Frame", PANEL, "DFrame")
+vgui.Register("TLib2:Frame", PANEL, "DFrame")

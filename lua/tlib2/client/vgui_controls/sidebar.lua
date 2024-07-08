@@ -1,6 +1,6 @@
 local PANEL = {}
 
-local tGradColor = ZoneCreator.ColorManip(ZoneCreator.Cfg.Colors.Accent, 0.3, 0.25)
+local tGradColor = TLib2.ColorManip(TLib2.Colors.Accent, 0.3, 0.25)
 local matGradL = Material("vgui/gradient-l")
 
 local draw = draw
@@ -36,12 +36,12 @@ function PANEL:Init()
             "TLib2.FA.6",
             iW - (dSideBar.button_height * 0.5),
             (iH * 0.5),
-            self:IsHovered() and ZoneCreator.Cfg.Colors.Base4 or ZoneCreator.Cfg.Colors.Base3,
+            self:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base3,
             1,
             1
         )
 
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base2)
+        surface.SetDrawColor(TLib2.Colors.Base2)
         surface.DrawLine(0, (iH - 1), iW, (iH - 1))
     end
 end
@@ -68,7 +68,7 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
     dButton:SetText("")
     dButton:SetCursor("hand")
     dButton.lerp = 0
-    dButton.text_color = ZoneCreator.Cfg.Colors.Accent
+    dButton.text_color = TLib2.Colors.Accent
     dButton.offset_x = 0
 
     function dButton:Paint(iW, iH)
@@ -85,21 +85,21 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
             self.lerp = Lerp(RealFrameTime() * 16, self.lerp, 1)
 
             if bExpanded then
-                self.text_color = ZoneCreator.Cfg.Colors.Accent
+                self.text_color = TLib2.Colors.Accent
                 self.offset_x = (iScrH * 0.005)
 
-                surface.SetDrawColor(ZoneCreator.Cfg.Colors.Accent)
+                surface.SetDrawColor(TLib2.Colors.Accent)
                 surface.DrawRect(0, 0, self.offset_x, iH)
             else
-                self.text_color = ZoneCreator.Cfg.Colors.Base4
+                self.text_color = TLib2.Colors.Base4
                 self.offset_x = 0
 
-                surface.SetDrawColor(ZoneCreator.Cfg.Colors.Accent)
+                surface.SetDrawColor(TLib2.Colors.Accent)
                 surface.DrawRect(0, 0, iH, iH)
             end
         else
             self.lerp = bExpanded and Lerp(RealFrameTime() * 16, self.lerp, 0) or 0
-            self.text_color = self:IsHovered() and ZoneCreator.Cfg.Colors.Base4 or ZoneCreator.Cfg.Colors.Base3
+            self.text_color = self:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base3
             self.offset_x = 0
         end
 
@@ -107,13 +107,13 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
         local fY = (iH * 0.5)
 
         if bExpanded then
-            draw.SimpleText(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + 1 + self.offset_x, fY + 1, ZoneCreator.Cfg.Colors.Base1, 1, 1)
+            draw.SimpleText(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + 1 + self.offset_x, fY + 1, TLib2.Colors.Base1, 1, 1)
         end
 
         draw.SimpleText(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + self.offset_x, fY, self.text_color, 1, 1)
 
         if bExpanded then
-            draw.SimpleText(sLabel, "TLib2.6", fIconW + 1 + self.offset_x, fY + 1, ZoneCreator.Cfg.Colors.Base1, 0, 1)
+            draw.SimpleText(sLabel, "TLib2.6", fIconW + 1 + self.offset_x, fY + 1, TLib2.Colors.Base1, 0, 1)
             draw.SimpleText(sLabel, "TLib2.6", fIconW + self.offset_x, fY, self.text_color, 0, 1)
         end
     end
@@ -142,10 +142,10 @@ function PANEL:SetSelected(iButton)
 end    
 
 function PANEL:Paint(iW, iH)
-    surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base1)
+    surface.SetDrawColor(TLib2.Colors.Base1)
     surface.DrawRect(0, 0, iW, iH)
 
-    surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base2)
+    surface.SetDrawColor(TLib2.Colors.Base2)
     surface.DrawLine(iW - 1, 0, iW - 1, iH)
 end
 
@@ -164,4 +164,4 @@ function PANEL:ToggleExpand()
     self:SetExpanded(not self:IsExpanded())
 end
 
-vgui.Register("ZoneCreator:Sidebar", PANEL, "DPanel")
+vgui.Register("Tlib2:Sidebar", PANEL, "DPanel")

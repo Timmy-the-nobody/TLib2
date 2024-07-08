@@ -12,18 +12,18 @@ function PANEL:Init()
    
     self:SetTall(ScrH() * 0.03)
     self:SetFont("TLib2.6")
-    self:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
-    self:SetPlaceholderColor(ZoneCreator.Cfg.Colors.Base2)
+    self:SetTextColor(TLib2.Colors.Base4)
+    self:SetPlaceholderColor(TLib2.Colors.Base2)
     self:SetDrawLanguageID(false)
     self:SetPaintBackground(false)
     self:SetUpdateOnType(true)
 
-    self.outline_color = ZoneCreator.Cfg.Colors.Base2
-    self.outline_color_editing = ZoneCreator.Cfg.Colors.Accent
+    self.outline_color = TLib2.Colors.Base2
+    self.outline_color_editing = TLib2.Colors.Accent
 
-    self:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
-    self:SetCursorColor(ZoneCreator.Cfg.Colors.Accent)
-    self:SetHighlightColor(ZoneCreator.Cfg.Colors.Accent)
+    self:SetTextColor(TLib2.Colors.Base4)
+    self:SetCursorColor(TLib2.Colors.Accent)
+    self:SetHighlightColor(TLib2.Colors.Accent)
 
     self.btn_right = self:Add("DButton")
     self.btn_right:Dock(RIGHT)
@@ -34,19 +34,19 @@ function PANEL:Init()
     local iPadding = math.ceil(TLib2.BorderRadius * 0.5)
     function self.btn_right:Paint(iW, iH)
         if not dTextEntry.is_empty then
-            surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base0)
+            surface.SetDrawColor(TLib2.Colors.Base0)
             surface.SetMaterial(matGradR)
 
             surface.DrawTexturedRect(0, (iPadding * 0.5), (iW - iPadding), (iH - iPadding))
             surface.DrawTexturedRect(0, (iPadding * 0.5), (iW - iPadding), (iH - iPadding))
         end
 
-        draw.SimpleText(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5) + 2, (iH * 0.5) + 2, ZoneCreator.Cfg.Colors.Base0, 1, 1)
+        draw.SimpleText(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5) + 2, (iH * 0.5) + 2, TLib2.Colors.Base0, 1, 1)
 
         if dTextEntry.is_empty then
-            draw.SimpleText(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), ZoneCreator.Cfg.Colors.Base3, 1, 1)
+            draw.SimpleText(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
         else
-            draw.SimpleText(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), self:IsHovered() and ZoneCreator.Cfg.Colors.Warn or ZoneCreator.Cfg.Colors.Base3, 1, 1)
+            draw.SimpleText(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Warn or TLib2.Colors.Base3, 1, 1)
         end
     end
 
@@ -107,13 +107,13 @@ end
 
 function PANEL:Paint(iW, iH)
     draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, self:IsEditing() and self.outline_color_editing or self.outline_color)
-    draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, ZoneCreator.Cfg.Colors.Base0)
+    draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base0)
 
-    self:DrawTextEntryText(self.m_colText, ZoneCreator.Cfg.Colors.Base3, ZoneCreator.Cfg.Colors.Base4)
+    self:DrawTextEntryText(self.m_colText, TLib2.Colors.Base3, TLib2.Colors.Base4)
 
     if self:IsPlaceholderVisible() then
-        self:DrawTextEntryText(self.m_txtPlaceholder, ZoneCreator.Cfg.Colors.Base3, ZoneCreator.Cfg.Colors.Base4)
+        self:DrawTextEntryText(self.m_txtPlaceholder, TLib2.Colors.Base3, TLib2.Colors.Base4)
     end
 end
 
-vgui.Register("ZoneCreator:TextEntry", PANEL, "DTextEntry")
+vgui.Register("TLib2:TextEntry", PANEL, "DTextEntry")

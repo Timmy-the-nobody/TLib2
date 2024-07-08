@@ -36,26 +36,26 @@ function PANEL:AddButton(sLabel, fnOnClick)
     dButton:SetText(sLabel or "")
     dButton:SetCursor("hand")
     dButton:SetFont("TLib2.6")
-    dButton:SetTextColor(ZoneCreator.Cfg.Colors.Base3)
+    dButton:SetTextColor(TLib2.Colors.Base3)
     dButton:SetTextInset(0, -iBarH)
     dButton.lerp_select = 0
 
     function dButton:Paint(iW, iH)
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base2)
+        surface.SetDrawColor(TLib2.Colors.Base2)
         surface.DrawRect(0, (iH - iBarH), iW, iBarH)
 
         if (dNavBar:GetSelected() == iID) then
             self.lerp_select = Lerp(RealFrameTime() * 16, self.lerp_select, 1)
 
-            surface.SetDrawColor(ZoneCreator.Cfg.Colors.Accent)
+            surface.SetDrawColor(TLib2.Colors.Accent)
             surface.DrawRect((iW - (self.lerp_select * iW)) * 0.5, (iH - iBarH), self.lerp_select * iW, iBarH)
 
-            self:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+            self:SetTextColor(TLib2.Colors.Base4)
         else
             if (self.lerp_select == 0) then return end
 
             self.lerp_select = 0
-            self:SetTextColor(ZoneCreator.Cfg.Colors.Base3)
+            self:SetTextColor(TLib2.Colors.Base3)
         end
     end
 
@@ -78,5 +78,4 @@ end
 function PANEL:Paint(iW, iH)
 end
 
-
-vgui.Register("ZoneCreator:Navbar", PANEL, "DPanel")
+vgui.Register("TLib2:Navbar", PANEL, "DPanel")

@@ -20,9 +20,9 @@ function PANEL:Init()
     self.columns_container = self:Add("DPanel")
     self.columns_container:SetTall(ScrH() * 0.03)
     self.columns_container:Dock(TOP)
-    self.columns_container:DockMargin(0, 0, 0, ZoneCreator.Padding3)
+    self.columns_container:DockMargin(0, 0, 0, TLib2.Padding4)
     function self.columns_container:Paint(iW, iH)
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base2)
+        surface.SetDrawColor(TLib2.Colors.Base2)
         surface.DrawLine(0, 0, iW, 0)
         surface.DrawLine(0, (iH - 1), iW, (iH - 1))
     end
@@ -34,7 +34,7 @@ function PANEL:Init()
     dFakeAnchor.Paint = nil
     dFakeAnchor.is_empty_anchor = true
 
-    self.scroll = self:Add("ZoneCreator:Scroll")
+    self.scroll = self:Add("TLib2:Scroll")
     self.scroll:Dock(FILL)
 end
 
@@ -73,8 +73,8 @@ function PANEL:AddColumn(sLabel, fnSelector, fnFormat, bSortable, fWidth)
     dColumn:SetText(string.upper(sLabel))
     dColumn:SetFont("TLib2.7")
     dColumn:SetContentAlignment(4)
-    dColumn:SetTextInset(ZoneCreator.Padding2, 0)
-    dColumn:SetTextColor(ZoneCreator.Cfg.Colors.Base3)
+    dColumn:SetTextInset(TLib2.Padding3, 0)
+    dColumn:SetTextColor(TLib2.Colors.Base3)
     dColumn.hover_lerp = 0
 
     function dColumn:Paint(iW, iH)
@@ -82,11 +82,11 @@ function PANEL:AddColumn(sLabel, fnSelector, fnFormat, bSortable, fWidth)
         if (self.hover_lerp > 0.001) then
             local fGradH = math.floor(iH * self.hover_lerp)
             surface.SetMaterial(matGradDown)
-            surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base1)
+            surface.SetDrawColor(TLib2.Colors.Base1)
             surface.DrawTexturedRect(0, (iH - fGradH) - 1, iW, fGradH)
         end
 
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base2)
+        surface.SetDrawColor(TLib2.Colors.Base2)
         if (iColumn == 1) then
             surface.DrawLine(0, 0, 0, iH - 1)
         end
@@ -95,9 +95,9 @@ function PANEL:AddColumn(sLabel, fnSelector, fnFormat, bSortable, fWidth)
         if not bSortable then return end
         
         if dDataTbl.sorted_column and dDataTbl.sorted_column == iColumn then
-            draw.SimpleText(dDataTbl.columns[iColumn].sort_asc and sFADown or sFAUp, "TLib2.FA.6", iW - ZoneCreator.Padding2, (iH * 0.5), ZoneCreator.Cfg.Colors.Base3, 2, 1)
+            draw.SimpleText(dDataTbl.columns[iColumn].sort_asc and sFADown or sFAUp, "TLib2.FA.6", iW - TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base3, 2, 1)
         else
-            draw.SimpleText(dDataTbl.columns[iColumn].sort_asc and sFADown or sFAUp, "TLib2.FA.6", iW - ZoneCreator.Padding2, (iH * 0.5), ZoneCreator.Cfg.Colors.Base2, 2, 1)
+            draw.SimpleText(dDataTbl.columns[iColumn].sort_asc and sFADown or sFAUp, "TLib2.FA.6", iW - TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base2, 2, 1)
         end
     end
 
@@ -191,7 +191,7 @@ function PANEL:AddRow(xData, ...)
     dRow:Dock(TOP)
     dRow:SetTall(ScrH() * 0.07)
     dRow.is_data_table_row = true
-    dRow.bg_color = (iRow % 2 == 0) and ZoneCreator.ColorManip(ZoneCreator.Cfg.Colors.Base1, 1, 0.7) or ZoneCreator.ColorManip(ZoneCreator.Cfg.Colors.Base1, 1, 0.8)
+    dRow.bg_color = (iRow % 2 == 0) and TLib2.ColorManip(TLib2.Colors.Base1, 1, 0.7) or TLib2.ColorManip(TLib2.Colors.Base1, 1, 0.8)
     dRow.data = xData
 
     self.rows[iRow] = dRow
@@ -205,7 +205,7 @@ function PANEL:AddRow(xData, ...)
     end
 
     function dRow:Paint(iW, iH)
-        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, self:IsHovered() and ZoneCreator.Cfg.Colors.Base1 or self.bg_color)
+        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, self:IsHovered() and TLib2.Colors.Base1 or self.bg_color)
     end
 
     function dRow:OnMousePressed(iButton)
@@ -224,7 +224,7 @@ function PANEL:AddRow(xData, ...)
     end
 
     -- Drag anchor
-    dRow.drag_anchor = dRow:Add("ZoneCreator:DataTableDragAnchor")
+    dRow.drag_anchor = dRow:Add("TLib2:DataTableDragAnchor")
     dRow.drag_anchor:Dock(LEFT)
     dRow.drag_anchor:SetWide(ScrH() * fDragAnchorW)
     dRow.drag_anchor.drop_data = {
@@ -240,8 +240,8 @@ function PANEL:AddRow(xData, ...)
         dContent:SetText(tColumnContent[iColumn])
         dContent:SetFont("TLib2.6")
         dContent:SetContentAlignment(4)
-        dContent:SetTextInset(ZoneCreator.Padding2, 0)
-        dContent:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+        dContent:SetTextInset(TLib2.Padding3, 0)
+        dContent:SetTextColor(TLib2.Colors.Base4)
 
         if self.columns[iColumn] and self.columns[iColumn].format then
             self.columns[iColumn].format(dContent, self.sorted_data[iRow], iRow, iColumn)
@@ -260,24 +260,24 @@ function PANEL:AddRow(xData, ...)
             dButton:Dock(RIGHT)
             dButton:SetWide(dRow:GetTall())
             dButton:SetFont("TLib2.6")
-            dButton:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+            dButton:SetTextColor(TLib2.Colors.Base4)
             dButton:SetContentAlignment(4)
-            dButton:SetTextInset(ZoneCreator.Padding2, 0)
+            dButton:SetTextInset(TLib2.Padding3, 0)
             dButton.fa_icon = TLib2.GetFAIcon(tButton.icon)
             dButton.lerp_hover = 0
 
             function dButton:Paint(iW, iH)
                 self.lerp_hover = Lerp(RealFrameTime() * 8, self.lerp_hover, self:IsHovered() and 1 or 0)
 
-                draw.SimpleText(sFACircle, "TLib2.FA.2", (iW * 0.5), (iH * 0.5), dRow:IsHovered() and ZoneCreator.Cfg.Colors.Base0 or ZoneCreator.Cfg.Colors.Base1, 1, 1)
-                draw.SimpleText(self.fa_icon, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), ZoneCreator.Cfg.Colors.Base3, 1, 1)
+                draw.SimpleText(sFACircle, "TLib2.FA.2", (iW * 0.5), (iH * 0.5), dRow:IsHovered() and TLib2.Colors.Base0 or TLib2.Colors.Base1, 1, 1)
+                draw.SimpleText(self.fa_icon, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
 
                 if (self.lerp_hover > 0.1) then
                     local iX, iY = self:LocalToScreen(0, 0)
 
                     render.SetScissorRect(iX, iY, (iX + (iW * self.lerp_hover)), iY + iH, true)
-                        draw.SimpleText(sFACircle, "TLib2.FA.2", (iW * 0.5), (iH * 0.5),  ZoneCreator.Cfg.Colors.Base2, 1, 1)
-                        draw.SimpleText(self.fa_icon, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), ZoneCreator.Cfg.Colors.Accent, 1, 1)
+                        draw.SimpleText(sFACircle, "TLib2.FA.2", (iW * 0.5), (iH * 0.5),  TLib2.Colors.Base2, 1, 1)
+                        draw.SimpleText(self.fa_icon, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
                     render.SetScissorRect(0, 0, 0, 0, false)
                 end
             end
@@ -294,7 +294,7 @@ function PANEL:AddRow(xData, ...)
     dRow.separator = self.scroll:Add("DPanel")
     dRow.separator:Dock(TOP)
     dRow.separator:SetTall(0)
-    dRow.separator:SetBackgroundColor(ZoneCreator.Cfg.Colors.Base1)
+    dRow.separator:SetBackgroundColor(TLib2.Colors.Base1)
 
     if self.OnRowAdded then
         self:OnRowAdded(dRow, iRow, xData)
@@ -330,7 +330,7 @@ function PANEL:PerformLayout(iW, iH)
 
     if (#self.rows == 0) then
         if not self.scroll:GetBackgroundInfo() then
-            self.scroll:SetBackgroundInfo(ZoneCreator:I18n("generic.no_data_found"), TLib2.GetFAIcon("f071"))
+            self.scroll:SetBackgroundInfo("No Data Found", TLib2.GetFAIcon("f071"))
         end
     else
         if self.scroll:GetBackgroundInfo() then
@@ -343,4 +343,4 @@ function PANEL:Paint(iW, iH)
     -- draw.RoundedBox(0, 0, 0, iW, iH, Color(50, 50, 50)) -- Gray background
 end
 
-vgui.Register("ZoneCreator:DataTable", PANEL, "DPanel")
+vgui.Register("TLib2:DataTable", PANEL, "DPanel")

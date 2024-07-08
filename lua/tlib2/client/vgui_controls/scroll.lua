@@ -6,40 +6,40 @@ local matGradU = Material("vgui/gradient-u")
 local matGradD = Material("vgui/gradient-d")
 
 function PANEL:Init()
-    self.edge_gradient_color = ZoneCreator.Cfg.Colors.Base0
+    self.edge_gradient_color = TLib2.Colors.Base0
 
     local iVBarW = math.max(math.ceil(ScrH() * 0.004), 3)
 
     local dVBar = self:GetVBar()
-    dVBar:SetWide(iVBarW + ZoneCreator.Padding2)
+    dVBar:SetWide(iVBarW + TLib2.Padding3)
     dVBar:SetHideButtons(true)
     dVBar.drag_approach = 0
 
     function dVBar:Paint(iW, iH)
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base1)
+        surface.SetDrawColor(TLib2.Colors.Base1)
         surface.DrawRect((iW - iVBarW), 0, iVBarW, iH)
 
         self.drag_approach = math.Approach(self.drag_approach, self.Dragging and 1 or 0, RealFrameTime() * 4)
     end
 
     function dVBar.btnUp:Paint(iW, iH)
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base2)
+        surface.SetDrawColor(TLib2.Colors.Base2)
         surface.DrawRect((iW - iVBarW), 0, iVBarW, iH)
     end
 
     function dVBar.btnDown:Paint(iW, iH)
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base2)
+        surface.SetDrawColor(TLib2.Colors.Base2)
         surface.DrawRect((iW - iVBarW), 0, iVBarW, iH)
     end
 
     function dVBar.btnGrip:Paint(iW, iH)
-        surface.SetDrawColor(ZoneCreator.Cfg.Colors[self:IsHovered() and "Base4" or "Base3"])
+        surface.SetDrawColor(TLib2.Colors[self:IsHovered() and "Base4" or "Base3"])
         surface.DrawRect((iW - iVBarW), 0, iVBarW, iH)
 
         if (dVBar.drag_approach > 0.001) then
             local iDragBarH = (iH * dVBar.drag_approach)
 
-            surface.SetDrawColor(ZoneCreator.Cfg.Colors.Accent)
+            surface.SetDrawColor(TLib2.Colors.Accent)
             surface.DrawRect((iW - iVBarW), (iH - iDragBarH) * 0.5, iVBarW, iDragBarH)
         end
     end
@@ -64,17 +64,17 @@ function PANEL:SetBackgroundInfo(sLabel, sFAIcon)
     self.bg_info.faicon = sFAIcon
 
     if sLabel then
-        self.bg_info.markup = markup.Parse("<font=ZCR.6><colour="..tostring(ZoneCreator.Cfg.Colors.Base3)..">"..sLabel.."</colour></font>")
+        self.bg_info.markup = markup.Parse("<font=TLib2.6><colour="..tostring(TLib2.Colors.Base3)..">"..sLabel.."</colour></font>")
     end
 end
 
 function PANEL:Paint(iW, iH)
-    -- surface.SetDrawColor(ZoneCreator.Cfg.Colors.Base0)
+    -- surface.SetDrawColor(TLib2.Colors.Base0)
     -- surface.DrawRect(0, 0, iW, iH)
 
     if (self.bg_info) then
         if self.bg_info.faicon then
-            local tFACol = ((os.time() % 2) == 1) and ZoneCreator.Cfg.Colors.Base2 or ZoneCreator.Cfg.Colors.Base3
+            local tFACol = ((os.time() % 2) == 1) and TLib2.Colors.Base2 or TLib2.Colors.Base3
             draw.SimpleText(self.bg_info.faicon, "TLib2.FA.4", (iW * 0.5), (iH * 0.5) - self.bg_info.offset, tFACol, 1, 1)
         end
         if self.bg_info.markup then
@@ -118,4 +118,4 @@ end
 --     end
 -- end
 
-vgui.Register("ZoneCreator:Scroll", PANEL, "DScrollPanel")
+vgui.Register("TLib2:Scroll", PANEL, "DScrollPanel")

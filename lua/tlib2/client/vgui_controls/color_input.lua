@@ -17,9 +17,9 @@ function PANEL:Init()
 
     function self.color_box:Paint(iW, iH)
         if self:IsHovered() or dPanel:IsHovered() or dPanel.color_mixer and dPanel.color_mixer:IsValid() then
-            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, ZoneCreator.Cfg.Colors.Base4)
+            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base4)
         else
-            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, ZoneCreator.Cfg.Colors.Base3)
+            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base3)
         end
         draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, dPanel.color)
     end
@@ -61,19 +61,19 @@ function PANEL:CreateColorMixer()
     dColorMixer:SetWangs(true)
     dColorMixer:SetSize(ScrH() * 0.26, ScrH() * 0.16)
     dColorMixer:SetColor(self.color)
-    dColorMixer:DockPadding(ZoneCreator.Padding3, ZoneCreator.Padding3, ZoneCreator.Padding3, ZoneCreator.Padding3)
+    dColorMixer:DockPadding(TLib2.Padding4, TLib2.Padding4, TLib2.Padding4, TLib2.Padding4)
 
     dColorMixer.RGB:SetWidth(ScrH() * 0.02)
-    dColorMixer.RGB:DockMargin(ZoneCreator.Padding3, 0, 0, 0)
+    dColorMixer.RGB:DockMargin(TLib2.Padding4, 0, 0, 0)
 
     dColorMixer.Alpha:SetWidth(ScrH() * 0.02)
-    dColorMixer.Alpha:DockMargin(ZoneCreator.Padding3, 0, 0, 0)
+    dColorMixer.Alpha:DockMargin(TLib2.Padding4, 0, 0, 0)
 
-    dColorMixer.WangsPanel:DockMargin(ZoneCreator.Padding3, 0, 0, 0)
+    dColorMixer.WangsPanel:DockMargin(TLib2.Padding4, 0, 0, 0)
 
     function dColorMixer:Paint(iW, iH)
-        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, ZoneCreator.Cfg.Colors.Base2)
-        draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, ZoneCreator.Cfg.Colors.Base1)
+        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
+        draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base1)
     end
 
     function dColorMixer:ValueChanged(oColor)
@@ -83,26 +83,26 @@ function PANEL:CreateColorMixer()
     local tChilds = {dColorMixer.txtR, dColorMixer.txtG, dColorMixer.txtB, dColorMixer.txtA}
     for _, v in ipairs(tChilds) do
         v:SetFont("TLib2.7")
-        v:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+        v:SetTextColor(TLib2.Colors.Base4)
         v:SetTall(ScrH() * 0.02)
         v:SetDrawLanguageID(false)
         function v:Paint(iW, iH)
-            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, ZoneCreator.Cfg.Colors.Base0)
-            self:DrawTextEntryText(self.m_colText, ZoneCreator.Cfg.Colors.Base3, ZoneCreator.Cfg.Colors.Base4)
+            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base0)
+            self:DrawTextEntryText(self.m_colText, TLib2.Colors.Base3, TLib2.Colors.Base4)
         end
     end
 
     local iX, iY = self.color_box:LocalToScreen(0, 0)
-    dColorMixer:SetPos(iX + self.color_box:GetWide() + ZoneCreator.Padding2, iY)
+    dColorMixer:SetPos(iX + self.color_box:GetWide() + TLib2.Padding3, iY)
 
     if self:GetDefaultColor() then
-        local dReset = dColorMixer.WangsPanel:Add("ZoneCreator:Button")
+        local dReset = dColorMixer.WangsPanel:Add("TLib2:Button")
         dReset:SetTall(ScrH() * 0.024)
         dReset:Dock(BOTTOM)
-        dReset:DockMargin(0, ZoneCreator.Padding3, 0, 0)
+        dReset:DockMargin(0, TLib2.Padding4, 0, 0)
         dReset:SetText("")
         dReset:SetFAIcon("f2ea", "TLib2.FA.7", true, true)
-        dReset:SetBackgroundColor(ZoneCreator.Cfg.Colors.Base0)
+        dReset:SetBackgroundColor(TLib2.Colors.Base0)
 
         function dReset:DoClick()
             dPanel:SetColor(dPanel:GetDefaultColor())
@@ -136,9 +136,9 @@ function PANEL:SetLabel(sText)
 
     self.label = self:Add("DLabel")
     self.label:Dock(FILL)
-    self.label:DockMargin(ZoneCreator.Padding2, 0, 0, 0)
+    self.label:DockMargin(TLib2.Padding3, 0, 0, 0)
     self.label:SetFont("TLib2.6")
-    self.label:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+    self.label:SetTextColor(TLib2.Colors.Base4)
     self.label:SetText(sText)
 
     self:InvalidateLayout()
@@ -173,7 +173,7 @@ function PANEL:PerformLayout(iW, iH)
 
     if self.color_mixer and self.color_mixer:IsValid() then
         local iX, iY = self.color_box:LocalToScreen(0, 0)
-        self.color_mixer:SetPos(iX + self.color_box:GetWide() + ZoneCreator.Padding2, iY)
+        self.color_mixer:SetPos(iX + self.color_box:GetWide() + TLib2.Padding3, iY)
     end
 end
 
@@ -184,4 +184,4 @@ end
 function PANEL:Paint(iW, iH)
 end
 
-vgui.Register("ZoneCreator:ColorInput", PANEL, "DButton")
+vgui.Register("TLib2:ColorInput", PANEL, "DButton")

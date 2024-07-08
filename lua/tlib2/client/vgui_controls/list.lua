@@ -7,14 +7,14 @@ function PANEL:Init()
 
     self.lines = {}
 
-    self.title = self:Add("ZoneCreator:Title")
+    self.title = self:Add("TLib2:Title")
     self.title:Dock(TOP)
     self.title:SetText("")
     self.title:SetVisible(false)
 
-    self.subtitle = self:Add("ZoneCreator:Subtitle")
+    self.subtitle = self:Add("TLib2:Subtitle")
     self.subtitle:Dock(TOP)
-    self.subtitle:DockMargin(0, 0, 0, ZoneCreator.Padding2)
+    self.subtitle:DockMargin(0, 0, 0, TLib2.Padding3)
     self.subtitle:SetText("")
     self.subtitle:SetVisible(false)
 
@@ -23,9 +23,9 @@ function PANEL:Init()
     self.header:SetTall(iScrH * 0.03)
     self.header.Paint = nil
 
-    self.search_bar = self.header:Add("ZoneCreator:TextEntry")
+    self.search_bar = self.header:Add("TLib2:TextEntry")
     self.search_bar:Dock(FILL)
-    self.search_bar:DockMargin(0, 0, ZoneCreator.Padding3, 0)
+    self.search_bar:DockMargin(0, 0, TLib2.Padding4, 0)
 
     function self.search_bar:OnValueChange(sValue)
         sValue = sValue:lower()
@@ -39,7 +39,7 @@ function PANEL:Init()
         dList:InvalidateLayout(true)
     end
 
-    self.button = self.header:Add("ZoneCreator:Button")
+    self.button = self.header:Add("TLib2:Button")
     self.button:Dock(RIGHT)
     self.button:SetText("")
     self.button:SetFAIcon("f0c0", "TLib2.FA.6", true, true)
@@ -49,9 +49,9 @@ function PANEL:Init()
         dPanel:OnClickButton()
     end
 
-    self.list = self:Add("ZoneCreator:Scroll")
+    self.list = self:Add("TLib2:Scroll")
     self.list:Dock(TOP)
-    self.list:DockMargin(0, ZoneCreator.Padding2, 0, 0)
+    self.list:DockMargin(0, TLib2.Padding3, 0, 0)
     self.list:SetTall(iScrH * 0.24)
 end
 
@@ -60,21 +60,21 @@ end
 
 ---`🔸 Client`<br>
 ---Returns the header's search bar
----@return ZoneCreator:TextEntry @The search bar
+---@return TLib2:TextEntry @The search bar
 function PANEL:GetSearchBar()
     return self.search_bar
 end
 
 ---`🔸 Client`<br>
 ---Returns the header's button
----@return ZoneCreator:Button @The button
+---@return TLib2:Button @The button
 function PANEL:GetButton()
     return self.button
 end
 
 ---`🔸 Client`<br>
 ---Returns the list
----@return ZoneCreator:Scroll @The list
+---@return TLib2:Scroll @The list
 function PANEL:GetList()
     return self.list
 end
@@ -97,7 +97,7 @@ function PANEL:SetTitle(sTitle)
     self.title:SetVisible(true)
 
     if not self.subtitle:IsVisible() then
-        self.title:DockMargin(0, 0, 0, ZoneCreator.Padding2)
+        self.title:DockMargin(0, 0, 0, TLib2.Padding3)
     end
 end
 
@@ -112,7 +112,7 @@ function PANEL:SetSubtitle(sSubtitle)
         self.title:DockMargin(0, 0, 0, 0)
     end
 
-    self.subtitle:DockMargin(0, 0, 0, ZoneCreator.Padding2)
+    self.subtitle:DockMargin(0, 0, 0, TLib2.Padding3)
 end
 
 ---`🔸 Client`<br>
@@ -125,12 +125,12 @@ function PANEL:AddLine(sLabel, xValue)
     local dList = self:GetList()
     local iLine = (#self.lines + 1)
 
-    self.lines[iLine] = dList:Add("ZoneCreator:Button")
+    self.lines[iLine] = dList:Add("TLib2:Button")
 
     local dLine = self.lines[iLine]
-    dLine:SetTextColor(ZoneCreator.Cfg.Colors.Base4)
+    dLine:SetTextColor(TLib2.Colors.Base4)
     dLine:SetContentAlignment(4)
-    dLine:SetTextInset(ZoneCreator.Padding2, 0)
+    dLine:SetTextInset(TLib2.Padding3, 0)
     dLine:SetText(sLabel)
     dLine:Dock(TOP)
     dLine.value = xValue
@@ -145,7 +145,7 @@ function PANEL:AddLine(sLabel, xValue)
 
     function dLine:Paint(iW, iH)
         if not self:IsHovered() then return end
-        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, ZoneCreator.Cfg.Colors.Base1)
+        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base1)
     end
 
     function dLine:DoClick()
@@ -158,7 +158,7 @@ function PANEL:AddLine(sLabel, xValue)
     dDelete:SetWide(dLine:GetTall())
 
     function dDelete:Paint(iW, iH)
-        draw.SimpleText(sFADelete, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), self:IsHovered() and ZoneCreator.Cfg.Colors.Warn or ZoneCreator.Cfg.Colors.Base3, 1, 1)
+        draw.SimpleText(sFADelete, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Warn or TLib2.Colors.Base3, 1, 1)
     end
 
     function dDelete:DoClick()
@@ -200,7 +200,7 @@ end
 ---@private
 function PANEL:__OnLinesUpdate()
     if (#self.lines == 0) then
-        self:GetList():SetBackgroundInfo(ZoneCreator:I18n("generic.empty_list"), TLib2.GetFAIcon("f071"))
+        self:GetList():SetBackgroundInfo("Empty List", TLib2.GetFAIcon("f071"))
     else
         self:GetList():SetBackgroundInfo()
     end
@@ -209,7 +209,7 @@ end
 ---`🔸 Client`<br>
 ---Returns a line by index
 ---@param iIndex number @Index of the line
----@return ZoneCreator:Button? @The line panel
+---@return TLib2:Button? @The line panel
 function PANEL:GetLine(iIndex)
     return self.lines[iIndex]
 end
@@ -221,10 +221,10 @@ end
 
 ---`🔸 Client`<br>
 ---Called when the remove button of a line is clicked
----@param dLine ZoneCreator:Button @The line panel
+---@param dLine TLib2:Button @The line panel
 ---@param iLine number @Index of the line
 ---@param xValue any @Value of the line
 function PANEL:OnClickRemove(dLine, iLine, xValue)
 end
 
-vgui.Register("ZoneCreator:List", PANEL, "DPanel")
+vgui.Register("TLib2:List", PANEL, "DPanel")
