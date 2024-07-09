@@ -22,6 +22,10 @@ local function requireCL(sPath)
 end
 
 hook.Add("OnGamemodeLoaded", "TLib2:OnGamemodeLoaded", function()
+    -- Shared
+    ------------------------------------------------------------------
+    requireSH("tlib2/shared/utils.lua")
+
     -- Client
     ------------------------------------------------------------------
     requireCL("tlib2/client/init.lua")
@@ -38,6 +42,9 @@ hook.Add("OnGamemodeLoaded", "TLib2:OnGamemodeLoaded", function()
     requireCL("tlib2/client/vgui_controls/data_table.lua")
     requireCL("tlib2/client/vgui_controls/modal.lua")
     requireCL("tlib2/client/vgui_controls/list.lua")
+    requireCL("tlib2/client/vgui_controls/slider.lua")
+    requireCL("tlib2/client/vgui_controls/num_scratch.lua")
+    requireCL("tlib2/client/vgui_controls/num_slider.lua")
     requireCL("tlib2/client/vgui_controls/color_input.lua")
     requireCL("tlib2/client/vgui_controls/tooltip.lua")
     requireCL("tlib2/client/vgui_controls/sidebar.lua")
