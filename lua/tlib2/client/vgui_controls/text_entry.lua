@@ -105,6 +105,10 @@ function PANEL:PerformLayout(iW, iH)
     self.btn_right:SetWide(iH)
 end
 
+function PANEL:SetButtonVisible(bVisible)
+    self.btn_right:SetVisible(bVisible)
+end
+
 function PANEL:Paint(iW, iH)
     draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, self:IsEditing() and self.outline_color_editing or self.outline_color)
     draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base0)
