@@ -75,7 +75,7 @@ function PANEL:PerformLayout(iW, iH)
 
     local iTall = math.max(self.Button:GetTall(), self.Label:GetTall())
 
-    if self.Description and self.Description:IsValid() then
+    if self.Description and self.Description:IsValid() and (self.Description:GetText() ~= "") then
         self.Description:SetWide(iW)
         self.Description:SetPos(self.Button:GetWide() + TLib2.Padding3, iTall)
         self.Description:InvalidateLayout(true)
