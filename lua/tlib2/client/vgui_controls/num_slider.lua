@@ -10,7 +10,9 @@ function PANEL:Init()
     self.TextArea:SetWide(ScrH() * 0.06)
 	self.TextArea:SetNumeric(true)
     self.TextArea:SetButtonVisible(false)
-	self.TextArea.OnChange = function(_, _) self:SetValue(self.TextArea:GetText()) end
+	self.TextArea.OnChange = function()
+        self:SetValue(self.TextArea:GetText())
+    end
 
 
     if self.Slider and self.Slider:IsValid() then self.Slider:Remove() end
@@ -24,7 +26,15 @@ function PANEL:Init()
     self.Label:SetTextColor(TLib2.Colors.Base4)
 
     local sFAScratch = TLib2.GetFAIcon("f05b")
+
+    if self.Scratch and self.Scratch:IsValid() then self.Scratch:Remove() end
+    self.Scratch = self.Label:Add("TLib2:NumScratch")
+	self.Scratch:SetImageVisible(false)
+	self.Scratch:Dock(FILL)
     self.Scratch:DockMargin(0, 0, TLib2.Padding4, 0)
+	self.Scratch.OnValueChanged = function()
+        self:ValueChanged(self.Scratch:GetFloatValue())
+    end
 
     function self.Scratch:Paint(iW, iH)
         draw.RoundedBox(TLib2.BorderRadius, (iW - iH), 0, iH, iH, TLib2.Colors.Base1)
