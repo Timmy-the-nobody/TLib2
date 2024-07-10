@@ -28,7 +28,6 @@ hook.Add("OnGamemodeLoaded", "TLib2:OnGamemodeLoaded", function()
 
     -- Client
     ------------------------------------------------------------------
-    requireCL("tlib2/client/init.lua")
     requireCL("tlib2/client/fonts.lua")
     requireCL("tlib2/client/color.lua")
     requireCL("tlib2/client/utils.lua")

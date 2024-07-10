@@ -60,7 +60,6 @@ hook.Add("OnScreenSizeChanged", "TLib2:Fonts:OnScreenSizeChanged", handleScreenS
 ---Returns a character from a character unicode, used for Font Awesome icons
 ---@param sUnicode string @The character unicode
 ---@return string @The character
----
 function TLib2.GetFAIcon(sUnicode)
     return utf8.char(tonumber("0x"..sUnicode))
 end
