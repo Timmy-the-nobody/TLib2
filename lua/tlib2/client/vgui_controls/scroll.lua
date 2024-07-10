@@ -60,25 +60,21 @@ function PANEL:SetBackgroundInfo(sLabel, sFAIcon)
     end
 
     self.bg_info = {}
-    self.bg_info.offset = (ScrH() * 0.02)
     self.bg_info.faicon = sFAIcon
 
     if sLabel then
-        self.bg_info.markup = markup.Parse("<font=TLib2.6><colour="..tostring(TLib2.Colors.Base3)..">"..sLabel.."</colour></font>")
+        self.bg_info.markup = markup.Parse("<font=TLib2.7><colour="..tostring(TLib2.Colors.Base3)..">"..sLabel.."</colour></font>")
     end
 end
 
 function PANEL:Paint(iW, iH)
-    -- surface.SetDrawColor(TLib2.Colors.Base0)
-    -- surface.DrawRect(0, 0, iW, iH)
-
     if (self.bg_info) then
         if self.bg_info.faicon then
             local tFACol = ((os.time() % 2) == 1) and TLib2.Colors.Base2 or TLib2.Colors.Base3
-            draw.SimpleText(self.bg_info.faicon, "TLib2.FA.4", (iW * 0.5), (iH * 0.5) - self.bg_info.offset, tFACol, 1, 1)
+            draw.SimpleText(self.bg_info.faicon, "TLib2.FA.5", (iW * 0.5), (iH * 0.5) - TLib2.Padding3, tFACol, 1, 1)
         end
         if self.bg_info.markup then
-            self.bg_info.markup:Draw((iW * 0.5), (iH * 0.5) + self.bg_info.offset, 1, 3, iW, iH)
+            self.bg_info.markup:Draw((iW * 0.5), (iH * 0.5) + TLib2.Padding3, 1, 3, iW, iH)
         end
     end
 end

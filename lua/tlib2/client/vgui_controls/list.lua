@@ -50,7 +50,7 @@ function PANEL:Init()
     end
 
     self.list = self:Add("TLib2:Scroll")
-    self.list:Dock(TOP)
+    self.list:Dock(FILL)
     self.list:DockMargin(0, TLib2.Padding3, 0, 0)
     self.list:SetTall(iScrH * 0.24)
 end
@@ -200,7 +200,7 @@ end
 ---@private
 function PANEL:__OnLinesUpdate()
     if (#self.lines == 0) then
-        self:GetList():SetBackgroundInfo("Empty List", TLib2.GetFAIcon("f071"))
+        self:GetList():SetBackgroundInfo("Empty List", TLib2.GetFAIcon("f15b"))
     else
         self:GetList():SetBackgroundInfo()
     end
