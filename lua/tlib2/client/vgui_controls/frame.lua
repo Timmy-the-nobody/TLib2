@@ -24,13 +24,6 @@ function PANEL:Init()
         surface.SetDrawColor(TLib2.Colors.Base1)
         surface.DrawRect(0, 0, iW, iH)
 
-        surface.SetDrawColor(TLib2.Colors.Base0)
-        surface.SetMaterial(matGradD)
-        surface.DrawTexturedRect(0, 0, iW, iH)
-
-        surface.SetDrawColor(TLib2.Colors.Base2)
-        surface.DrawLine(0, (iH - 1), iW, (iH - 1))
-
         local iTitleX = TLib2.Padding4
         if dPanel.title_faicon then
             draw.SimpleText(dPanel.title_faicon, "TLib2.FA.6", (iH + TLib2.Padding4) * 0.5, (iH * 0.5), TLib2.Colors.Base4, 1, 1)
@@ -58,6 +51,11 @@ function PANEL:Init()
         dPanel:OnMouseReleased(...)
     end
 
+    self.header_line = self:Add("DPanel")
+    self.header_line:Dock(TOP)
+    self.header_line:SetTall(1)
+    self.header_line:SetBackgroundColor(TLib2.Colors.Base2)
+
     self.close_btn = self.header:Add("DButton")
     self.close_btn:Dock(RIGHT)
     self.close_btn:DockMargin((iScrH * 0.002), 0, 0, 0)
@@ -71,7 +69,8 @@ function PANEL:Init()
             surface.SetDrawColor(TLib2.Colors.Warn)
             surface.DrawRect(0, 0, iW, iH)
 
-            draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base4, 1, 1)
+            draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5) + 1, TLib2.Colors.Base0, 1, 1)
+            draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base5, 1, 1)
         else
             draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
         end
@@ -89,10 +88,11 @@ function PANEL:Init()
     local sExpandBtnFA = TLib2.GetFAIcon("f2d0")
     function self.expand_btn:Paint(iW, iH)
         if self:IsHovered() then
-            surface.SetDrawColor(TLib2.Colors.Base2)
+            surface.SetDrawColor(TLib2.Colors.Base3)
             surface.DrawRect(0, 0, iW, iH)
 
-            draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base4, 1, 1)
+            draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5) + 1, TLib2.Colors.Base0, 1, 1)
+            draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base5, 1, 1)
         else
             draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
         end
@@ -158,13 +158,13 @@ function PANEL:SetTitle(sTitle, sFAIcon)
 end
 
 function PANEL:PerformLayout()
-    if self.header and (self.header:IsValid()) then
-        self.header:SetTall(ScrH() * 0.028)
+    if self.header and self.header:IsValid() then
+        self.header:SetTall(ScrH() * 0.026)
     end
-    if self.close_btn and (self.close_btn:IsValid()) then
+    if self.close_btn and self.close_btn:IsValid() then
         self.close_btn:SetWide(self.header:GetTall())
     end
-    if self.expand_btn and (self.expand_btn:IsValid()) then
+    if self.expand_btn and self.expand_btn:IsValid() then
         self.expand_btn:SetWide(self.header:GetTall())
     end
 end
