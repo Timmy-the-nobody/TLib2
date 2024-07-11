@@ -13,7 +13,7 @@ function PANEL:Init()
     function self.Knob:Paint(iW, iH)
         draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Accent)
 
-        if self:IsHovered() or dSlider:GetDragging() then
+        if dSlider:GetDragging() then
             draw.RoundedBox(TLib2.BorderRadius - 4, 2, 2, iW - 4, iH - 4, TLib2.Colors.Base0)
         end
     end
