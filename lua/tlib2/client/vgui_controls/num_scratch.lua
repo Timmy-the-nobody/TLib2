@@ -1,5 +1,11 @@
 local PANEL = {}
 
+local surface = surface
+local draw = draw
+local math = math
+
+local matGradU = Material("vgui/gradient-u")
+
 function PANEL:DrawNotches(level, x, y, w, h, range, value, min, max)
 	local size = level * self:GetZoom()
 	if (size < 5) then return end
@@ -82,10 +88,15 @@ function PANEL:DrawScreen(x, y, w, h)
 	local value = self:GetFloatValue()
 
 	-- Background
-    draw.RoundedBox(TLib2.BorderRadius, x, y, w, h, TLib2.Colors.Base1)
+	surface.SetDrawColor(TLib2.Colors.Base0)
+    surface.DrawRect(x, y, w, h)
+
+	surface.SetDrawColor(TLib2.Colors.Base1)
+	surface.SetMaterial(matGradU)
+	surface.DrawTexturedRect(x, y, w, h )
 
 	-- Background colour block
-	surface.SetDrawColor(TLib2.Colors.Base2)
+	surface.SetDrawColor(TLib2.Colors.Base1)
 	local targetX = x + w * 0.5 - ((value - min) * self:GetZoom())
 	local targetW = range * self:GetZoom()
 	targetW = targetW - math.max(0, x - targetX)
@@ -104,15 +115,18 @@ function PANEL:DrawScreen(x, y, w, h)
 	surface.DrawLine(x + (w * 0.5), y, x + (w * 0.5), y + h)
 
 	-- Text Value
-	surface.SetFont("TLib2.5")
+	surface.SetFont("TLib2.6")
 	local str = string.Comma(self:GetTextValue())
 	local tw, th = surface.GetTextSize(str)
 
-	draw.RoundedBoxEx(TLib2.BorderRadius, x + ((w - tw) * 0.5) - (TLib2.Padding2 * 0.5), y + h - th, tw + TLib2.Padding2, th, TLib2.Colors.Base1, true, true, false, false)
+	draw.RoundedBoxEx(TLib2.BorderRadius, x + ((w - tw) * 0.5) - (TLib2.Padding2 * 0.5), y + h - th, tw + TLib2.Padding2, th, TLib2.Colors.Accent, true, true, false, false)
 
 	surface.SetTextColor(TLib2.Colors.Base4)
 	surface.SetTextPos(x + ((w - tw) * 0.5), y + h - th)
 	surface.DrawText(str)
+	
+	surface.SetDrawColor(TLib2.Colors.Base2)
+	surface.DrawOutlinedRect(x, y, w, h)
 
 	DisableClipping(wasEnabled)
 end
