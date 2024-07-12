@@ -1,5 +1,7 @@
 local PANEL = {}
 
+local draw = draw
+
 function PANEL:Init()
     local iScrH = ScrH()
     local dPanel = self

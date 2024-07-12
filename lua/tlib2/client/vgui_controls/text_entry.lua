@@ -1,6 +1,7 @@
 local PANEL = {}
 
 local draw = draw
+local surface = surface
 
 local matGradR = Material("vgui/gradient-r")
 

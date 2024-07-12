@@ -1,5 +1,7 @@
 local PANEL = {}
 
+local draw = draw
+
 function PANEL:Init()
     self:SetDrawOnTop(true)
     self:SetFont("TLib2.7")

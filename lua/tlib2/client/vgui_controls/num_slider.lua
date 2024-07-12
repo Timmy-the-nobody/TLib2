@@ -1,5 +1,7 @@
 local PANEL = {}
 
+local draw = draw
+
 function PANEL:Init()
     self:SetTall(math.max(ScrH() * 0.016, TLib2.BorderRadius))
 

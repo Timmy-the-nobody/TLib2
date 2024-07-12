@@ -1,5 +1,7 @@
 local PANEL = {}
 
+local surface = surface
+
 local matGradD = Material("vgui/gradient-d")
 
 function PANEL:Init()
