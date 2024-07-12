@@ -69,6 +69,17 @@ function TLib2.GetFAIcon(sUnicode)
     return tFAChars[sUnicode]
 end
 
+---`🔸 Client`<br>
+---Returns a character from a character unicode, used for Font Awesome icons in Paint hooks
+---@param sUnicode string @The character unicode
+---@param sFont string @The font
+---@param iX number @The X position
+---@param iY number @The Y position
+---@param tColor table @The color
+---@param iAlignX number @The X alignment
+---@param iAlignY number @The Y alignment
+---@return number @The text width
+---@return number @The text height
 function TLib2.DrawFAIcon(sUnicode, sFont, iX, iY, tColor, iAlignX, iAlignY)
     local sFA = tFAChars[sUnicode] or TLib2.GetFAIcon(sUnicode)
     return draw.SimpleText(sFA, sFont, iX, iY, tColor, iAlignX, iAlignY)
