@@ -3,8 +3,6 @@ local PANEL = {}
 local draw = draw
 local render = render
 
-local sFACheck = TLib2.GetFAIcon("f00c")
-
 function PANEL:Init()
     local dCheckBox = self
 
@@ -33,7 +31,7 @@ function PANEL:Init()
             local iX, iY = self:LocalToScreen(0, 0)
 
             render.SetScissorRect(iX, iY, iX + (iW * self.check_approach), (iY + iH), true)
-                draw.SimpleText(sFACheck, "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base4, 1, 1)
+                TLib2.DrawFAIcon("f00c", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base4, 1, 1)
             render.SetScissorRect(0, 0, 0, 0, false)
         end
     end

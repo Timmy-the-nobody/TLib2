@@ -1,5 +1,4 @@
 local PANEL = {}
-local sFADelete = TLib2.GetFAIcon("f1f8")
 
 function PANEL:Init()
     local iScrH = ScrH()
@@ -158,7 +157,7 @@ function PANEL:AddLine(sLabel, xValue)
     dDelete:SetWide(dLine:GetTall())
 
     function dDelete:Paint(iW, iH)
-        draw.SimpleText(sFADelete, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Warn or TLib2.Colors.Base3, 1, 1)
+        TLib2.DrawFAIcon("f1f8", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Warn or TLib2.Colors.Base3, 1, 1)
     end
 
     function dDelete:DoClick()
@@ -200,7 +199,7 @@ end
 ---@private
 function PANEL:__OnLinesUpdate()
     if (#self.lines == 0) then
-        self:GetList():SetBackgroundInfo("Empty List", TLib2.GetFAIcon("f15b"))
+        self:GetList():SetBackgroundInfo("Empty List", "f15b")
     else
         self:GetList():SetBackgroundInfo()
     end

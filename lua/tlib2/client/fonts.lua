@@ -3,6 +3,7 @@ local surface = surface
 
 local iBorderRadius = 0
 local tPadding = {}
+local tFAChars = {}
 
 -- Absolute size fonts
 surface.CreateFont("TLib2.Abs.1", {font = "Rajdhani Bold", size = 60, weight = 600, antialias = true})
@@ -55,11 +56,20 @@ handleScreenSizeChange()
 
 hook.Add("OnScreenSizeChanged", "TLib2:Fonts:OnScreenSizeChanged", handleScreenSizeChange)
 
-
 ---`🔸 Client`<br>
 ---Returns a character from a character unicode, used for Font Awesome icons
 ---@param sUnicode string @The character unicode
 ---@return string @The character
 function TLib2.GetFAIcon(sUnicode)
-    return utf8.char(tonumber("0x"..sUnicode))
+    if tFAChars[sUnicode] then
+        return tFAChars[sUnicode]
+    end
+
+    tFAChars[sUnicode] = utf8.char(tonumber("0x"..sUnicode))
+    return tFAChars[sUnicode]
+end
+
+function TLib2.DrawFAIcon(sUnicode, sFont, iX, iY, tColor, iAlignX, iAlignY)
+    local sFA = tFAChars[sUnicode] or TLib2.GetFAIcon(sUnicode)
+    return draw.SimpleText(sFA, sFont, iX, iY, tColor, iAlignX, iAlignY)
 end

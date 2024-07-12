@@ -41,12 +41,12 @@ function PANEL:Init()
             surface.DrawTexturedRect(0, (iPadding * 0.5), (iW - iPadding), (iH - iPadding))
         end
 
-        draw.SimpleText(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5) + 2, (iH * 0.5) + 2, TLib2.Colors.Base0, 1, 1)
+        TLib2.DrawFAIcon(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5) + 2, (iH * 0.5) + 2, TLib2.Colors.Base0, 1, 1)
 
         if dTextEntry.is_empty then
-            draw.SimpleText(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
+            TLib2.DrawFAIcon(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
         else
-            draw.SimpleText(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Warn or TLib2.Colors.Base3, 1, 1)
+            TLib2.DrawFAIcon(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Warn or TLib2.Colors.Base3, 1, 1)
         end
     end
 

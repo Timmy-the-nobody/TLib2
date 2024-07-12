@@ -1,5 +1,4 @@
 local PANEL = {}
-local sFADrag = TLib2.GetFAIcon("f58e")
 
 local function findParentRowHoverRecursive(dVGUI)
     if not dVGUI or not dVGUI:IsValid() then return end
@@ -50,13 +49,13 @@ end
 
 function PANEL:Paint(iW, iH)
     if self.dragging then
-        draw.SimpleText(sFADrag, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
+        TLib2.DrawFAIcon("f58e", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
         return
     end
 
     if not self:GetParent():IsHovered() then return end
 
-    draw.SimpleText(sFADrag, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base3, 1, 1)
+    TLib2.DrawFAIcon("f58e", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base3, 1, 1)
 end
 
 function PANEL:StopDrag(bShouldDrop)

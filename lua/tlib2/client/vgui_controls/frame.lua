@@ -26,7 +26,7 @@ function PANEL:Init()
 
         local iTitleX = TLib2.Padding4
         if dPanel.title_faicon then
-            draw.SimpleText(dPanel.title_faicon, "TLib2.FA.6", (iH + TLib2.Padding4) * 0.5, (iH * 0.5), TLib2.Colors.Base4, 1, 1)
+            TLib2.DrawFAIcon(dPanel.title_faicon, "TLib2.FA.6", (iH + TLib2.Padding4) * 0.5, (iH * 0.5), TLib2.Colors.Base4, 1, 1)
             iTitleX = iH + TLib2.Padding4
         end
 
@@ -62,17 +62,15 @@ function PANEL:Init()
     self.close_btn:SetWide(self.header:GetTall())
     self.close_btn:SetText("")
     self.close_btn:SetCursor("hand")
-
-    local sCloseBtnFA = TLib2.GetFAIcon("f057")
     function self.close_btn:Paint(iW, iH)
         if self:IsHovered() then
             surface.SetDrawColor(TLib2.Colors.Warn)
             surface.DrawRect(0, 0, iW, iH)
 
-            draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5) + 1, TLib2.Colors.Base0, 1, 1)
-            draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base5, 1, 1)
+            TLib2.DrawFAIcon("f057", "TLib2.FA.6", (iW * 0.5), (iH * 0.5) + 1, TLib2.Colors.Base0, 1, 1)
+            TLib2.DrawFAIcon("f057", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base5, 1, 1)
         else
-            draw.SimpleText(sCloseBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
+            TLib2.DrawFAIcon("f057", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
         end
     end
     function self.close_btn:DoClick()
@@ -84,17 +82,15 @@ function PANEL:Init()
     self.expand_btn:SetWide(self.header:GetTall())
     self.expand_btn:SetText("")
     self.expand_btn:SetCursor("hand")
-
-    local sExpandBtnFA = TLib2.GetFAIcon("f2d0")
     function self.expand_btn:Paint(iW, iH)
         if self:IsHovered() then
             surface.SetDrawColor(TLib2.Colors.Base3)
             surface.DrawRect(0, 0, iW, iH)
 
-            draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5) + 1, TLib2.Colors.Base0, 1, 1)
-            draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base5, 1, 1)
+            TLib2.DrawFAIcon("f2d0", "TLib2.FA.6", (iW * 0.5), (iH * 0.5) + 1, TLib2.Colors.Base0, 1, 1)
+            TLib2.DrawFAIcon("f2d0", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base5, 1, 1)
         else
-            draw.SimpleText(sExpandBtnFA, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
+            TLib2.DrawFAIcon("f2d0", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
         end
     end
     function self.expand_btn:DoClick()

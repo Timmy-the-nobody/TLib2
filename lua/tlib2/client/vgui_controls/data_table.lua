@@ -93,11 +93,12 @@ function PANEL:AddColumn(sLabel, fnSelector, fnFormat, bSortable, fWidth)
         surface.DrawLine(iW - 1, 0, iW - 1, iH - 1)
 
         if not bSortable then return end
-        
-        if dDataTbl.sorted_column and dDataTbl.sorted_column == iColumn then
-            draw.SimpleText(dDataTbl.columns[iColumn].sort_asc and sFADown or sFAUp, "TLib2.FA.6", iW - TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base3, 2, 1)
+
+        local sFA = dDataTbl.columns[iColumn].sort_asc and "f0d7" or "f0d8"
+        if dDataTbl.sorted_column and (dDataTbl.sorted_column == iColumn) then
+            TLib2.DrawFAIcon(sFA, "TLib2.FA.6", iW - TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base3, 2, 1)
         else
-            draw.SimpleText(dDataTbl.columns[iColumn].sort_asc and sFADown or sFAUp, "TLib2.FA.6", iW - TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base2, 2, 1)
+            TLib2.DrawFAIcon(sFA, "TLib2.FA.6", iW - TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base2, 2, 1)
         end
     end
 
@@ -249,8 +250,6 @@ function PANEL:AddRow(xData, ...)
     end
 
     if self.row_buttons then
-        local sFACircle = TLib2.GetFAIcon("f111")
-
         for i = 1, #self.row_buttons do
             local tButton = self.row_buttons[i]
             tButton.vgui = dRow:Add("DButton")
@@ -263,21 +262,20 @@ function PANEL:AddRow(xData, ...)
             dButton:SetTextColor(TLib2.Colors.Base4)
             dButton:SetContentAlignment(4)
             dButton:SetTextInset(TLib2.Padding3, 0)
-            dButton.fa_icon = TLib2.GetFAIcon(tButton.icon)
             dButton.lerp_hover = 0
 
             function dButton:Paint(iW, iH)
                 self.lerp_hover = Lerp(RealFrameTime() * 8, self.lerp_hover, self:IsHovered() and 1 or 0)
 
-                draw.SimpleText(sFACircle, "TLib2.FA.2", (iW * 0.5), (iH * 0.5), dRow:IsHovered() and TLib2.Colors.Base0 or TLib2.Colors.Base1, 1, 1)
-                draw.SimpleText(self.fa_icon, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
+                TLib2.DrawFAIcon("f111", "TLib2.FA.2", (iW * 0.5), (iH * 0.5), dRow:IsHovered() and TLib2.Colors.Base0 or TLib2.Colors.Base1, 1, 1)
+                TLib2.DrawFAIcon(tButton.icon, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
 
                 if (self.lerp_hover > 0.1) then
                     local iX, iY = self:LocalToScreen(0, 0)
 
                     render.SetScissorRect(iX, iY, (iX + (iW * self.lerp_hover)), iY + iH, true)
-                        draw.SimpleText(sFACircle, "TLib2.FA.2", (iW * 0.5), (iH * 0.5),  TLib2.Colors.Base2, 1, 1)
-                        draw.SimpleText(self.fa_icon, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
+                        TLib2.DrawFAIcon("f111", "TLib2.FA.2", (iW * 0.5), (iH * 0.5),  TLib2.Colors.Base2, 1, 1)
+                        TLib2.DrawFAIcon(tButton.icon, "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
                     render.SetScissorRect(0, 0, 0, 0, false)
                 end
             end
@@ -330,11 +328,11 @@ function PANEL:PerformLayout(iW, iH)
 
     if (#self.rows == 0) then
         if not self.scroll:GetBackgroundInfo() then
-            self.scroll:SetBackgroundInfo("No Data Found", TLib2.GetFAIcon("f071"))
+            self.scroll:SetBackgroundInfo("No Data Found", "f071")
         end
     else
         if self.scroll:GetBackgroundInfo() then
-            self.scroll:SetBackgroundInfo(nil, nil)
+            self.scroll:SetBackgroundInfo()
         end
     end
 end

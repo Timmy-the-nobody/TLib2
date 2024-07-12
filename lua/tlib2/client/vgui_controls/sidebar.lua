@@ -52,7 +52,7 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
     local iID = (#self.buttons + 1)
 
     sLabel = sLabel or ""
-    sFAIcon = sFAIcon or TLib2.GetFAIcon("f00d")
+    sFAIcon = sFAIcon or "f00d"
 
     self.buttons[iID] = {
         id = iID,
@@ -107,10 +107,10 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
         local fY = (iH * 0.5)
 
         if bExpanded then
-            draw.SimpleText(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + 1 + self.offset_x, fY + 1, TLib2.Colors.Base1, 1, 1)
+            TLib2.DrawFAIcon(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + 1 + self.offset_x, fY + 1, TLib2.Colors.Base1, 1, 1)
         end
 
-        draw.SimpleText(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + self.offset_x, fY, self.text_color, 1, 1)
+        TLib2.DrawFAIcon(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + self.offset_x, fY, self.text_color, 1, 1)
 
         if bExpanded then
             draw.SimpleText(sLabel, "TLib2.6", fIconW + 1 + self.offset_x, fY + 1, TLib2.Colors.Base1, 0, 1)
