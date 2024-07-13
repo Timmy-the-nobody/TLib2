@@ -1,11 +1,32 @@
 local PANEL = {}
 
 local draw = draw
+local surface = surface
 
 function PANEL:Init()
     self.options = {}
-    self.selected = nil
+    self.multi_select = false
+    self.selected_options = {}
     self.title = ""
+end
+
+function PANEL:GetMultiple()
+    return self.multi_select
+end
+
+function PANEL:SetMultiple(bMultiple)
+    self.multi_select = tobool(bMultiple)
+
+    if not self.multi_select then
+        local iFirstSelected = nil
+        for iOption, _ in pairs(self.selected_options) do
+            iFirstSelected = iOption
+            break
+        end
+        if iFirstSelected then
+            self.selected_options = {[iFirstSelected] = true}
+        end
+    end
 end
 
 function PANEL:CloseMenu()
@@ -54,15 +75,13 @@ function PANEL:OpenMenu()
     dMenuClose:Dock(RIGHT)
     dMenuClose:SetText("")
     dMenuClose:SetSize(self.menu.title:GetTall(), self.menu.title:GetTall())
-    local sCloseFA = TLib2.GetFAIcon("f00d")
     function dMenuClose:Paint(iW, iH)
-        draw.SimpleText(sCloseFA, "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors[self:IsHovered() and "Warn" or "Base3"], 1, 1)
+        TLib2.DrawFAIcon("f00d", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors[self:IsHovered() and "Warn" or "Base3"], 1, 1)
     end
     function dMenuClose:DoClick()
         dPanel:CloseMenu()
     end
 
-    local sFASelected = TLib2.GetFAIcon("f00c")
     local iOptionsCount = #self.options
 
     self.menu.scroll = self.menu:Add("TLib2:Scroll")
@@ -84,13 +103,12 @@ function PANEL:OpenMenu()
         dOption:SetOutlineHoverColor(color_transparent)
 
         function dOption:PaintOver(iW, iH)
-            if (dPanel.selected == i) then
-                draw.SimpleText(sFASelected, "TLib2.FA.7", TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base3, 0, 1)
-            end
+            if not dPanel:IsOptionSelected(i) then return end
+            TLib2.DrawFAIcon("f00c", "TLib2.FA.7", TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base3, 0, 1)
         end
 
         function dOption:DoClick()
-            dPanel:ChooseOption(i)
+            dPanel:__OnClickOption(i)
         end
     end
 
@@ -114,21 +132,62 @@ end
 function PANEL:OnSelect(iIndex, sLabel, xData)
 end
 
-function PANEL:GetSelected()
-    local iIndex = self.selected
-    return iIndex, self.options[iIndex].label, self.options[iIndex].data
+function PANEL:OnUnselect(iIndex, sLabel, xData)
 end
 
-function PANEL:ChooseOption(iIndex)
-    if not self.options[iIndex] then return end
+function PANEL:__OnClickOption(iIndex)
+    local tOption = self.options[iIndex]
+    if not tOption then return end
 
-    self.selected = iIndex
-    self:OnSelect(iIndex, self.options[iIndex].label, self.options[iIndex].data)
+    -- Multiple selection
+    if self:GetMultiple() then
+        self:SetSelectedOption(iIndex, not self:IsOptionSelected(iIndex))
+        return
+    end
 
+    -- Single selection
+    self:SetSelectedOption(iIndex, true)
     self:CloseMenu()
 end
 
-function PANEL:AddOption(sLabel, xData, bSelect)
+function PANEL:SetSelectedOption(iIndex, bSelected, bSilent)
+    if not self.options[iIndex] then return end
+
+    if bSelected then
+        if self.selected_options[iIndex] then return end
+
+        if not self:GetMultiple() then
+            for i, _ in pairs(self.selected_options) do
+                self.selected_options[i] = nil
+                if not bSilent then
+                    self:OnUnselect(i, self.options[i].label, self.options[i].data)
+                end
+            end
+        end
+
+        self.selected_options[iIndex] = true
+        if not bSilent then
+            self:OnSelect(iIndex, self.options[iIndex].label, self.options[iIndex].data)
+        end
+    else
+        if not self.selected_options[iIndex] then return end
+
+        self.selected_options[iIndex] = nil
+        if not bSilent then
+            self:OnUnselect(iIndex, self.options[iIndex].label, self.options[iIndex].data)
+        end
+    end
+end
+
+function PANEL:IsOptionSelected(iIndex)
+    return (self.selected_options[iIndex] == true)
+end
+
+function PANEL:GetSelectedOptions()
+    return self.selected_options
+end
+
+function PANEL:AddOption(sLabel, xData, bSelected)
     local iInd = (#self.options + 1)
 
     self.options[iInd] = {
@@ -136,8 +195,8 @@ function PANEL:AddOption(sLabel, xData, bSelect)
         data = xData
     }
 
-    if bSelect then
-        self:ChooseOption(iInd)
+    if bSelected then
+        self:SetSelectedOption(iInd, true, true)
     end
 
     return iInd
@@ -152,7 +211,7 @@ end
 function PANEL:PerformLayout(iW, iH)
     if not self.menu or not self.menu:IsValid() then return end
 
-    local iMinW = math.max(self.menu.title:GetWide() + (TLib2.Padding3 * 2), 50)
+    local iMinW = math.max(self.menu.title:GetWide(), 50)
     local tChildren = self.menu.scroll:GetCanvas():GetChildren()
     local iChildrenH = self.menu.title:GetTall() + (TLib2.Padding4 * 2) + 2
 
