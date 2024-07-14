@@ -21,3 +21,17 @@ function TLib2.GetUsergroupsList(bIgnoreULX, bIgnoreGExtension, bIgnoreXAdmin)
 
     return tGroups
 end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns a sequential table of all standard teams, sorted by name
+---@return table <number, table> @The list of teams
+function TLib2.GetTeamsList()
+    local tTeams = {}
+
+    for iID, tTeam in SortedPairsByMemberValue(team.GetAllTeams(), "Name") do
+        if (iID <= 0) or (iID > 1000) then continue end
+        tTeams[#tTeams + 1] = tTeam
+    end
+
+    return tTeams
+end
