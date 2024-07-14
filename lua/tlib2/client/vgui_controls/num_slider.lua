@@ -3,7 +3,7 @@ local PANEL = {}
 local draw = draw
 
 function PANEL:Init()
-    self:SetTall(math.max(ScrH() * 0.016, TLib2.BorderRadius))
+    self:SetTall(math.max(ScrH() * 0.02, TLib2.BorderRadius))
 
     if self.TextArea and self.TextArea:IsValid() then self.TextArea:Remove() end
     self.TextArea = self:Add("TLib2:TextEntry")
@@ -26,11 +26,12 @@ function PANEL:Init()
 
 	self.Label:SetFont("TLib2.6")
     self.Label:SetTextColor(TLib2.Colors.Base4)
+    self.Label:Dock(LEFT)
 
     if self.Scratch and self.Scratch:IsValid() then self.Scratch:Remove() end
-    self.Scratch = self.Label:Add("TLib2:NumScratch")
+    self.Scratch = self:Add("TLib2:NumScratch")
 	self.Scratch:SetImageVisible(false)
-	self.Scratch:Dock(FILL)
+	self.Scratch:Dock(LEFT)
     self.Scratch:DockMargin(0, 0, TLib2.Padding4, 0)
 	self.Scratch.OnValueChanged = function()
         self:ValueChanged(self.Scratch:GetFloatValue())
@@ -47,5 +48,21 @@ function PANEL:Init()
         end
     end
 end
+
+function PANEL:PerformLayout(iW, iH)
+    if self.Label and self.Label:IsValid() then
+        if (self.Label:GetText() == "") then
+            self.Label:SetVisible(false)
+        else
+            self.Label:SetVisible(true)
+            self.Label:SetWide(iW * 0.5)
+        end
+    end
+
+    if self.Scratch and self.Scratch:IsValid() then
+        self.Scratch:SetWide(iH)
+    end
+end
+
 
 vgui.Register("TLib2:NumSlider", PANEL, "DNumSlider")
