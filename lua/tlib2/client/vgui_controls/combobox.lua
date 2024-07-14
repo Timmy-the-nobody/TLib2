@@ -109,6 +109,7 @@ function PANEL:OpenMenu()
 
         function dOption:DoClick()
             dPanel:__OnClickOption(i)
+            dPanel.menu.scroll:ScrollToChild(self)
         end
     end
 
@@ -211,10 +212,11 @@ end
 function PANEL:PerformLayout(iW, iH)
     if not self.menu or not self.menu:IsValid() then return end
 
-    local iMinW = math.max(self.menu.title:GetWide(), 50)
-    local tChildren = self.menu.scroll:GetCanvas():GetChildren()
-    local iChildrenH = self.menu.title:GetTall() + (TLib2.Padding4 * 2) + 2
+    local iScrH = ScrH()
+    local iNewW = math.max(self.menu.title:GetWide(), iScrH * 0.05)
+    local iNewH = self.menu.title:GetTall() + (TLib2.Padding4 * 2) + 2
 
+    local tChildren = self.menu.scroll:GetCanvas():GetChildren()
     for i = 1, #tChildren do
         local dChild = tChildren[i]
 
@@ -223,16 +225,33 @@ function PANEL:PerformLayout(iW, iH)
         local iInsetX = dChild:GetTextInset()
 
         dChild:InvalidateLayout(true)
-        iMinW = math.max(iMinW, iTextW + iInsetX + iTextH + TLib2.Padding2)
-        iChildrenH = iChildrenH + dChild:GetTall()
+        iNewW = math.max(iNewW, iTextW + iInsetX + iTextH + TLib2.Padding2)
+        iNewH = iNewH + dChild:GetTall()
     end
 
-    local _, iMenuY = self:LocalToScreen(0, 0)
-    self.menu:SetTall(math.min(iChildrenH, ScrH() - iMenuY - (TLib2.Padding4 * 2) - TLib2.Padding2))
-    self.menu:SetWide(iMinW)
+    iNewH = math.min(iNewH, (iScrH * 0.24))
 
-    local iVPLeft, iVPTop = self:LocalToScreen(0, 0)
-    self.menu:SetPos(iVPLeft - (self.menu:GetWide() - self:GetWide()), iVPTop + self:GetTall() + TLib2.Padding4)
+    self.menu:SetSize(iNewW, iNewH)
+
+    local iX, iY = self:LocalToScreen(0, 0)
+
+    local iNewX = iX + self:GetWide() - iNewW
+    if (iNewX < TLib2.Padding4) then
+        iNewX = TLib2.Padding4
+    end
+    if (iNewX + iNewW) > (ScrW() - TLib2.Padding4) then
+        iNewX = (ScrW() - iNewW - TLib2.Padding4)
+    end
+
+    local iNewY = (iY + self:GetTall() + TLib2.Padding4)
+    if (iNewY < TLib2.Padding4) then
+        iNewY = TLib2.Padding4
+    end
+    if ((iNewY + iNewH) > (iScrH - TLib2.Padding4)) then
+        iNewY = (iY - iNewH - TLib2.Padding4)
+    end
+
+    self.menu:SetPos(iNewX, iNewY)
 end
 
 vgui.Register("TLib2:ComboBox", PANEL, "TLib2:Button")
