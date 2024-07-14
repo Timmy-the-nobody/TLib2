@@ -6,22 +6,22 @@ function PANEL:Init()
     local dSlider = self
 
     self:SetTrapInside(true)
-    self:SetTall(math.max(ScrH() * 0.016, TLib2.BorderRadius))
+    self:SetTall(math.max(ScrH() * 0.02, TLib2.BorderRadius))
 
     self.Knob:SetSize(self:GetTall(), self:GetTall())
 
     function self.Knob:Paint(iW, iH)
-        draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Accent)
-
-        if dSlider:GetDragging() then
-            draw.RoundedBox(TLib2.BorderRadius - 4, 2, 2, iW - 4, iH - 4, TLib2.Colors.Base0)
-        end
+        local bOldClipping = DisableClipping(true)
+            TLib2.DrawFAIcon("f192", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
+        DisableClipping(bOldClipping)
     end
 end
 
 function PANEL:Paint(iW, iH)
-    draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
-    draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base1)
+    local fBarH = (iH * 0.5)
+
+    draw.RoundedBox(TLib2.BorderRadius, 0, ((iH - fBarH) * 0.5) + 0, iW, fBarH, TLib2.Colors.Base2)
+    draw.RoundedBox(TLib2.BorderRadius - 2, 1, ((iH - fBarH) * 0.5) + 1, iW - 2, fBarH - 2, TLib2.Colors.Base1)
 end
 
 vgui.Register("TLib2:Slider", PANEL, "DSlider")
