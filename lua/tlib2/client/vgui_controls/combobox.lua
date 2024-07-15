@@ -130,6 +130,14 @@ function PANEL:OnRemove()
     end
 end
 
+function PANEL:OnAttemptSelect(iIndex, sLabel, xData)
+    return true
+end
+
+function PANEL:OnAttemptUnselect(iIndex, sLabel, xData)
+    return true
+end
+
 function PANEL:OnSelect(iIndex, sLabel, xData)
 end
 
@@ -157,6 +165,11 @@ function PANEL:SetSelectedOption(iIndex, bSelected, bSilent)
     if bSelected then
         if self.selected_options[iIndex] then return end
 
+        if self.OnAttemptSelect then
+            local bReturn = self:OnAttemptSelect(iIndex, self.options[iIndex].label, self.options[iIndex].data)
+            if (bReturn == false) then return end
+        end
+
         if not self:GetMultiple() then
             for i, _ in pairs(self.selected_options) do
                 self.selected_options[i] = nil
@@ -172,6 +185,11 @@ function PANEL:SetSelectedOption(iIndex, bSelected, bSilent)
         end
     else
         if not self.selected_options[iIndex] then return end
+
+        if self.OnAttemptUnselect then
+            local bReturn = self:OnAttemptUnselect(iIndex, self.options[iIndex].label, self.options[iIndex].data)
+            if (bReturn == false) then return end
+        end
 
         self.selected_options[iIndex] = nil
         if not bSilent then
