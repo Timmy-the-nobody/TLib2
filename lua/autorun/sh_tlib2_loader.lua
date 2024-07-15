@@ -1,3 +1,11 @@
+-- TODO: Put this in workshop and remove from here
+resource.AddFile("resource/fonts/fa5/fa-regular-400.ttf")
+resource.AddFile("resource/fonts/fa5/fa-brands-400.ttf")
+resource.AddFile("resource/fonts/fa5/fa-solid-900.ttf")
+resource.AddFile("resource/fonts/rajdhani-bold.ttf")
+resource.AddFile("resource/fonts/rajdhani-regular.ttf")
+-- TODO end
+
 TLib2 = TLib2 or {}
 
 local function requireSH(sPath)
