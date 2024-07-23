@@ -15,6 +15,10 @@ function PANEL:Init()
     self.TextArea:SetButtonVisible(false)
 	self.TextArea.OnChange = function()
         self:SetValue(self.TextArea:GetText())
+
+        if self.SingleValueChanged then
+            self:SingleValueChanged(self:GetValue())
+        end
     end
 
     if self.Slider and self.Slider:IsValid() then self.Slider:Remove() end
@@ -22,6 +26,15 @@ function PANEL:Init()
     self.Slider:Dock(FILL)
 	self.Slider.TranslateValues = function(_, iX, iY)
         return self:TranslateSliderValues(iX, iY)
+    end
+
+    local fnOldSliderSetDragging = self.Slider.SetDragging
+    self.Slider.SetDragging = function(_, bDragging)
+        fnOldSliderSetDragging(self.Slider, bDragging)
+
+        if not bDragging and self.SingleValueChanged then
+            self:SingleValueChanged(self:GetValue())
+        end
     end
 
 	self.Label:SetFont("TLib2.6")
@@ -37,11 +50,22 @@ function PANEL:Init()
         self:ValueChanged(self.Scratch:GetFloatValue())
     end
 
+    local fnOldMouseReleased = self.Scratch.OnMouseReleased
+    self.Scratch.OnMouseReleased = function(_, iKey)
+        fnOldMouseReleased(self.Scratch, iKey)
+
+        if self.SingleValueChanged then
+            self:SingleValueChanged(self:GetValue())
+        end
+    end
+
     function self.Scratch:Paint(iW, iH)
-        draw.RoundedBox(TLib2.BorderRadius, (iW - iH), 0, iH, iH, TLib2.Colors.Base2)
+        local bActive = self:GetActive()
+
+        draw.RoundedBox(TLib2.BorderRadius, (iW - iH), 0, iH, iH, bActive and TLib2.Colors.Accent or TLib2.Colors.Base2)
         draw.RoundedBox(TLib2.BorderRadius - 2, (iW - iH) + 1, 1, iH - 2, iH - 2, TLib2.Colors.Base1)
 
-        if self:GetActive() then
+        if bActive then
             TLib2.DrawFAIcon("f05b", "TLib2.FA.7", (iW - (iH * 0.5)), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
         else
             TLib2.DrawFAIcon("f05b", "TLib2.FA.7", (iW - (iH * 0.5)), (iH * 0.5), self:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base3, 1, 1)
