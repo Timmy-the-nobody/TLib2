@@ -35,3 +35,27 @@ function TLib2.GetTeamsList()
 
     return tTeams
 end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns the maximum value of an unsigned integer for the given bitcount
+---@param iBitCount integer @The bitcount
+---@return integer
+function TLib2.GetMaxUnsignedInteger(iBitCount)
+    return (2 ^ iBitCount) - 1
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns the minimum value of an signed integer for the given bitcount
+---@param iBitCount integer @The bitcount
+---@return integer
+function TLib2.GetMaxSignedInteger(iBitCount)
+    return (2 ^ (iBitCount - 1)) - 1
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns the minimum value of an signed integer for the given bitcount
+---@param iBitCount integer @The bitcount
+---@return integer
+function TLib2.GetMinSignedInteger(iBitCount)
+    return -(2 ^ (iBitCount - 1))
+end
