@@ -40,7 +40,7 @@ end
 ---Returns the maximum value of an unsigned integer for the given bitcount
 ---@param iBitCount integer @The bitcount
 ---@return integer
-function TLib2.GetMaxUnsignedInteger(iBitCount)
+function TLib2.GetMaxUnsignedInt(iBitCount)
     return (2 ^ iBitCount) - 1
 end
 
@@ -48,7 +48,7 @@ end
 ---Returns the minimum value of an signed integer for the given bitcount
 ---@param iBitCount integer @The bitcount
 ---@return integer
-function TLib2.GetMaxSignedInteger(iBitCount)
+function TLib2.GetMaxSignedInt(iBitCount)
     return (2 ^ (iBitCount - 1)) - 1
 end
 
@@ -56,6 +56,6 @@ end
 ---Returns the minimum value of an signed integer for the given bitcount
 ---@param iBitCount integer @The bitcount
 ---@return integer
-function TLib2.GetMinSignedInteger(iBitCount)
+function TLib2.GetMinSignedInt(iBitCount)
     return -(2 ^ (iBitCount - 1))
 end
