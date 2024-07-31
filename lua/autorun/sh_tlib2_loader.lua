@@ -29,7 +29,9 @@ local function requireCL(sPath)
     end
 end
 
-hook.Add("OnGamemodeLoaded", "TLib2:OnGamemodeLoaded", function()
+-- hook.Add("PreGamemodeLoaded", "TLib2:PreGamemodeLoaded", function()
+    print("[TLib2] Loading...")
+
     -- Shared
     ------------------------------------------------------------------
     requireSH("tlib2/shared/utils.lua")
@@ -60,4 +62,7 @@ hook.Add("OnGamemodeLoaded", "TLib2:OnGamemodeLoaded", function()
     requireCL("tlib2/client/vgui_controls/title.lua")
     requireCL("tlib2/client/vgui_controls/subtitle.lua")
     requireCL("tlib2/client/vgui_controls/separator.lua")
-end)
+
+    print("[TLib2] Loaded!")
+--     hook.Remove("PreGamemodeLoaded", "TLib2:PreGamemodeLoaded")
+-- end)
