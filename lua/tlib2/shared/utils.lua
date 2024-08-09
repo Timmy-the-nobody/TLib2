@@ -59,3 +59,57 @@ end
 function TLib2.GetMinSignedInt(iBitCount)
     return -(2 ^ (iBitCount - 1))
 end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns the money of the given player (wrapper for DarkRP, nutscript, and helix)
+---@param pPlayer Player @The player
+---@return number
+function TLib2.GetMoney(pPlayer)
+    if DarkRP then
+        return pPlayer:getDarkRPVar("money") or 0
+    end
+    if nut and pPlayer.GetMoney then
+        return pPlayer:GetMoney()
+    end
+    if ix and pPlayer.GetCharacter then
+        local eChar = pPlayer:GetCharacter()
+        if not eChar or not eChar.GetMoney then return 0 end
+        return eChar:GetMoney()
+    end
+    return 0
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Sets the money of the given player (wrapper for DarkRP, nutscript, and helix), does nothing when called on the client
+---@param pPlayer Player @The player
+---@param iMoney number @The money
+function TLib2.SetMoney(pPlayer, iMoney)
+    if CLIENT then return end
+    if DarkRP then
+        return pPlayer:setDarkRPVar("money", iMoney)
+    end
+    if nut and pPlayer.SetMoney then
+        return pPlayer:SetMoney(iMoney)
+    end
+    if ix and pPlayer.GetCharacter then
+        local eChar = pPlayer:GetCharacter()
+        if not eChar or not eChar.SetMoney then return end
+        eChar:SetMoney(iMoney)
+    end
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Adds money to the given player (wrapper for DarkRP, nutscript, and helix)
+---@param pPlayer Player @The player
+---@param iMoney number @The money
+function TLib2.AddMoney(pPlayer, iMoney)
+    if DarkRP then
+        return pPlayer:addMoney(iMoney)
+    end
+    if nut and pPlayer.GiveMoney then
+        return pPlayer:GiveMoney(iMoney)
+    end
+    if ix and pPlayer.GetCharacter then
+        return TLib2.SetMoney(pPlayer, TLib2.GetMoney(pPlayer) + iMoney)
+    end
+end
