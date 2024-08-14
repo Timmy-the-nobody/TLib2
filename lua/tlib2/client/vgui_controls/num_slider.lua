@@ -1,6 +1,7 @@
 local PANEL = {}
 
 local draw = draw
+local math = math
 
 function PANEL:Init()
     self:SetTall(math.max(ScrH() * 0.02, TLib2.BorderRadius))
@@ -35,6 +36,16 @@ function PANEL:Init()
         if not bDragging and self.SingleValueChanged then
             self:SingleValueChanged(self:GetValue())
         end
+    end
+
+    local fnOldSliderMoved = self.Slider.OnCursorMoved
+    self.Slider.OnCursorMoved = function(d, iX, iY)
+        fnOldSliderMoved(d, iX, iY)
+
+        input.SetCursorPos(d:LocalToScreen(
+            math.Clamp(iX, 0, d:GetWide()),
+            math.Clamp(iY, 0, d:GetTall()))
+        )
     end
 
 	self.Label:SetFont("TLib2.6")
