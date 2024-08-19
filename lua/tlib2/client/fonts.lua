@@ -15,13 +15,13 @@ surface.CreateFont("TLib2.Abs.6", {font = "Rajdhani Regular", size = 21, weight 
 surface.CreateFont("TLib2.Abs.7", {font = "Rajdhani Regular", size = 19, weight = 550, antialias = true})
 
 -- Absolute size icons
-surface.CreateFont("TLib2.Abs.FAS.1", {font = "Font Awesome 5 Free Solid", size = 80, antialias = true, extended = true})
-surface.CreateFont("TLib2.Abs.FAS.2", {font = "Font Awesome 5 Free Solid", size = 48, antialias = true, extended = true})
-surface.CreateFont("TLib2.Abs.FAS.3", {font = "Font Awesome 5 Free Solid", size = 32, antialias = true, extended = true})
-surface.CreateFont("TLib2.Abs.FAS.4", {font = "Font Awesome 5 Free Solid", size = 24, antialias = true, extended = true})
-surface.CreateFont("TLib2.Abs.FAS.5", {font = "Font Awesome 5 Free Solid", size = 18, antialias = true, extended = true})
-surface.CreateFont("TLib2.Abs.FAS.6", {font = "Font Awesome 5 Free Solid", size = 16, antialias = true, extended = true})
-surface.CreateFont("TLib2.Abs.FAS.7", {font = "Font Awesome 5 Free Solid", size = 14, antialias = true, extended = true})
+surface.CreateFont("TLib2.Abs.FA.1", {font = "Font Awesome 5 Free Solid", size = 80, antialias = true, extended = true})
+surface.CreateFont("TLib2.Abs.FA.2", {font = "Font Awesome 5 Free Solid", size = 48, antialias = true, extended = true})
+surface.CreateFont("TLib2.Abs.FA.3", {font = "Font Awesome 5 Free Solid", size = 32, antialias = true, extended = true})
+surface.CreateFont("TLib2.Abs.FA.4", {font = "Font Awesome 5 Free Solid", size = 24, antialias = true, extended = true})
+surface.CreateFont("TLib2.Abs.FA.5", {font = "Font Awesome 5 Free Solid", size = 18, antialias = true, extended = true})
+surface.CreateFont("TLib2.Abs.FA.6", {font = "Font Awesome 5 Free Solid", size = 16, antialias = true, extended = true})
+surface.CreateFont("TLib2.Abs.FA.7", {font = "Font Awesome 5 Free Solid", size = 14, antialias = true, extended = true})
 
 local function handleScreenSizeChange()
     local iH = ScrH()
