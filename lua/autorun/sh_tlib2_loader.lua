@@ -62,6 +62,7 @@ end
     requireCL("tlib2/client/vgui_controls/title.lua")
     requireCL("tlib2/client/vgui_controls/subtitle.lua")
     requireCL("tlib2/client/vgui_controls/separator.lua")
+    requireCL("tlib2/client/vgui_controls/infoline.lua")
 
     print("[TLib2] Loaded!")
 --     hook.Remove("PreGamemodeLoaded", "TLib2:PreGamemodeLoaded")
