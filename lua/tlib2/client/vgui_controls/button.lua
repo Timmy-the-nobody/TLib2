@@ -37,6 +37,17 @@ function PANEL:SetOutlineHoverColor(oColor)
     self.outline_color_hover = oColor
 end
 
+function PANEL:SetColorTheme(tCol)
+    if not IsColor(tCol) then return end
+
+    self:SetColor(tCol)
+    self:SetOutlineColor(tCol)
+    self:SetBackgroundColor(TLib2.ColorManip(tCol, 0.5, 0.2))
+
+    self:SetOutlineHoverColor(TLib2.ColorManip(tCol, 0.5, 0.5))
+    self:SetBackgroundHoverColor(TLib2.ColorManip(tCol, 0.5, 0.5))
+end
+
 function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)
     self.fa_icon = TLib2.GetFAIcon(sIcon)
     self.fa_icon_font = sFont or "TLib2.FA.7"
