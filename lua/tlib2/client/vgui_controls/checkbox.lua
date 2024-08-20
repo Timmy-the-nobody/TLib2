@@ -4,7 +4,7 @@ local draw = draw
 local render = render
 
 function PANEL:Init()
-    local dCheckBox = self
+    self.rtl = false
 
     self.Button:SetSize(ScrH() * 0.016, ScrH() * 0.016)
     self.Button.check_approach = 0
@@ -53,10 +53,10 @@ function PANEL:SetDescription(sText)
         self.Description:SetFont("TLib2.7")
         self.Description:SetTextColor(TLib2.Colors.Base3)
         self.Description:SetTall(ScrH() * 0.03)
-        self.Description:SetContentAlignment(7)
+        self.Description:SetContentAlignment(self:IsRTL() and 9 or 7)
         self.Description:SetCursor("hand")
         self.Description:SetMouseInputEnabled(true)
-        self.Description:SetWrap(true)
+        self.Description:SetWrap(not self:IsRTL())
         self.Description:SetAutoStretchVertical(true)
         self.Description:SetWide(ScrW() * 0.2)
         self.Description.DoClick = function() self:Toggle() end
@@ -82,6 +82,32 @@ function PANEL:PerformLayout(iW, iH)
     end
 
     self:SetTall(iTall)
+
+    if self:IsRTL() then
+        self.Button:SetX(iW - self.Button:GetWide())
+
+        self.Label:SetX(iW - self.Button:GetWide() - self.Label:GetWide() - TLib2.Padding3)
+
+        if self.Description and self.Description:IsValid() and (self.Description:GetText() ~= "") then
+            self.Description:SetX(iW - self.Button:GetWide() - self.Description:GetWide() - TLib2.Padding3)
+        end
+    end
+end
+
+function PANEL:IsRTL()
+    return self.rtl
+end
+
+function PANEL:SetRTL(bRTL)
+    bRTL = tobool(bRTL)
+    if (bRTL == self.rtl) then return end
+
+    self.rtl = bRTL
+
+    if self.Description and self.Description:IsValid() then
+        self.Description:SetContentAlignment(9)
+        self.Description:SetWrap(not bRTL)
+    end
 end
 
 vgui.Register("TLib2:Checkbox", PANEL, "DCheckBoxLabel")
