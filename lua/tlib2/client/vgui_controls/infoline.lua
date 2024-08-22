@@ -1,5 +1,3 @@
-
-
 local PANEL = {}
 
 function PANEL:Init()
@@ -11,7 +9,7 @@ function PANEL:SetContents(tContents)
 
     for _, v in ipairs(tContents) do
         local dLine = self:Add("DLabel")
-        dLine:Dock(LEFT)
+        dLine:Dock(v.dock or LEFT)
         dLine:SetFont(v.font or "TLib2.7")
         dLine:SetTextColor(v.color or "", TLib2.Colors.Base3)
         dLine:SetText(v.text or "")
@@ -32,11 +30,9 @@ function PANEL:SetContents(tContents)
         end
 
         function dLine:Paint(iW, iH)
-            if v.url then
-                if self:IsHovered() then
-                    surface.SetDrawColor(TLib2.Colors.Accent)
-                    surface.DrawLine(0, (iH - 1), iW, (iH - 1))
-                end
+            if v.url and self:IsHovered() then
+                surface.SetDrawColor(TLib2.Colors.Accent)
+                surface.DrawLine(0, (iH - 1), iW, (iH - 1))
             end
             if v.underline then
                 surface.SetDrawColor(v.underline_color or TLib2.Colors.Base2)

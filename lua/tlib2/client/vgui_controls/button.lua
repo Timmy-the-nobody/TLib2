@@ -7,7 +7,6 @@ function PANEL:Init()
     self:SetFont("TLib2.6")
     self:SetTextColor(TLib2.Colors.Base4)
     self:SetCursor("hand")
-    self:SizeToContentsY()
     self:SetTall(ScrH() * 0.03)
 
     self.bg_color = TLib2.Colors.Base1
@@ -18,10 +17,14 @@ function PANEL:Init()
 end
 
 function PANEL:SetBackgroundColor(tCol)
+    if not IsColor(oColor) then return end
+
     self.bg_color = tCol
 end
 
 function PANEL:SetBackgroundHoverColor(tCol)
+    if not IsColor(oColor) then return end
+
     self.bg_color_hover = tCol
 end
 

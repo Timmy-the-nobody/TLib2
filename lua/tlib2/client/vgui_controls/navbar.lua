@@ -111,6 +111,10 @@ function PANEL:SetSelected(iTab)
     self.selected = iTab
 end
 
+function PANEL:GetTab(iTab)
+    return self.tabs[iTab]
+end
+
 function PANEL:AddTab(sLabel, dPanel, bSelected)
     local iTab = (#self.tabs + 1)
 
@@ -124,15 +128,16 @@ function PANEL:AddTab(sLabel, dPanel, bSelected)
         button = self.tabs_container:Add("TLib2:NavbarTab")
     }
 
-    local dButton = self.tabs[iTab].button
-    dButton:Dock(LEFT)
-    dButton:SetText(sLabel or "")
-    dButton:SetIndex(iTab)
-    dButton:SetNavbar(self)
+    self.tabs[iTab].button:Dock(LEFT)
+    self.tabs[iTab].button:SetText(sLabel or "")
+    self.tabs[iTab].button:SetIndex(iTab)
+    self.tabs[iTab].button:SetNavbar(self)
 
     if not self:GetSelected() or bSelected then
         self:SetSelected(iTab)
     end
+
+    return self.tabs[iTab], iTab
 end
 
 function PANEL:PerformLayout(iW, iH)

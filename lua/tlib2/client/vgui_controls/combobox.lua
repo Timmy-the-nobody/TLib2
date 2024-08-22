@@ -88,6 +88,7 @@ function PANEL:OpenMenu()
     self.menu.scroll:Dock(FILL)
     self.menu.scroll:DockMargin(0, TLib2.Padding4, 0, TLib2.Padding4)
     self.menu.scroll:SetEdgeGradientColor(TLib2.Colors.Base1)
+    self.menu.scroll:SetMarginEnabled(false)
     self.menu.scroll.Paint = nil
 
     for i = 1, iOptionsCount do
@@ -231,7 +232,7 @@ function PANEL:PerformLayout(iW, iH)
     if not self.menu or not self.menu:IsValid() then return end
 
     local iScrH = ScrH()
-    local iNewW = math.max(self.menu.title:GetWide(), iScrH * 0.05)
+    local iNewW = math.max(self.menu.title:GetWide() + self.menu.title:GetTall(), iScrH * 0.05)
     local iNewH = self.menu.title:GetTall() + (TLib2.Padding4 * 2) + 2
 
     local tChildren = self.menu.scroll:GetCanvas():GetChildren()
@@ -247,7 +248,7 @@ function PANEL:PerformLayout(iW, iH)
         iNewH = iNewH + dChild:GetTall()
     end
 
-    iNewH = math.min(iNewH, (iScrH * 0.24))
+    iNewH = math.min(iNewH, (iScrH * 0.32))
 
     self.menu:SetSize(iNewW, iNewH)
 

@@ -5,12 +5,14 @@ local surface = surface
 local DisableClipping = DisableClipping
 
 function PANEL:Init()
+    self:SetAlpha(0)
     self:SetDrawOnTop(true)
     self:SetFont("TLib2.7")
     self:SetContentAlignment(5)
     self:SetTextColor(TLib2.Colors.Base4)
     self:SetWrap(true)
     self:SetAutoStretchVertical(true)
+    self:AlphaTo(255, 0.2, 0)
 
     self.padding = TLib2.Padding3
 end
