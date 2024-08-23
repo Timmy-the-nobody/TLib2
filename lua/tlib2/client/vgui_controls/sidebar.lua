@@ -1,7 +1,6 @@
 local PANEL = {}
 
-local tGradColor = TLib2.ColorManip(TLib2.Colors.Accent, 0.3, 0.25)
-local matGradL = Material("vgui/gradient-l")
+local tSelectedBgColor = TLib2.ColorManip(TLib2.Colors.Accent, 0.25, 0.25)
 
 local draw = draw
 local surface = surface
@@ -67,7 +66,6 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
     dButton:SetTall(self.button_height)
     dButton:SetText("")
     dButton:SetCursor("hand")
-    dButton.lerp = 0
     dButton.text_color = TLib2.Colors.Accent
     dButton.offset_x = 0
 
@@ -75,18 +73,16 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
         local tTextCol = self:GetTextColor()
         local bExpanded = dSideBar:IsExpanded()
 
-        if bExpanded and (self.lerp > 0.001) then
-            surface.SetDrawColor(tGradColor)
-            surface.SetMaterial(matGradL)
-            surface.DrawTexturedRect(0, 0, iW * self.lerp, iH)
-        end
+        local fIconW = dSideBar.button_height
+        local fY = (iH * 0.5)
 
         if dSideBar.selected and (dSideBar.selected == iID) then
-            self.lerp = Lerp(RealFrameTime() * 16, self.lerp, 1)
-
             if bExpanded then
                 self.text_color = TLib2.Colors.Accent
                 self.offset_x = (iScrH * 0.005)
+
+                surface.SetDrawColor(tSelectedBgColor)
+                surface.DrawRect(0, 0, iW, iH)
 
                 surface.SetDrawColor(TLib2.Colors.Accent)
                 surface.DrawRect(0, 0, self.offset_x, iH)
@@ -98,18 +94,11 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
                 surface.DrawRect(0, 0, iH, iH)
             end
         else
-            self.lerp = bExpanded and Lerp(RealFrameTime() * 16, self.lerp, 0) or 0
             self.text_color = self:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base3
             self.offset_x = 0
         end
 
-        local fIconW = dSideBar.button_height
-        local fY = (iH * 0.5)
-
-        if bExpanded then
-            TLib2.DrawFAIcon(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + 1 + self.offset_x, fY + 1, TLib2.Colors.Base1, 1, 1)
-        end
-
+        TLib2.DrawFAIcon(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + 1 + self.offset_x, fY + 1, TLib2.Colors.Base1, 1, 1)
         TLib2.DrawFAIcon(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + self.offset_x, fY, self.text_color, 1, 1)
 
         if bExpanded then
@@ -138,6 +127,7 @@ end
 
 function PANEL:SetSelected(iButton)
     if not self.buttons[iButton] then return end
+    
     self.selected = iButton
 end    
 
