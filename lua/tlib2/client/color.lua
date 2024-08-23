@@ -13,11 +13,11 @@ TLib2.Colors = {
 
 ---`🔸 Client`<br>
 ---Manipulates the color's lightness and saturation
----@param tCol Color @The color
+---@param oColor Color @The color
 ---@param fLightnessFactor? number @The lightness factor, defaults to 1
 ---@param fSaturationMul? number @The saturation factor, defaults to 1
 ---@return Color
-function TLib2.ColorManip(tCol, fSaturationMul, fLightnessFactor)
-    local fH, fS, fL = tCol:ToHSL()
+function TLib2.ColorManip(oColor, fSaturationMul, fLightnessFactor)
+    local fH, fS, fL = oColor:ToHSL()
     return HSLToColor(fH, fS * (fSaturationMul or 1), fL * (fLightnessFactor or 1))
 end

@@ -70,9 +70,7 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
     dButton.offset_x = 0
 
     function dButton:Paint(iW, iH)
-        local tTextCol = self:GetTextColor()
         local bExpanded = dSideBar:IsExpanded()
-
         local fIconW = dSideBar.button_height
         local fY = (iH * 0.5)
 

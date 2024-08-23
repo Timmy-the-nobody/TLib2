@@ -16,39 +16,39 @@ function PANEL:Init()
     self.outline_color_hover = TLib2.Colors.Base3
 end
 
-function PANEL:SetBackgroundColor(tCol)
-    if not IsColor(oColor) then return end
+function PANEL:SetBackgroundColor(oCol)
+    if not IsColor(oCol) then return end
 
-    self.bg_color = tCol
+    self.bg_color = oCol
 end
 
-function PANEL:SetBackgroundHoverColor(tCol)
-    if not IsColor(oColor) then return end
+function PANEL:SetBackgroundHoverColor(oCol)
+    if not IsColor(oCol) then return end
 
-    self.bg_color_hover = tCol
+    self.bg_color_hover = oCol
 end
 
-function PANEL:SetOutlineColor(oColor)
-    if not IsColor(oColor) then return end
+function PANEL:SetOutlineColor(oCol)
+    if not IsColor(oCol) then return end
 
-    self.outline_color = oColor
+    self.outline_color = oCol
 end
 
-function PANEL:SetOutlineHoverColor(oColor)
-    if not IsColor(oColor) then return end
+function PANEL:SetOutlineHoverColor(oCol)
+    if not IsColor(oCol) then return end
 
-    self.outline_color_hover = oColor
+    self.outline_color_hover = oCol
 end
 
-function PANEL:SetColorTheme(tCol)
-    if not IsColor(tCol) then return end
+function PANEL:SetColorTheme(oCol)
+    if not IsColor(oCol) then return end
 
-    self:SetColor(tCol)
-    self:SetOutlineColor(tCol)
-    self:SetBackgroundColor(TLib2.ColorManip(tCol, 0.5, 0.2))
+    self:SetColor(oCol)
+    self:SetOutlineColor(oCol)
+    self:SetBackgroundColor(TLib2.ColorManip(oCol, 0.5, 0.2))
 
-    self:SetOutlineHoverColor(TLib2.ColorManip(tCol, 0.5, 0.5))
-    self:SetBackgroundHoverColor(TLib2.ColorManip(tCol, 0.5, 0.5))
+    self:SetOutlineHoverColor(TLib2.ColorManip(oCol, 0.5, 0.5))
+    self:SetBackgroundHoverColor(TLib2.ColorManip(oCol, 0.5, 0.5))
 end
 
 function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)

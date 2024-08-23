@@ -12,6 +12,7 @@ function PANEL:Init()
     self.Label:SetFont("TLib2.6")
     self.Label:SetTextColor(TLib2.Colors.Base4)
     self.Label:SetCursor("hand")
+    -- self.Label:SetTall(self.Button:GetTall())
 
     function self.Button:Paint(iW, iH)
         local bChecked = self:GetChecked()
@@ -68,7 +69,7 @@ end
 function PANEL:PerformLayout(iW, iH)
 	self.Button:SetPos(0, 0)
 
-	self.Label:SizeToContents()
+	self.Label:SizeToContentsX()
 	self.Label:SetPos(self.Button:GetWide() + TLib2.Padding3, math.floor((self.Button:GetTall() - self.Label:GetTall()) * 0.5))
 
     local iTall = math.max(self.Button:GetTall(), self.Label:GetTall())
