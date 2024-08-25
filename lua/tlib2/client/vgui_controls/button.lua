@@ -17,26 +17,18 @@ function PANEL:Init()
 end
 
 function PANEL:SetBackgroundColor(oCol)
-    if not IsColor(oCol) then return end
-
     self.bg_color = oCol
 end
 
-function PANEL:SetBackgroundHoverColor(oCol)
-    if not IsColor(oCol) then return end
-
-    self.bg_color_hover = oCol
-end
-
 function PANEL:SetOutlineColor(oCol)
-    if not IsColor(oCol) then return end
-
     self.outline_color = oCol
 end
 
-function PANEL:SetOutlineHoverColor(oCol)
-    if not IsColor(oCol) then return end
+function PANEL:SetBackgroundHoverColor(oCol)
+    self.bg_color_hover = oCol
+end
 
+function PANEL:SetOutlineHoverColor(oCol)
     self.outline_color_hover = oCol
 end
 
@@ -44,11 +36,11 @@ function PANEL:SetColorTheme(oCol)
     if not IsColor(oCol) then return end
 
     self:SetColor(oCol)
-    self:SetOutlineColor(oCol)
     self:SetBackgroundColor(TLib2.ColorManip(oCol, 0.5, 0.2))
+    self:SetOutlineColor(oCol)
 
-    self:SetOutlineHoverColor(TLib2.ColorManip(oCol, 0.5, 0.5))
     self:SetBackgroundHoverColor(TLib2.ColorManip(oCol, 0.5, 0.5))
+    self:SetOutlineHoverColor(TLib2.ColorManip(oCol, 0.5, 0.5))
 end
 
 function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)
