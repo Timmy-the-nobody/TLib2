@@ -229,13 +229,20 @@ function PANEL:RemoveOption(iIndex)
 end
 
 function PANEL:PerformLayout(iW, iH)
-    if not self.menu or not self.menu:IsValid() then return end
+    local dMenu = self.menu
+    if not dMenu or not dMenu:IsValid() then return end
+
+    -- Calculate the size of the menu
+    local dTitle = dMenu.title
+    if not dTitle or not dTitle:IsValid() then return end
+
+    dTitle:SizeToContents()
 
     local iScrH = ScrH()
-    local iNewW = math.max(self.menu.title:GetWide() + self.menu.title:GetTall(), iScrH * 0.05)
-    local iNewH = self.menu.title:GetTall() + (TLib2.Padding4 * 2) + 2
+    local iNewW = math.max(dTitle:GetWide() + dTitle:GetTall(), iScrH * 0.05)
+    local iNewH = dTitle:GetTall() + (TLib2.Padding4 * 2) + 2
 
-    local tChildren = self.menu.scroll:GetCanvas():GetChildren()
+    local tChildren = dMenu.scroll:GetCanvas():GetChildren()
     for i = 1, #tChildren do
         local dChild = tChildren[i]
 
@@ -250,8 +257,9 @@ function PANEL:PerformLayout(iW, iH)
 
     iNewH = math.min(iNewH, (iScrH * 0.32))
 
-    self.menu:SetSize(iNewW, iNewH)
+    dMenu:SetSize(iNewW, iNewH)
 
+    -- Position the menu
     local iX, iY = self:LocalToScreen(0, 0)
 
     local iNewX = iX + self:GetWide() - iNewW
