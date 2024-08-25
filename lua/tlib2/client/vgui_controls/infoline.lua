@@ -1,7 +1,6 @@
 local PANEL = {}
 
 function PANEL:Init()
-    self:SetTall(ScrH() * 0.02)
 end
 
 function PANEL:SetContents(tContents)
@@ -14,7 +13,7 @@ function PANEL:SetContents(tContents)
         dLine:SetTextColor(v.color or "", TLib2.Colors.Base3)
         dLine:SetText(v.text or "")
         dLine:InvalidateLayout(true)
-        dLine:SizeToContentsX()
+        dLine:SizeToContents()
 
         if v.fa_icon then
             dLine:SetWide(dLine:GetTall())
@@ -39,13 +38,17 @@ function PANEL:SetContents(tContents)
                 surface.DrawLine(0, (iH - 1), iW, (iH - 1))
             end
             if v.fa_icon then
-                TLib2.DrawFAIcon(v.fa_icon, "TLib2.FA.7", (iW * 0.5), (iH * 0.5), v.color or TLib2.Colors.Base2, 1, 1)
+                TLib2.DrawFAIcon(v.fa_icon, v.font or "TLib2.FA.7", (iW * 0.5), (iH * 0.5), v.color or TLib2.Colors.Base2, 1, 1)
             end
         end
     end
 end
 
 function PANEL:Paint(iW, iH)
+end
+
+function PANEL:PerformLayout(iW, iH)
+    self:SizeToChildren(false, true)
 end
 
 vgui.Register("TLib2:InfoLine", PANEL, "DPanel")
