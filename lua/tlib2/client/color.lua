@@ -8,7 +8,7 @@ TLib2.Colors = {
     Base4 = Color(236, 242, 248, 255),
     Accent = Color(68, 147, 248),
     Action = Color(41,144,59),
-    Warn = Color(231, 76, 60),
+    Warn = Color(200, 70, 60),
 }
 
 ---`🔸 Client`<br>
