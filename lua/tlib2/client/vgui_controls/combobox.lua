@@ -228,6 +228,11 @@ function PANEL:RemoveOption(iIndex)
     table.remove(self.options, iIndex)
 end
 
+function PANEL:ClearOptions()
+    self.options = {}
+    self.selected_options = {}
+end
+
 function PANEL:PerformLayout(iW, iH)
     local dMenu = self.menu
     if not dMenu or not dMenu:IsValid() then return end
