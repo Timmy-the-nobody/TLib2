@@ -41,6 +41,7 @@ end
     requireCL("tlib2/client/fonts.lua")
     requireCL("tlib2/client/color.lua")
     requireCL("tlib2/client/utils.lua")
+    requireCL("tlib2/client/sound.lua")
 
     requireCL("tlib2/client/vgui_controls/button.lua")
     requireCL("tlib2/client/vgui_controls/checkbox.lua")
