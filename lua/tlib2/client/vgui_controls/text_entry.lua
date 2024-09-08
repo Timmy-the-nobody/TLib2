@@ -114,10 +114,10 @@ function PANEL:Paint(iW, iH)
     draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, self:IsEditing() and self.outline_color_editing or self.outline_color)
     draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base0)
 
-    self:DrawTextEntryText(self.m_colText, TLib2.Colors.Base3, TLib2.Colors.Base4)
-
     if self:IsPlaceholderVisible() then
-        self:DrawTextEntryText(self.m_txtPlaceholder, TLib2.Colors.Base3, TLib2.Colors.Base4)
+        draw.SimpleText(self.m_txtPlaceholder, self:GetFont(), TLib2.Padding4, iH * 0.5, self:GetPlaceholderColor(), 0, 1)
+    else
+        self:DrawTextEntryText(self.m_colText, TLib2.Colors.Base3, TLib2.Colors.Base4)
     end
 end
 
