@@ -3,7 +3,7 @@
 TLib2.Colors = {
     Base0 = Color(13, 17, 23, 255),
     Base1 = Color(22, 27, 34, 255),
-    Base2 = Color(33, 38, 45, 255),
+    Base2 = Color(42, 46, 54, 255),
     Base3 = Color(137, 146, 155, 255),
     Base4 = Color(236, 242, 248, 255),
     Accent = Color(68, 147, 248),
