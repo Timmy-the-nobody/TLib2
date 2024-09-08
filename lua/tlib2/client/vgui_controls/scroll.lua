@@ -6,47 +6,55 @@ local matGradU = Material("vgui/gradient-u")
 local matGradD = Material("vgui/gradient-d")
 
 function PANEL:Init()
-    self.edge_gradient_color = TLib2.Colors.Base0
+    local dPanel = self
 
-    local iVBarW = math.max(math.ceil(ScrH() * 0.004), 3)
+    self.vbar_w = math.max(math.ceil(ScrH() * 0.004), 3)
 
     local dVBar = self:GetVBar()
-    dVBar:SetWide(iVBarW + TLib2.Padding3)
+    dVBar:SetWide(self.vbar_w + TLib2.Padding3)
     dVBar:SetHideButtons(true)
     dVBar.drag_approach = 0
 
     function dVBar:Paint(iW, iH)
         surface.SetDrawColor(TLib2.Colors.Base1)
-        surface.DrawRect((iW - iVBarW), 0, iVBarW, iH)
+        surface.DrawRect((iW - dPanel.vbar_w), 0, dPanel.vbar_w, iH)
 
         self.drag_approach = math.Approach(self.drag_approach, self.Dragging and 1 or 0, RealFrameTime() * 4)
     end
 
     function dVBar.btnUp:Paint(iW, iH)
         surface.SetDrawColor(TLib2.Colors.Base2)
-        surface.DrawRect((iW - iVBarW), 0, iVBarW, iH)
+        surface.DrawRect((iW - dPanel.vbar_w), 0, dPanel.vbar_w, iH)
     end
 
     function dVBar.btnDown:Paint(iW, iH)
         surface.SetDrawColor(TLib2.Colors.Base2)
-        surface.DrawRect((iW - iVBarW), 0, iVBarW, iH)
+        surface.DrawRect((iW - dPanel.vbar_w), 0, dPanel.vbar_w, iH)
     end
 
     function dVBar.btnGrip:Paint(iW, iH)
         surface.SetDrawColor(TLib2.Colors[self:IsHovered() and "Base4" or "Base3"])
-        surface.DrawRect((iW - iVBarW), 0, iVBarW, iH)
+        surface.DrawRect((iW - dPanel.vbar_w), 0, dPanel.vbar_w, iH)
 
         if (dVBar.drag_approach > 0.001) then
             local iDragBarH = (iH * dVBar.drag_approach)
 
             surface.SetDrawColor(TLib2.Colors.Accent)
-            surface.DrawRect((iW - iVBarW), (iH - iDragBarH) * 0.5, iVBarW, iDragBarH)
+            surface.DrawRect((iW - dPanel.vbar_w), (iH - iDragBarH) * 0.5, dPanel.vbar_w, iDragBarH)
         end
     end
 
     self.lerp_up = 0
     self.lerp_down = 0
     self.gradient_height = (ScrH() * 0.02)
+end
+
+function PANEL:SetMarginEnabled(bEnabled, iSize)
+    if not bEnabled then
+        self:SetWide(self.vbar_w)
+        return
+    end
+    self:SetWide(self.vbar_w + (iSize or TLib2.Padding3))
 end
 
 function PANEL:GetBackgroundInfo()
@@ -77,16 +85,6 @@ function PANEL:Paint(iW, iH)
             self.bg_info.markup:Draw((iW * 0.5), (iH * 0.5) + TLib2.Padding3, 1, 3, iW, iH)
         end
     end
-end
-
-function PANEL:GetEdgeGradientColor()
-    return self.edge_gradient_color
-end
-
-function PANEL:SetEdgeGradientColor(oColor)
-    if not IsColor(oColor) then return end
-
-    self.edge_gradient_color = oColor
 end
 
 -- function PANEL:PaintOver(iW, iH)
