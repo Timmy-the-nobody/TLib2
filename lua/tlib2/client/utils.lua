@@ -45,12 +45,24 @@ function TLib2.DrawDashedBox(iX, iY, iW, iH, iSegLen, iSpacing, iThickness, oCol
     surface.SetDrawColor(oColor)
 
     for i = 0, math.floor(iW / (iSegLen + iSpacing)) do
-        surface.DrawRect(iX + (i * (iSegLen + iSpacing)), iY, iSegLen, iThickness)
-        surface.DrawRect(iX + (i * (iSegLen + iSpacing)), iY + iH - iThickness, iSegLen, iThickness)
+        local iSegX = iX + ((iSegLen + iSpacing) * i)
+        local iLen = iSegLen
+        if ((iSegX + iSegLen) > (iX + iW)) then
+            iLen = (iX + iW - iSegX)
+        end
+
+        surface.DrawRect(iSegX, iY, iLen, iThickness)
+        surface.DrawRect(iSegX, iY + iH - iThickness, iLen, iThickness)
     end
 
     for i = 0, math.floor(iH / (iSegLen + iSpacing)) do
-        surface.DrawRect(iX, iY + (i * (iSegLen + iSpacing)), iThickness, iSegLen)
-        surface.DrawRect(iX + iW - iThickness, iY + (i * (iSegLen + iSpacing)), iThickness, iSegLen)
+        local iSegY = iY + ((iSegLen + iSpacing) * i)
+        local iLen = iSegLen
+        if ((iSegY + iSegLen) > (iY + iH)) then
+            iLen = (iY + iH - iSegY)
+        end
+
+        surface.DrawRect(iX, iSegY, iThickness, iLen)
+        surface.DrawRect(iX + iW - iThickness, iSegY, iThickness, iLen)
     end
 end
