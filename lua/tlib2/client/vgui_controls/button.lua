@@ -10,26 +10,18 @@ function PANEL:Init()
     self:SetTall(ScrH() * 0.03)
 
     self.bg_color = TLib2.Colors.Base1
-    self.outline_color = TLib2.Colors.Base2
-
     self.bg_color_hover = TLib2.Colors.Base2
+
+    self.outline_color = TLib2.Colors.Base2
     self.outline_color_hover = TLib2.Colors.Base3
 end
 
 function PANEL:SetBackgroundColor(oCol, oColHover)
     self.bg_color = oCol
-
-    if oColHover then
-        self:SetBackgroundHoverColor(oColHover)
-    end
 end
 
 function PANEL:SetOutlineColor(oCol, oColHover)
     self.outline_color = oCol
-
-    if oColHover then
-        self:SetOutlineHoverColor(oColHover)
-    end
 end
 
 function PANEL:SetBackgroundHoverColor(oCol)
@@ -51,24 +43,40 @@ function PANEL:SetColorTheme(oCol)
     self:SetOutlineHoverColor(TLib2.ColorManip(oCol, 0.5, 0.5))
 end
 
+---@param sIcon string @The icon to use
+---@param sFont string @The font to use
+---@param bAdjustWidth boolean @Whether to adjust the width of the button
+---@param bAlignRight boolean @Whether to align the button to the right
 function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)
-    self.fa_icon = sIcon
-    self.fa_icon_font = sFont or "TLib2.FA.7"
-    self.fa_align_right = tobool(bAlignRight)
+    sFont = sFont or "TLib2.FA.7"
 
-    if not bAdjustWidth then return end
-
-    surface.SetFont(self.fa_icon_font)
-    local iFAIconW, iFAIconH = surface.GetTextSize(self.fa_icon)
-    local iTextW, iTextH = self:GetTextSize()
-
-    self:SetWide(iTextW + iFAIconW + (TLib2.Padding3 * 2.5))
+    surface.SetFont(sFont)
+    local iFAIconW, _ = surface.GetTextSize(TLib2.GetFAIcon(sIcon))
+    
+    self:InvalidateLayout(true)
+    local iMargin = (self:GetTall() * 0.25)
 
     self:SetContentAlignment(4)
-    if self.fa_align_right then
-        self:SetTextInset(TLib2.Padding3, 0)
-    else
-        self:SetTextInset(iFAIconW + (TLib2.Padding3 * 1.5), 0)
+    self:SetTextInset(bAlignRight and iMargin or (iFAIconW + (iMargin * 2)), 0)
+
+    self.fa_icon_pnl = self.fa_icon_pnl or self:Add("Panel")
+    self.fa_icon_pnl:Dock(bAlignRight and RIGHT or LEFT)
+    self.fa_icon_pnl:DockMargin(iMargin, 0, iMargin, 0)
+    self.fa_icon_pnl:SetWide(iFAIconW)
+    self.fa_icon_pnl:SetMouseInputEnabled(false)
+    self.fa_icon_pnl.Paint = function(_, iW, iH)
+        TLib2.DrawFAIcon(sIcon, sFont or "TLib2.FA.7", (iW * 0.5), (iH * 0.5), self:GetTextColor(), 1, 1)
+    end
+
+    if bAdjustWidth then
+        local iTextW, _ = self:GetTextSize()
+        self:SetWide(iTextW + iFAIconW + (iMargin * (iTextW == 0 and 2 or 3)))
+    end
+end
+
+function PANEL:PerformLayout(iW, iH)
+    if self.fa_icon_pnl and self.fa_icon_pnl:IsValid() then
+        
     end
 end
 
@@ -84,25 +92,18 @@ end
 
 function PANEL:Paint(iW, iH)
     local iRad, iBoxX, iBoxY, iBoxW, iBoxH
-    if self.outline_color then
-        if self.outline_color_hover then
-            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, self:IsHovered() and self.outline_color_hover or self.outline_color)
-        else
-            draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, self.outline_color)
-        end
+
+    local bHovered = self:IsHovered()
+    local bOutlineHover = (self.outline_color_hover and bHovered) and true or false
+
+    if self.outline_color or bOutlineHover then
+        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, bOutlineHover and self.outline_color_hover or self.outline_color)
         iRad, iBoxX, iBoxY, iBoxW, iBoxH = TLib2.BorderRadius - 2, 1, 1, (iW - 2), (iH - 2)
     else
         iRad, iBoxX, iBoxY, iBoxW, iBoxH = TLib2.BorderRadius, 0, 0, iW, iH
     end
-    draw.RoundedBox(iRad, iBoxX, iBoxY, iBoxW, iBoxH, self:IsHovered() and self.bg_color_hover or self.bg_color)
 
-    if self.fa_icon then
-        if (self.fa_align_right) then
-            TLib2.DrawFAIcon(self.fa_icon, self.fa_icon_font, (iW - (iH * 0.25)), (iH * 0.5), self:GetTextColor(), 2, 1)
-        else
-            TLib2.DrawFAIcon(self.fa_icon, self.fa_icon_font, (iH * 0.25), (iH * 0.5), self:GetTextColor(), 0, 1)
-        end
-    end
+    draw.RoundedBox(iRad, iBoxX, iBoxY, iBoxW, iBoxH, (self.bg_color_hover and bHovered) and self.bg_color_hover or self.bg_color)
 end
 
 vgui.Register("TLib2:Button", PANEL, "DButton")
