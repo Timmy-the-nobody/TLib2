@@ -16,12 +16,20 @@ function PANEL:Init()
     self.outline_color_hover = TLib2.Colors.Base3
 end
 
-function PANEL:SetBackgroundColor(oCol)
+function PANEL:SetBackgroundColor(oCol, oColHover)
     self.bg_color = oCol
+
+    if oColHover then
+        self:SetBackgroundHoverColor(oColHover)
+    end
 end
 
-function PANEL:SetOutlineColor(oCol)
+function PANEL:SetOutlineColor(oCol, oColHover)
     self.outline_color = oCol
+
+    if oColHover then
+        self:SetOutlineHoverColor(oColHover)
+    end
 end
 
 function PANEL:SetBackgroundHoverColor(oCol)
@@ -44,7 +52,7 @@ function PANEL:SetColorTheme(oCol)
 end
 
 function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)
-    self.fa_icon = TLib2.GetFAIcon(sIcon)
+    self.fa_icon = sIcon
     self.fa_icon_font = sFont or "TLib2.FA.7"
     self.fa_align_right = tobool(bAlignRight)
 
@@ -90,9 +98,9 @@ function PANEL:Paint(iW, iH)
 
     if self.fa_icon then
         if (self.fa_align_right) then
-            draw.SimpleText(self.fa_icon, self.fa_icon_font, (iW - (iH * 0.25)), (iH * 0.5), self:GetTextColor(), TEXT_ALIGN_RIGHT, 1)
+            TLib2.DrawFAIcon(self.fa_icon, self.fa_icon_font, (iW - (iH * 0.25)), (iH * 0.5), self:GetTextColor(), 2, 1)
         else
-            draw.SimpleText(self.fa_icon, self.fa_icon_font, (iH * 0.25), (iH * 0.5), self:GetTextColor(), 0, 1)
+            TLib2.DrawFAIcon(self.fa_icon, self.fa_icon_font, (iH * 0.25), (iH * 0.5), self:GetTextColor(), 0, 1)
         end
     end
 end
