@@ -43,6 +43,7 @@ local function handleScreenSizeChange()
     surface.CreateFont("TLib2.FA.5", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (18 * 0.001)), antialias = true, extended = true})
     surface.CreateFont("TLib2.FA.6", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (16 * 0.001)), antialias = true, extended = true})
     surface.CreateFont("TLib2.FA.7", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (14 * 0.001)), antialias = true, extended = true})
+    surface.CreateFont("TLib2.FA.8", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (12 * 0.001)), antialias = true, extended = true})
 
     TLib2.BorderRadius = math.Round(iH * 0.006)
 
