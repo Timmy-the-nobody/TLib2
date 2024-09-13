@@ -10,18 +10,15 @@ function PANEL:Init()
 
     self.is_empty = true
     self.fa_icon = TLib2.GetFAIcon("f002")
+    self.outline_color = TLib2.Colors.Base2
+    self.outline_color_editing = TLib2.Colors.Accent
    
     self:SetTall(ScrH() * 0.03)
     self:SetFont("TLib2.6")
-    self:SetTextColor(TLib2.Colors.Base4)
     self:SetPlaceholderColor(TLib2.Colors.Base2)
     self:SetDrawLanguageID(false)
     self:SetPaintBackground(false)
     self:SetUpdateOnType(true)
-
-    self.outline_color = TLib2.Colors.Base2
-    self.outline_color_editing = TLib2.Colors.Accent
-
     self:SetTextColor(TLib2.Colors.Base4)
     self:SetCursorColor(TLib2.Colors.Accent)
     self:SetHighlightColor(TLib2.Colors.Accent)

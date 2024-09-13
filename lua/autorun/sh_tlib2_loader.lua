@@ -53,6 +53,7 @@ end
     requireCL("tlib2/client/vgui_controls/modal.lua")
     requireCL("tlib2/client/vgui_controls/list.lua")
     requireCL("tlib2/client/vgui_controls/slider.lua")
+    requireCL("tlib2/client/vgui_controls/num_wang.lua")
     requireCL("tlib2/client/vgui_controls/num_scratch.lua")
     requireCL("tlib2/client/vgui_controls/num_slider.lua")
     requireCL("tlib2/client/vgui_controls/color_input.lua")
