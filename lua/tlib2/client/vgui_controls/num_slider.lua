@@ -4,11 +4,12 @@ local draw = draw
 local math = math
 
 function PANEL:Init()
-    self:SetTall(math.max(ScrH() * 0.02, TLib2.BorderRadius))
+    self:SetTall(TLib2.VGUIControlH2)
 
     if self.TextArea and self.TextArea:IsValid() then self.TextArea:Remove() end
     self.TextArea = self:Add("TLib2:TextEntry")
-    self.TextArea:SetFont("TLib2.7")
+    self.TextArea:SetFont("TLib2.6")
+    self.TextArea:SetTextColor(TLib2.Colors.Base4)
 	self.TextArea:Dock(RIGHT)
     self.TextArea:DockMargin(TLib2.Padding4, 0, 0, 0)
     self.TextArea:SetWide(ScrH() * 0.06)

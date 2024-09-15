@@ -16,8 +16,8 @@ function PANEL:SetContents(tContents)
         dLine:SizeToContents()
 
         if v.fa_icon then
-            dLine:SetWide(dLine:GetTall() * 1.5)
-            dLine:DockMargin(0, 0, TLib2.Padding4, 0)
+            dLine:SetWide(dLine:GetTall())
+            dLine:DockMargin(0, 0, TLib2.Padding3, 0)
         end
 
         if v.url then

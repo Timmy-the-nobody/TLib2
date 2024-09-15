@@ -97,7 +97,7 @@ function PANEL:CreateColorMixer()
 
     if self:GetDefaultColor() then
         local dReset = dColorMixer.WangsPanel:Add("TLib2:Button")
-        dReset:SetTall(ScrH() * 0.024)
+        dReset:SetTall(TLib2.VGUIControlH2)
         dReset:Dock(BOTTOM)
         dReset:DockMargin(0, TLib2.Padding4, 0, 0)
         dReset:SetText("")

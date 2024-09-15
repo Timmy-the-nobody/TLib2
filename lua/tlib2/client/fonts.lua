@@ -51,6 +51,9 @@ local function handleScreenSizeChange()
     TLib2.Padding2 = math.Round(iH * 0.025)
     TLib2.Padding3 = math.Round(iH * 0.01)
     TLib2.Padding4 = math.Round(iH * 0.005)
+
+    TLib2.VGUIControlH1 = math.Round(iH * 0.03)
+    TLib2.VGUIControlH2 = math.Round(iH * 0.026)
 end
 
 handleScreenSizeChange()

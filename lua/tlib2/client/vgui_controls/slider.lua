@@ -6,13 +6,13 @@ function PANEL:Init()
     local dSlider = self
 
     self:SetTrapInside(true)
-    self:SetTall(math.max(ScrH() * 0.02, TLib2.BorderRadius))
+    self:SetTall(math.ceil(TLib2.VGUIControlH2 * 0.5))
 
     self.Knob:SetSize(self:GetTall(), self:GetTall())
 
     function self.Knob:Paint(iW, iH)
         local bOldClipping = DisableClipping(true)
-            TLib2.DrawFAIcon("f192", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
+        TLib2.DrawFAIcon("f192", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
         DisableClipping(bOldClipping)
     end
 end

@@ -4,6 +4,8 @@ local draw = draw
 local surface = surface
 
 function PANEL:Init()
+    self:SetTall(TLib2.VGUIControlH2)
+
     self.options = {}
     self.multi_select = false
     self.selected_options = {}
@@ -51,7 +53,6 @@ function PANEL:OpenMenu()
     self.menu = self.menu_container:Add("DPanel")
     self.menu:SetDrawOnTop(true)
     self.menu:DockPadding(1, 1, 1, 1)
-    self.menu:SetTall(ScrH() * 0.03)
     self.menu:MakePopup()
     function self.menu:Paint(iW, iH)
         draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
