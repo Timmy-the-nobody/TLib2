@@ -4,10 +4,10 @@ local draw = draw
 local surface = surface
 
 function PANEL:Init()
+    self:SetTall(TLib2.VGUIControlH2)
     self:SetFont("TLib2.6")
     self:SetTextColor(TLib2.Colors.Base4)
     self:SetCursor("hand")
-    self:SetTall(ScrH() * 0.03)
 
     self.bg_color = TLib2.Colors.Base1
     self.bg_color_hover = TLib2.Colors.Base2
@@ -41,6 +41,16 @@ function PANEL:SetColorTheme(oCol)
 
     self:SetBackgroundHoverColor(TLib2.ColorManip(oCol, 0.5, 0.5))
     self:SetOutlineHoverColor(TLib2.ColorManip(oCol, 0.5, 0.5))
+end
+
+function PANEL:SetFlatColorTheme(oCol)
+    if not IsColor(oCol) then return end
+
+    self:SetBackgroundColor(oCol)
+    self:SetOutlineColor(oCol)
+
+    self:SetBackgroundHoverColor(TLib2.ColorManip(oCol, 0.9, 0.9))
+    self:SetOutlineHoverColor(TLib2.ColorManip(oCol, 0.9, 0.9))
 end
 
 ---@param sIcon string @The icon to use
