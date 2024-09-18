@@ -132,7 +132,9 @@ end
 function PANEL:Paint(iW, iH)
     surface.SetDrawColor(TLib2.Colors.Base1)
     surface.DrawRect(0, 0, iW, iH)
+end
 
+function PANEL:PaintOver(iW, iH)
     surface.SetDrawColor(TLib2.Colors.Base2)
     surface.DrawLine(iW - 1, 0, iW - 1, iH)
 end
