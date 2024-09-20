@@ -225,7 +225,14 @@ end
 function PANEL:RemoveOption(iIndex)
     if not self.options[iIndex] then return end
 
-    table.remove(self.options, iIndex)
+    local tNewOptions = {}
+    for i = 1, #self.options do
+        if (i ~= iIndex) then
+            tNewOptions[#tNewOptions + 1] = self.options[i]
+        end
+    end
+
+    self.options = tNewOptions
 end
 
 function PANEL:ClearOptions()
