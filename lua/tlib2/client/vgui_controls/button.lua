@@ -79,15 +79,15 @@ function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)
     end
 
     if bAdjustWidth then
-        local iTextW, _ = self:GetTextSize()
-        self:SetWide(iTextW + iFAIconW + (iMargin * (iTextW == 0 and 2 or 3)))
+        self:AdjustWidth()
     end
 end
 
-function PANEL:PerformLayout(iW, iH)
-    if self.fa_icon_pnl and self.fa_icon_pnl:IsValid() then
-        
-    end
+function PANEL:AdjustWidth()
+    local iTextW, _ = self:GetTextSize()
+    local iMargin = (self:GetTall() * 0.25)
+
+    self:SetWide(iTextW + (self.fa_icon_pnl and self.fa_icon_pnl:GetWide() or 0) + (iMargin * (iTextW == 0 and 2 or 3)))
 end
 
 function PANEL:SetClickable(bClickable)
@@ -101,19 +101,14 @@ function PANEL:SetClickable(bClickable)
 end
 
 function PANEL:Paint(iW, iH)
-    local iRad, iBoxX, iBoxY, iBoxW, iBoxH
-
-    local bHovered = self:IsHovered()
     local bOutlineHover = (self.outline_color_hover and bHovered) and true or false
 
     if self.outline_color or bOutlineHover then
         draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, bOutlineHover and self.outline_color_hover or self.outline_color)
-        iRad, iBoxX, iBoxY, iBoxW, iBoxH = TLib2.BorderRadius - 2, 1, 1, (iW - 2), (iH - 2)
+        draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, (iW - 2), (iH - 2), (self.bg_color_hover and self:IsHovered()) and self.bg_color_hover or self.bg_color)
     else
-        iRad, iBoxX, iBoxY, iBoxW, iBoxH = TLib2.BorderRadius, 0, 0, iW, iH
+        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, (self.bg_color_hover and self:IsHovered()) and self.bg_color_hover or self.bg_color)
     end
-
-    draw.RoundedBox(iRad, iBoxX, iBoxY, iBoxW, iBoxH, (self.bg_color_hover and bHovered) and self.bg_color_hover or self.bg_color)
 end
 
 vgui.Register("TLib2:Button", PANEL, "DButton")
