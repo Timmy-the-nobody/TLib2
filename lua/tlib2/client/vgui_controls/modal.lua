@@ -132,10 +132,10 @@ function PANEL:AddButton(sLabel, fnCallback)
     dBtn:SetText(sLabel)
 
     function dBtn:DoClick()
-        dModal:Remove()
+        if (type(fnCallback) ~= "function") then return end
 
-        if (type(fnCallback) == "function") then
-            fnCallback()
+        if not fnCallback() then
+            dModal:Remove()
         end
     end
 
