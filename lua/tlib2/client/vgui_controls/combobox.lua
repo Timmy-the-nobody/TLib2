@@ -88,7 +88,7 @@ function PANEL:OpenMenu()
     self.menu.scroll = self.menu:Add("TLib2:Scroll")
     self.menu.scroll:Dock(FILL)
     self.menu.scroll:DockMargin(0, TLib2.Padding4, 0, TLib2.Padding4)
-    self.menu.scroll:SetMarginEnabled(false)
+    self.menu.scroll:SetVBarMargin(0)
     self.menu.scroll.Paint = nil
 
     for i = 1, iOptionsCount do
