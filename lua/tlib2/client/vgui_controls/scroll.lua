@@ -2,16 +2,15 @@ local PANEL = {}
 
 local surface = surface
 
-local matGradU = Material("vgui/gradient-u")
-local matGradD = Material("vgui/gradient-d")
-
 function PANEL:Init()
     local dPanel = self
-
+    local dCanvas = self:GetCanvas()
+ 
     self.vbar_w = math.max(math.ceil(ScrH() * 0.004), 3)
-
+    self.vbar_m = TLib2.Padding3
+    
     local dVBar = self:GetVBar()
-    dVBar:SetWide(self.vbar_w + TLib2.Padding3)
+    dVBar:SetWide(0)
     dVBar:SetHideButtons(true)
     dVBar.drag_approach = 0
 
@@ -44,17 +43,39 @@ function PANEL:Init()
         end
     end
 
-    self.lerp_up = 0
-    self.lerp_down = 0
-    self.gradient_height = (ScrH() * 0.02)
+    self.__old_perform_layout = self.PerformLayout
+    self.PerformLayout = function()
+        if self.__old_perform_layout then
+            self:__old_perform_layout()
+        end
+
+        if (dCanvas:GetTall() > self:GetTall()) then
+            local iTargetW = (self:GetVBarWidth() + self:GetVBarMargin())
+            if (iTargetW ~= dVBar:GetWide()) then
+                dVBar:SetWide(iTargetW)
+            end
+        else
+            if (dVBar:GetWide() ~= 0) then
+                dVBar:SetWide(0)
+            end
+        end
+    end
 end
 
-function PANEL:SetMarginEnabled(bEnabled, iSize)
-    if not bEnabled then
-        self:SetWide(self.vbar_w)
-        return
-    end
-    self:SetWide(self.vbar_w + (iSize or TLib2.Padding3))
+function PANEL:GetVBarWidth()
+    return self.vbar_w
+end
+
+function PANEL:SetVBarWidth(iWidth)
+    self.vbar_w = (type(iWidth) == "number") and iWidth or 0
+end
+
+function PANEL:GetVBarMargin()
+    return self.vbar_m
+end
+
+function PANEL:SetVBarMargin(iMargin)
+    self.vbar_m = (type(iMargin) == "number") and iMargin or 0
 end
 
 function PANEL:GetBackgroundInfo()
@@ -86,30 +107,5 @@ function PANEL:Paint(iW, iH)
         end
     end
 end
-
--- function PANEL:PaintOver(iW, iH)
---     local dVBar = self:GetVBar()
---     if not dVBar or (dVBar.CanvasSize < iH) then return end
-
---     local fGradSpeed = (RealFrameTime() * 8)
---     local iScroll = dVBar:GetScroll()
-
---     self.lerp_up = Lerp(fGradSpeed, self.lerp_up, (iScroll > 0) and 1 or 0)
---     self.lerp_down = Lerp(fGradSpeed, self.lerp_down, (iScroll < dVBar.CanvasSize) and 1 or 0)
-
---     if (self.lerp_up > 0.001) then
---         surface.SetMaterial(matGradU)
---         surface.SetDrawColor(self.edge_gradient_color)
---         surface.DrawTexturedRect(0, 0, iW - dVBar:GetWide(), math.floor(self.gradient_height * self.lerp_up))
---     end
-
---     if (self.lerp_down > 0.001) then
---         local iGradH = math.floor(self.gradient_height * self.lerp_down)
-
---         surface.SetMaterial(matGradD)
---         surface.SetDrawColor(self.edge_gradient_color)
---         surface.DrawTexturedRect(0, (iH - iGradH), iW - dVBar:GetWide(), iGradH)
---     end
--- end
 
 vgui.Register("TLib2:Scroll", PANEL, "DScrollPanel")
