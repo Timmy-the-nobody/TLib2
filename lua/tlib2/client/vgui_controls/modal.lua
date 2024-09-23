@@ -119,6 +119,7 @@ end
 
 function PANEL:AddSeparator()
     local dSeparator = self.content_container:Add("TLib2:Separator")
+    dSeparator:Dock(TOP)
     dSeparator:DockMargin(0, TLib2.Padding3, 0, TLib2.Padding3)
 
     return dSeparator
