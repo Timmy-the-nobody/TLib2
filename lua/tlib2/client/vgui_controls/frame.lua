@@ -9,8 +9,12 @@ function PANEL:Init()
     local iScrH = ScrH()
 
     self:DockPadding(0, 0, 0, 0)
-    self.expanded = false
+    
     self.anim_time = 0.25
+    self.__w = self:GetWide()
+    self.__h = self:GetTall()
+    self.min_w = (iScrH * 0.85)
+    self.min_h = (iScrH * 0.6)
 
     self.lblTitle:Remove()
     self.btnClose:Remove()
@@ -19,6 +23,7 @@ function PANEL:Init()
 
     self.header = self:Add("DPanel")
     self.header:Dock(TOP)
+    self.header:SetTall(TLib2.VGUIControlH2)
     self.header:SetCursor("sizeall")
     self.header.last_click = 0
 
@@ -101,23 +106,20 @@ function PANEL:Init()
 end
 
 function PANEL:IsExpanded()
-    return self.expanded
+    return ((self:GetWide() == ScrW()) and (self:GetTall() == ScrH()))
 end
 
 function PANEL:SetExpanded(bExpanded)
     local fAnimTime = self:GetAnimatonTime()
 
-    self.expanded = tobool(bExpanded)
-
-    if self.expanded then
+    if bExpanded then
         self:SizeTo(ScrW(), ScrH(), fAnimTime, 0, 0.5)
         self:MoveTo(0, 0, fAnimTime, 0, 0.5)
     else
-        local tMinSize = self:GetMinimizedSize()
-        if not tMinSize then return end
+        local iDefaultW, iDefaultH = self:GetDefaultSize()
 
-        self:SizeTo(tMinSize.w, tMinSize.h, fAnimTime, 0, 0.5)
-        self:MoveTo((ScrW() - tMinSize.w) * 0.5, (ScrH() - tMinSize.h) * 0.5, fAnimTime, 0, 0.5)
+        self:SizeTo(iDefaultW, iDefaultH, fAnimTime, 0, 0.5)
+        self:MoveTo((ScrW() - iDefaultW) * 0.5, (ScrH() - iDefaultH) * 0.5, fAnimTime, 0, 0.5)
     end
 end
 
@@ -125,14 +127,31 @@ function PANEL:ToggleExpand()
     self:SetExpanded(not self:IsExpanded())
 end
 
-function PANEL:GetMinimizedSize()
-    return self.minimized_size
+function PANEL:GetMinWidth()
+    return self.min_w
 end
 
-function PANEL:SetMinimizedSize(iW, iH)
-    if (type(iW) ~= "number") or (type(iH) ~= "number") then return end
+function PANEL:SetMinWidth(iWidth)
+    if (type(iWidth) ~= "number") then return end
+    self.min_w = iWidth
+end
 
-    self.minimized_size = {w = iW, h = iH}
+function PANEL:GetMinHeight()
+    return self.min_h
+end
+
+function PANEL:SetMinHeight(iHeight)
+    if (type(iHeight) ~= "number") then return end
+    self.min_h = iHeight
+end
+
+function PANEL:GetDefaultSize()
+    return self.__w, self.__h
+end
+
+function PANEL:SetDefaultSize(iW, iH)
+    self.__w = iW
+    self.__h = iH
 end
 
 function PANEL:GetAnimatonTime()
@@ -155,15 +174,104 @@ function PANEL:SetTitle(sTitle, sFAIcon)
     self.title_faicon = sFAIcon
 end
 
-function PANEL:PerformLayout()
+function PANEL:SetResizable(bResizable)
+    if self.resize_btn and self.resize_btn:IsValid() then
+        self.resize_btn:Remove()
+    end
+
+    if not bResizable then return end
+
+    local dPanel = self
+
+    self.resize_btn = self:Add("DButton")
+    self.resize_btn:SetText("")
+    self.resize_btn:SetSize(TLib2.VGUIControlH2, TLib2.VGUIControlH2)
+    self.resize_btn:SetCursor("sizenesw")
+    self.resize_btn:AlignRight(0)
+    self.resize_btn:AlignBottom(0)
+    self.resize_btn:MoveToFront()
+    self.resize_btn.dragging = false
+    
+    function self.resize_btn:PerformLayout(iW, iH)
+        self:MoveToFront()
+    end
+    
+    function self.resize_btn:OnMousePressed(iMouseBtn)
+        if (iMouseBtn ~= MOUSE_LEFT) then return end
+
+        local iCursorX, iCursorY = input.GetCursorPos()
+        self.dragging = {
+            x = iCursorX,
+            y = iCursorY,
+            w = dPanel:GetWide(),
+            h = dPanel:GetTall()
+        }
+    end
+
+    function self.resize_btn:Think()
+        if self.dragging then
+            if not input.IsMouseDown(MOUSE_LEFT) then
+                self.dragging = nil
+                return
+            end
+            
+            local iCursorX, iCursorY = input.GetCursorPos()
+            local iDiffX = (iCursorX - self.dragging.x)
+            local iDiffY = (iCursorY - self.dragging.y)
+            local iNewW = math.max((self.dragging.w + iDiffX), dPanel:GetMinWidth())
+            local iNewH = math.max((self.dragging.h + iDiffY), dPanel:GetMinHeight())
+
+            if (iNewW ~= dPanel:GetWide()) then
+                dPanel:SetWide(iNewW)
+            end
+
+            if (iNewH ~= dPanel:GetTall()) then
+                dPanel:SetTall(iNewH)
+            end
+        end
+    end
+
+    function self.resize_btn:Paint(iW, iH)
+        if self.dragging then
+            TLib2.DrawFAIcon("f424", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
+            return
+        end
+        TLib2.DrawFAIcon("f424", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base3, 1, 1)
+    end
+end
+
+function PANEL:PerformLayout(iW, iH)
     if self.header and self.header:IsValid() then
-        self.header:SetTall(ScrH() * 0.026)
+        local iHeaderH = self.header:GetTall()
+        if self.close_btn and self.close_btn:IsValid() and (self.close_btn:GetWide() ~= iHeaderH) then
+            self.close_btn:SetWide(iHeaderH)
+        end
+        if self.expand_btn and self.expand_btn:IsValid() and (self.expand_btn:GetWide() ~= iHeaderH) then
+            self.expand_btn:SetWide(iHeaderH)
+        end
     end
-    if self.close_btn and self.close_btn:IsValid() then
-        self.close_btn:SetWide(self.header:GetTall())
-    end
-    if self.expand_btn and self.expand_btn:IsValid() then
-        self.expand_btn:SetWide(self.header:GetTall())
+
+    if self.resize_btn and self.resize_btn:IsValid() then
+        if (self:GetWide() >= ScrW()) and (self:GetTall() >= ScrH()) then
+            if self.resize_btn:IsVisible() then
+                self.resize_btn:Hide()
+            end
+        else
+            if not self.resize_btn:IsVisible() then
+                self.resize_btn:Show()
+            end
+        end
+
+        local iX, iY = self.resize_btn:GetPos()
+        local iTargetX, iTargetY = (iW - TLib2.VGUIControlH2), (iH - TLib2.VGUIControlH2)
+
+        if (iX ~= iTargetX) then
+            self.resize_btn:SetX(iTargetX)
+        end
+
+        if (iY ~= iTargetY) then
+            self.resize_btn:SetY(iTargetY)
+        end
     end
 end
 
