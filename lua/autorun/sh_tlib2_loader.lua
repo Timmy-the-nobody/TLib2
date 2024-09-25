@@ -1,7 +1,14 @@
--- TODO: Put this in workshop and remove from here
+-- TODO: Remove old FA fonts?
 resource.AddFile("resource/fonts/fa5/fa-regular-400.ttf")
 resource.AddFile("resource/fonts/fa5/fa-brands-400.ttf")
 resource.AddFile("resource/fonts/fa5/fa-solid-900.ttf")
+
+resource.AddFile("resource/fonts/fa6/fa-brands-400.ttf")
+resource.AddFile("resource/fonts/fa6/fa-regular-400.ttf")
+resource.AddFile("resource/fonts/fa6/fa-solid-900.ttf")
+resource.AddFile("resource/fonts/fa6/fa-v4compatibility.ttf")
+
+-- TODO: Put this in workshop and remove from here
 resource.AddFile("resource/fonts/rajdhani-bold.ttf")
 resource.AddFile("resource/fonts/rajdhani-regular.ttf")
 -- TODO end
@@ -64,5 +71,6 @@ requireCL("tlib2/client/vgui_controls/title.lua")
 requireCL("tlib2/client/vgui_controls/subtitle.lua")
 requireCL("tlib2/client/vgui_controls/separator.lua")
 requireCL("tlib2/client/vgui_controls/infoline.lua")
+requireCL("tlib2/client/vgui_controls/helper.lua")
 
 print("[TLib2] Loaded!")
