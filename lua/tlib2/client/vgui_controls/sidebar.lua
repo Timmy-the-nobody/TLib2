@@ -96,11 +96,9 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
             self.offset_x = 0
         end
 
-        TLib2.DrawFAIcon(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + 1 + self.offset_x, fY + 1, TLib2.Colors.Base1, 1, 1)
         TLib2.DrawFAIcon(sFAIcon, "TLib2.FA.5", (fIconW * 0.5) + self.offset_x, fY, self.text_color, 1, 1)
 
         if bExpanded then
-            draw.SimpleText(sLabel, "TLib2.6", fIconW + 1 + self.offset_x, fY + 1, TLib2.Colors.Base1, 0, 1)
             draw.SimpleText(sLabel, "TLib2.6", fIconW + self.offset_x, fY, self.text_color, 0, 1)
         end
     end
