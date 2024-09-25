@@ -110,6 +110,8 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
         end
 
         dSideBar:SetSelected(iID)
+
+        surface.PlaySound("buttons/lightswitch2.wav")
     end
 
     if not self:GetSelected() then
