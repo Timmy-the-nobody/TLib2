@@ -36,14 +36,14 @@ local function handleScreenSizeChange()
     surface.CreateFont("TLib2.7", {font = "Rajdhani Regular", size = math.Round(iH * (19 * 0.001)), weight = 550, antialias = true})
 
     -- Font Awesome (responsive/solid)
-    surface.CreateFont("TLib2.FA.1", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (80 * 0.001)), antialias = true, extended = true})
-    surface.CreateFont("TLib2.FA.2", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (48 * 0.001)), antialias = true, extended = true})
-    surface.CreateFont("TLib2.FA.3", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (32 * 0.001)), antialias = true, extended = true})
-    surface.CreateFont("TLib2.FA.4", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (24 * 0.001)), antialias = true, extended = true})
-    surface.CreateFont("TLib2.FA.5", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (18 * 0.001)), antialias = true, extended = true})
-    surface.CreateFont("TLib2.FA.6", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (16 * 0.001)), antialias = true, extended = true})
-    surface.CreateFont("TLib2.FA.7", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (14 * 0.001)), antialias = true, extended = true})
-    surface.CreateFont("TLib2.FA.8", {font = "Font Awesome 5 Free Solid", size = math.Round(iH * (12 * 0.001)), antialias = true, extended = true})
+    surface.CreateFont("TLib2.FA.1", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (80 * 0.001)), antialias = true, extended = true})
+    surface.CreateFont("TLib2.FA.2", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (48 * 0.001)), antialias = true, extended = true})
+    surface.CreateFont("TLib2.FA.3", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (32 * 0.001)), antialias = true, extended = true})
+    surface.CreateFont("TLib2.FA.4", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (24 * 0.001)), antialias = true, extended = true})
+    surface.CreateFont("TLib2.FA.5", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (18 * 0.001)), antialias = true, extended = true})
+    surface.CreateFont("TLib2.FA.6", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (16 * 0.001)), antialias = true, extended = true})
+    surface.CreateFont("TLib2.FA.7", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (14 * 0.001)), antialias = true, extended = true})
+    surface.CreateFont("TLib2.FA.8", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (12 * 0.001)), antialias = true, extended = true})
 
     TLib2.BorderRadius = math.Round(iH * 0.006)
 
@@ -53,7 +53,7 @@ local function handleScreenSizeChange()
     TLib2.Padding4 = math.Round(iH * 0.005)
 
     TLib2.VGUIControlH1 = math.Round(iH * 0.03)
-    TLib2.VGUIControlH2 = math.Round(iH * 0.026)
+    TLib2.VGUIControlH2 = math.Round(iH * 0.024)
 end
 
 handleScreenSizeChange()
