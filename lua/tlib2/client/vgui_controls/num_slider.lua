@@ -88,14 +88,20 @@ end
 function PANEL:PerformLayout(iW, iH)
     if self.Label and self.Label:IsValid() then
         if (self.Label:GetText() == "") then
-            self.Label:SetVisible(false)
+            if self.Label:IsVisible() then
+                self.Label:SetVisible(false)
+            end
         else
-            self.Label:SetVisible(true)
-            self.Label:SetWide(iW * 0.5)
+            if not self.Label:IsVisible() then
+                self.Label:SetVisible(true)
+            end
+            if (self.Label:GetWide() ~= (iW * 0.25)) then
+                self.Label:SetWide(iW * 0.25)
+            end
         end
     end
 
-    if self.Scratch and self.Scratch:IsValid() then
+    if self.Scratch and self.Scratch:IsValid() and (self.Scratch:GetWide() ~= iH) then
         self.Scratch:SetWide(iH)
     end
 end
