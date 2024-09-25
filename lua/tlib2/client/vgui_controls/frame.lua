@@ -218,8 +218,8 @@ function PANEL:SetResizable(bResizable)
             local iCursorX, iCursorY = input.GetCursorPos()
             local iDiffX = (iCursorX - self.dragging.x)
             local iDiffY = (iCursorY - self.dragging.y)
-            local iNewW = math.max((self.dragging.w + iDiffX), dPanel:GetMinWidth())
-            local iNewH = math.max((self.dragging.h + iDiffY), dPanel:GetMinHeight())
+            local iNewW = math.floor(math.max((self.dragging.w + iDiffX), dPanel:GetMinWidth()))
+            local iNewH = math.floor(math.max((self.dragging.h + iDiffY), dPanel:GetMinHeight()))
 
             if (iNewW ~= dPanel:GetWide()) then
                 dPanel:SetWide(iNewW)
