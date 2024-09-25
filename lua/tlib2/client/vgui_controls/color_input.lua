@@ -81,7 +81,8 @@ function PANEL:CreateColorMixer()
     end
 
     local tChilds = {dColorMixer.txtR, dColorMixer.txtG, dColorMixer.txtB, dColorMixer.txtA}
-    for _, v in ipairs(tChilds) do
+    for i = 1, #tChilds do
+        local v = tChilds[i]
         v:SetFont("TLib2.7")
         v:SetTextColor(TLib2.Colors.Base4)
         v:SetTall(ScrH() * 0.02)

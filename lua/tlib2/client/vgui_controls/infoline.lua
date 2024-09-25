@@ -6,7 +6,9 @@ end
 function PANEL:SetContents(tContents)
     self:Clear()
 
-    for _, v in ipairs(tContents) do
+    for i = 1, #tContents do
+        local v = tContents[i]
+
         local dLine = self:Add("DLabel")
         dLine:Dock(v.dock or LEFT)
         dLine:SetFont(v.font or "TLib2.7")

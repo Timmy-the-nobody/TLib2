@@ -30,8 +30,11 @@ function PANEL:Init()
 
     function self.search_bar:OnValueChange(sValue)
         sValue = sValue:lower()
-        for _, dLine in ipairs(dPanel.lines) do
+
+        for i = 1, #self.lines do
+            local dLine = self.lines[i]
             local bVisible = (sValue == "") and true or (dLine:GetText():lower():find(sValue) ~= nil)
+
             dLine:SetVisible(bVisible)
         end
 
