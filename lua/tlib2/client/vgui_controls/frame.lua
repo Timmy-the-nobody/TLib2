@@ -11,10 +11,10 @@ function PANEL:Init()
     self:DockPadding(0, 0, 0, 0)
     
     self.anim_time = 0.25
-    self.__w = self:GetWide()
-    self.__h = self:GetTall()
-    self.min_w = (iScrH * 0.85)
-    self.min_h = (iScrH * 0.6)
+    self.default_w = self:GetWide()
+    self.default_h = self:GetTall()
+    self.min_w = (iScrH * 0.7)
+    self.min_h = (iScrH * 0.4)
 
     self.lblTitle:Remove()
     self.btnClose:Remove()
@@ -145,13 +145,40 @@ function PANEL:SetMinHeight(iHeight)
     self.min_h = iHeight
 end
 
+function PANEL:GetMinSize()
+    return self:GetMinWidth(), self:GetMinHeight()
+end
+
+function PANEL:SetMinSize(iWidth, iHeight)
+    self:SetMinWidth(iWidth)
+    self:SetMinHeight(iHeight)
+end
+
+function PANEL:GetDefaultWidth()
+    return self.default_w
+end
+
+function PANEL:SetDefaultWidth(iWidth)
+    if (type(iWidth) ~= "number") then return end
+    self.default_w = iWidth
+end
+
+function PANEL:GetDefaultHeight()
+    return self.default_h
+end
+
+function PANEL:SetDefaultHeight(iHeight)
+    if (type(iHeight) ~= "number") then return end
+    self.default_h = iHeight
+end
+
 function PANEL:GetDefaultSize()
-    return self.__w, self.__h
+    return self:GetDefaultWidth(), self:GetDefaultHeight()
 end
 
 function PANEL:SetDefaultSize(iW, iH)
-    self.__w = iW
-    self.__h = iH
+    self:SetDefaultWidth(iW)
+    self:SetDefaultHeight(iH)
 end
 
 function PANEL:GetAnimatonTime()
