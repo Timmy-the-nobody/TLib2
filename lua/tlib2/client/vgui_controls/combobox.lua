@@ -32,8 +32,8 @@ function PANEL:SetMultiple(bMultiple)
 end
 
 function PANEL:CloseMenu()
-    if self.menu_container and self.menu_container:IsValid() then
-        self.menu_container:Remove()
+    if self.screen_canvas and self.screen_canvas:IsValid() then
+        self.screen_canvas:Remove()
     end
 end
 
@@ -42,15 +42,15 @@ function PANEL:OpenMenu()
 
     local dPanel = self
 
-    self.menu_container = vgui.Create("DPanel")
-    self.menu_container:SetSize(ScrW(), ScrH())
-    self.menu_container:MakePopup()
-    self.menu_container.Paint = nil
-    function self.menu_container:OnMousePressed()
+    self.screen_canvas = vgui.Create("Panel")
+    self.screen_canvas:SetSize(ScrW(), ScrH())
+    self.screen_canvas:MakePopup()
+    self.screen_canvas.Paint = nil
+    function self.screen_canvas:OnMousePressed()
         dPanel:CloseMenu()
     end
 
-    self.menu = self.menu_container:Add("DPanel")
+    self.menu = self.screen_canvas:Add("DPanel")
     self.menu:SetDrawOnTop(true)
     self.menu:DockPadding(1, 1, 1, 1)
     self.menu:MakePopup()
@@ -126,8 +126,8 @@ function PANEL:DoClick()
 end
 
 function PANEL:OnRemove()
-    if self.menu_container and self.menu_container:IsValid() then
-        self.menu_container:Remove()
+    if self.screen_canvas and self.screen_canvas:IsValid() then
+        self.screen_canvas:Remove()
     end
 end
 
@@ -244,15 +244,15 @@ function PANEL:PerformLayout(iW, iH)
     local dMenu = self.menu
     if not dMenu or not dMenu:IsValid() then return end
 
-    -- Calculate the size of the menu
     local dTitle = dMenu.title
     if not dTitle or not dTitle:IsValid() then return end
 
     dTitle:SizeToContents()
 
     local iScrH = ScrH()
+    local _, iDPT, _, iDPB = dMenu:GetDockPadding()
     local iNewW = math.max(dTitle:GetWide() + dTitle:GetTall(), iScrH * 0.05)
-    local iNewH = dTitle:GetTall() + (TLib2.Padding4 * 2) + 2
+    local iNewH = dTitle:GetTall() + (TLib2.Padding4 * 2) + iDPT + iDPB
 
     local tChildren = dMenu.scroll:GetCanvas():GetChildren()
     for i = 1, #tChildren do
@@ -269,17 +269,21 @@ function PANEL:PerformLayout(iW, iH)
 
     iNewH = math.min(iNewH, (iScrH * 0.32))
 
-    dMenu:SetSize(iNewW, iNewH)
+    local iCurW, iCurH = dMenu:GetSize()
+    if (iCurW ~= iNewW) or (iCurH ~= iNewH) then
+        dMenu:SetSize(iNewW, iNewH)
+    end
 
     -- Position the menu
     local iX, iY = self:LocalToScreen(0, 0)
+    local iScrW = ScrW()
 
     local iNewX = iX + self:GetWide() - iNewW
     if (iNewX < TLib2.Padding4) then
         iNewX = TLib2.Padding4
     end
-    if (iNewX + iNewW) > (ScrW() - TLib2.Padding4) then
-        iNewX = (ScrW() - iNewW - TLib2.Padding4)
+    if (iNewX + iNewW) > (iScrW - TLib2.Padding4) then
+        iNewX = (iScrW - iNewW - TLib2.Padding4)
     end
 
     local iNewY = (iY + self:GetTall() + TLib2.Padding4)
@@ -290,7 +294,10 @@ function PANEL:PerformLayout(iW, iH)
         iNewY = (iY - iNewH - TLib2.Padding4)
     end
 
-    self.menu:SetPos(iNewX, iNewY)
+    local iCurX, iCurY = dMenu:GetPos()
+    if (iCurX ~= iNewX) or (iCurY ~= iNewY) then
+        dMenu:SetPos(iNewX, iNewY)
+    end
 end
 
 vgui.Register("TLib2:ComboBox", PANEL, "TLib2:Button")
