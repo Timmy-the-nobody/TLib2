@@ -86,6 +86,18 @@ function PANEL:OnChange()
         self.__next_playable_sound = (CurTime() + 0.25)
     end
 
+    local dParent = self:GetParent()
+    while dParent do
+        if not dParent:IsValid() then break end
+
+        if dParent.ScrollToChild then
+            dParent:ScrollToChild(self) 
+            break
+        end
+
+        dParent = dParent:GetParent()
+    end
+
     if self.max_chars then
         -- TODO: Check why char limit doesn't work
         local sVal = self:GetValue() or ""
