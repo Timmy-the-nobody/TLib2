@@ -38,6 +38,8 @@ function PANEL:DoClick()
     if not dNavbar or not dNavbar:IsValid() then return end
 
     dNavbar:SetSelected(self:GetIndex())
+
+    surface.PlaySound("buttons/lightswitch2.wav")
 end
 
 function PANEL:Paint(iW, iH)

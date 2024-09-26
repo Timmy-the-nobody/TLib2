@@ -82,8 +82,8 @@ function PANEL:OnChange()
     self:__HandleStyle()
 
     if not self.__next_playable_sound or (CurTime() > self.__next_playable_sound) then
-        sound.Play("ambient/machines/keyboard2_clicks.wav", LocalPlayer():GetPos(), 100, math.Rand(80, 100), 1, 0)
-        self.__next_playable_sound = (CurTime() + 0.3)
+        sound.Play("ambient/machines/keyboard2_clicks.wav", LocalPlayer():GetPos(), 100, math.Rand(100, 110), 1, 0)
+        self.__next_playable_sound = (CurTime() + 0.25)
     end
 
     if self.max_chars then
