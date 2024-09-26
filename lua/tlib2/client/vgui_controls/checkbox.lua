@@ -6,7 +6,8 @@ local render = render
 function PANEL:Init()
     self.rtl = false
 
-    self.Button:SetSize(ScrH() * 0.016, ScrH() * 0.016)
+    self.Button:SetSize(TLib2.VGUIControlH2 * 0.75, TLib2.VGUIControlH2 * 0.75)
+    self.Button.DoClick = function() self:Toggle() end
     self.Button.check_approach = 0
 
     self.Label:SetFont("TLib2.6")
@@ -35,6 +36,12 @@ function PANEL:Init()
                 TLib2.DrawFAIcon("f00c", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base4, 1, 1)
             render.SetScissorRect(0, 0, 0, 0, false)
         end
+    end
+
+    self.__toggle_detour = self.Toggle
+    function self:Toggle(...)
+        self:__toggle_detour(...)
+        surface.PlaySound("buttons/lightswitch2.wav")
     end
 end
 
