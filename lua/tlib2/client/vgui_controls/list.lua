@@ -21,7 +21,7 @@ function PANEL:Init()
 
     self.header = self:Add("DPanel")
     self.header:Dock(TOP)
-    self.header:SetTall(TLib2.VGUIControlH2)
+    self.header:SetTall(TLib2.VGUIControlH1)
     self.header.Paint = nil
 
     self.search_bar = self.header:Add("TLib2:TextEntry")

@@ -21,8 +21,6 @@ end
 
 function PANEL:SetNavbar(dNavbar)
     self.navbar = dNavbar
-
-    -- self:SetTall(dNavbar.tabs_container:GetTall())
 end
 
 function PANEL:GetIndex()
@@ -46,7 +44,6 @@ function PANEL:Paint(iW, iH)
     local dNavbar = self:GetNavbar()
     if not dNavbar or not dNavbar:IsValid() then return end
 
-    -- Draw the bar
     surface.SetDrawColor(TLib2.Colors.Base2)
     surface.DrawRect(0, (iH - iBarH), iW, iBarH)
 
@@ -55,13 +52,8 @@ function PANEL:Paint(iW, iH)
 
         surface.SetDrawColor(TLib2.Colors.Accent)
         surface.DrawRect((iW - (self.lerp_select * iW)) * 0.5, (iH - iBarH), self.lerp_select * iW, iBarH)
-
-            -- self:SetTextColor(TLib2.Colors.Base4)
     else
-        if (self.lerp_select == 0) then return end
-
         self.lerp_select = 0
-        -- self:SetTextColor(TLib2.Colors.Base3)
     end
 end
 
@@ -118,11 +110,13 @@ function PANEL:GetTab(iTab)
 end
 
 function PANEL:AddTab(sLabel, dPanel, bSelected)
-    local iTab = (#self.tabs + 1)
-
+    if not dPanel or not dPanel:IsValid() then
+        dPanel = vgui.Create("DPanel")
+    end
     dPanel:SetVisible(false)
     dPanel:SetParent(self)
-
+    
+    local iTab = (#self.tabs + 1)
     self.tabs[iTab] = {
         id = iTab,
         label = sLabel,
@@ -143,8 +137,12 @@ function PANEL:AddTab(sLabel, dPanel, bSelected)
 end
 
 function PANEL:PerformLayout(iW, iH)
+    local iButtonW = (iW / #self.tabs)
     for i = 1, #self.tabs do
-        self.tabs[i].button:SetWide(iW / #self.tabs)
+        if not self.tabs[i].button:IsValid() then continue end
+        if (self.tabs[i].button:GetWide() == iButtonW) then continue end
+
+        self.tabs[i].button:SetWide(iButtonW)
     end
 end
 
