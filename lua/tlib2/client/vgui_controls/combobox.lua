@@ -61,12 +61,12 @@ function PANEL:OpenMenu()
 
     self.menu.title = self.menu:Add("TLib2:Button")
     self.menu.title:Dock(TOP)
+    -- self.menu.title:DockPadding(TLib2.Padding4, TLib2.Padding4, TLib2.Padding4, TLib2.Padding4)
     self.menu.title:SetFont("TLib2.7")
     self.menu.title:SetTextColor(TLib2.Colors.Base3)
     self.menu.title:SetTextInset(TLib2.Padding3, 0)
     self.menu.title:SetContentAlignment(4)
     self.menu.title:SetText(self.title)
-    self.menu.title:SizeToContentsX()
     function self.menu.title:Paint(iW, iH)
         surface.SetDrawColor(TLib2.Colors.Base2)
         surface.DrawLine(0, (iH - 1), iW, (iH - 1))
@@ -87,9 +87,10 @@ function PANEL:OpenMenu()
 
     self.menu.scroll = self.menu:Add("TLib2:Scroll")
     self.menu.scroll:Dock(FILL)
-    self.menu.scroll:DockMargin(0, TLib2.Padding4, 0, TLib2.Padding4)
     self.menu.scroll:SetVBarMargin(0)
     self.menu.scroll.Paint = nil
+
+    self.menu.scroll:GetCanvas():DockPadding(TLib2.Padding4, TLib2.Padding4, TLib2.Padding4, TLib2.Padding4)
 
     for i = 1, iOptionsCount do
         local dOption = self.menu.scroll:Add("TLib2:Button")
@@ -246,8 +247,6 @@ function PANEL:PerformLayout(iW, iH)
 
     local dTitle = dMenu.title
     if not dTitle or not dTitle:IsValid() then return end
-
-    dTitle:SizeToContents()
 
     local iScrH = ScrH()
     local _, iDPT, _, iDPB = dMenu:GetDockPadding()
