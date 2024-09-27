@@ -2,6 +2,7 @@ local PANEL = {}
 
 local draw = draw
 local surface = surface
+local TLib2 = TLib2
 
 function PANEL:Init()
     self:SetTall(TLib2.VGUIControlH2)
