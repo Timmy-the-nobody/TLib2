@@ -103,7 +103,7 @@ function PANEL:Paint(iW, iH)
             TLib2.DrawFAIcon(self.bg_info.faicon, "TLib2.FA.5", (iW * 0.5), (iH * 0.5) - TLib2.Padding3, tFACol, 1, 1)
         end
         if self.bg_info.markup then
-            self.bg_info.markup:Draw((iW * 0.5), (iH * 0.5) + TLib2.Padding3, 1, 3, iW, iH)
+            self.bg_info.markup:Draw((iW * 0.5), (iH * 0.5) + TLib2.Padding3, 1, 3, 255, 1)
         end
     end
 end

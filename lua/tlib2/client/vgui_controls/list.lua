@@ -204,7 +204,7 @@ end
 ---@private
 function PANEL:__OnLinesUpdate()
     if (#self.lines == 0) then
-        self:GetList():SetBackgroundInfo("Empty List", "f15b")
+        self:GetList():SetBackgroundInfo("Empty List", "f07c")
     else
         self:GetList():SetBackgroundInfo()
     end
