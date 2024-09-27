@@ -11,6 +11,9 @@ resource.AddFile("resource/fonts/fa6/fa-v4compatibility.ttf")
 -- TODO: Put this in workshop and remove from here
 resource.AddFile("resource/fonts/rajdhani-bold.ttf")
 resource.AddFile("resource/fonts/rajdhani-regular.ttf")
+
+resource.AddFile("materials/tlib2/grad_round_vignette.png")
+resource.AddFile("materials/tlib2/grad_square_vignette.png")
 -- TODO end
 
 TLib2 = TLib2 or {}
@@ -55,7 +58,8 @@ requireCL("tlib2/client/vgui_controls/combobox.lua")
 requireCL("tlib2/client/vgui_controls/scroll.lua")
 requireCL("tlib2/client/vgui_controls/text_entry.lua")
 requireCL("tlib2/client/vgui_controls/data_table_drag_anchor.lua")
-requireCL("tlib2/client/vgui_controls/data_table.lua")
+requireCL("tlib2/client/vgui_controls/data_table.lua") -- TODO: Remove old data table
+requireCL("tlib2/client/vgui_controls/data_table_new.lua")
 requireCL("tlib2/client/vgui_controls/modal.lua")
 requireCL("tlib2/client/vgui_controls/list.lua")
 requireCL("tlib2/client/vgui_controls/slider.lua")
