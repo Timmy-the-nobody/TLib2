@@ -76,5 +76,6 @@ requireCL("tlib2/client/vgui_controls/subtitle.lua")
 requireCL("tlib2/client/vgui_controls/separator.lua")
 requireCL("tlib2/client/vgui_controls/infoline.lua")
 requireCL("tlib2/client/vgui_controls/helper.lua")
+requireCL("tlib2/client/vgui_controls/bar_chart.lua")
 
 print("[TLib2] Loaded!")
