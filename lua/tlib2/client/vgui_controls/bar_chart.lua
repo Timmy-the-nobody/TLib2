@@ -39,7 +39,7 @@ function PANEL:Init()
     end
     self.left = self:Add("DPanel")
     self.left:Dock(LEFT)
-    self.left:SetWide(ScrH() * 0.2)
+    self.left:SetWide(ScrH() * 0.25)
     self.left.Paint = nil
 
     self.right = self:Add("DPanel")
@@ -103,7 +103,7 @@ function PANEL:AddData(sLabel, fValue)
         local bHovered = dProgress:IsHovered()
         local fBarH = (dProgress.bar_h * iH)
 
-        dProgress.approach_w = math.Approach(dProgress.approach_w, iW - 2, RealFrameTime() * 1280)
+        dProgress.approach_w = math.Approach(dProgress.approach_w, iW - 2, RealFrameTime() * 256)
         dProgress.approach_w = math.min(dProgress.approach_w, iW)
 
         surface.SetDrawColor(bHovered and TLib2.Colors.Action or TLib2.Colors.Accent)
