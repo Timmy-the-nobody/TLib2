@@ -3,6 +3,8 @@ local math = math
 local render = render
 local surface = surface
 
+local pLP
+
 ---`🔸 Client`<br>
 ---Draws a stencil mask
 ---@param fnMask function @The mask function
@@ -65,4 +67,16 @@ function TLib2.DrawDashedBox(iX, iY, iW, iH, iSegLen, iSpacing, iThickness, oCol
         surface.DrawRect(iX, iSegY, iThickness, iLen)
         surface.DrawRect(iX + iW - iThickness, iSegY, iThickness, iLen)
     end
+end
+
+---`🔸 Client`<br>
+---Plays a UI sound
+---@param sSound string @The sound
+---@param fVolume? number @The volume, defaults to 1
+---@param iPitch? number @The pitch, defaults to 100
+function TLib2.PlayUISound(sSound, fVolume, iPitch)
+    pLP = pLP or LocalPlayer()
+    if not pLP or not pLP:IsValid() then return end
+
+    pLP:EmitSound(sSound, 100, (iPitch or 100), (fVolume or 1))
 end
