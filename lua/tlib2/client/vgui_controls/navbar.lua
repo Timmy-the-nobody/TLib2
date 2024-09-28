@@ -37,7 +37,7 @@ function PANEL:DoClick()
 
     dNavbar:SetSelected(self:GetIndex())
 
-    surface.PlaySound("buttons/lightswitch2.wav")
+    TLib2.PlayUISound("buttons/lightswitch2.wav")
 end
 
 function PANEL:Paint(iW, iH)

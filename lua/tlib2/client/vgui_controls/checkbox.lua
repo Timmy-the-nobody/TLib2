@@ -41,7 +41,7 @@ function PANEL:Init()
     self.__toggle_detour = self.Toggle
     function self:Toggle(...)
         self:__toggle_detour(...)
-        surface.PlaySound("buttons/lightswitch2.wav")
+        TLib2.PlayUISound("buttons/lightswitch2.wav")
     end
 end
 

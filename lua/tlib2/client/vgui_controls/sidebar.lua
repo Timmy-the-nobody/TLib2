@@ -24,6 +24,8 @@ function PANEL:Init()
     self.expand_btn:SetText("")
     self.expand_btn:SetCursor("hand")
     function self.expand_btn:DoClick()
+        TLib2.PlayUISound("buttons/lightswitch2.wav")
+
         dSideBar:ToggleExpand()
     end
 
@@ -111,7 +113,7 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
 
         dSideBar:SetSelected(iID)
 
-        surface.PlaySound("buttons/lightswitch2.wav")
+        TLib2.PlayUISound("buttons/lightswitch2.wav")
     end
 
     if not self:GetSelected() then

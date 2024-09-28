@@ -190,7 +190,7 @@ function PANEL:AddRow(xData, ...)
 
     local dRow = self.scroll:Add("DPanel")
     dRow:Dock(TOP)
-    dRow:SetTall(ScrH() * 0.07)
+    dRow:SetTall(ScrH() * 0.06)
     dRow.is_data_table_row = true
     dRow.bg_color = (iRow % 2 == 0) and TLib2.ColorManip(TLib2.Colors.Base1, 1, 0.7) or TLib2.ColorManip(TLib2.Colors.Base1, 1, 0.8)
     dRow.data = xData
@@ -328,7 +328,7 @@ function PANEL:PerformLayout(iW, iH)
 
     if (#self.rows == 0) then
         if not self.scroll:GetBackgroundInfo() then
-            self.scroll:SetBackgroundInfo("No Data Found", "f071")
+            self.scroll:SetBackgroundInfo("No Data Found", "f07c")
         end
     else
         if self.scroll:GetBackgroundInfo() then

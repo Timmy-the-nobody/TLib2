@@ -113,7 +113,7 @@ function PANEL:Paint(iW, iH)
 end
 
 function PANEL:DoClickInternal(iButton)
-    surface.PlaySound("buttons/lightswitch2.wav")
+    TLib2.PlayUISound("buttons/lightswitch2.wav")
 end
 
 vgui.Register("TLib2:Button", PANEL, "DButton")
