@@ -95,10 +95,16 @@ function PANEL:PerformLayout(iW, iH)
     local iTall = math.max(self.Button:GetTall(), self.Label:GetTall())
 
     if self.Description and self.Description:IsValid() and (self.Description:GetText() ~= "") then
-        self.Description:SetWide(iW)
-        self.Description:SetPos(self.Button:GetWide() + TLib2.Padding3, iTall)
-        self.Description:InvalidateLayout(true)
+        if (self.description:GetWide() ~= iW) then
+            self.Description:SetWide(iW)
+        end
 
+        local iDescTargetX, iDescTargetY = (self.Button:GetWide() + TLib2.Padding3), iTall
+        if (self.Description:GetX() ~= iDescTargetX) or (self.Description:GetY() ~= iDescTargetY) then
+            self.Description:SetPos(self.Button:GetWide() + TLib2.Padding3, iTall)
+        end
+
+        self.Description:InvalidateLayout(true)
         iTall = (iTall + self.Description:GetTall())
     end
 
