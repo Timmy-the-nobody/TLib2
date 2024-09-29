@@ -74,10 +74,23 @@ function PANEL:SetDescription(sText)
 end
 
 function PANEL:PerformLayout(iW, iH)
-	self.Button:SetPos(0, 0)
+    local iBtnX, iBtnY = self.Button:GetPos()
+    if (iBtnX ~= 0) or (iBtnY ~= 0) then
+    	self.Button:SetPos(0, 0)
+    end
 
-	self.Label:SizeToContentsX()
-	self.Label:SetPos(self.Button:GetWide() + TLib2.Padding3, math.floor((self.Button:GetTall() - self.Label:GetTall()) * 0.5))
+    surface.SetFont(self.Label:GetFont())
+    local iLabelW = surface.GetTextSize(self.Label:GetText())
+    if (self.Label:GetWide() ~= iLabelW) then
+    	self.Label:SetWide(iLabelW)
+    end
+
+    local iLabelTargetX = self.Button:GetWide() + TLib2.Padding3
+    local iLabelTargetY = math.floor((self.Button:GetTall() - self.Label:GetTall()) * 0.5)
+
+    if (self.Label:GetX() ~= iLabelTargetX) or (self.Label:GetY() ~= iLabelTargetY) then
+        self.Label:SetPos(iLabelTargetX, iLabelTargetY)
+    end
 
     local iTall = math.max(self.Button:GetTall(), self.Label:GetTall())
 
@@ -89,15 +102,26 @@ function PANEL:PerformLayout(iW, iH)
         iTall = (iTall + self.Description:GetTall())
     end
 
-    self:SetTall(iTall)
+    if (iH ~= iTall) then
+        self:SetTall(iTall)
+    end
 
     if self:IsRTL() then
-        self.Button:SetX(iW - self.Button:GetWide())
+        local iButtonX = (iW - self.Button:GetWide())
+        if (self.Button:GetX() ~= iButtonX) then
+            self.Button:SetX(iButtonX)
+        end
 
-        self.Label:SetX(iW - self.Button:GetWide() - self.Label:GetWide() - TLib2.Padding3)
+        local iLabelTargetX = (iButtonX - self.Label:GetWide() - TLib2.Padding3)
+        if (self.Label:GetX() ~= iLabelTargetX) then
+            self.Label:SetX(iLabelTargetX)
+        end
 
         if self.Description and self.Description:IsValid() and (self.Description:GetText() ~= "") then
-            self.Description:SetX(iW - self.Button:GetWide() - self.Description:GetWide() - TLib2.Padding3)
+            local iDescTargetX = (iButtonX - self.Description:GetWide() - TLib2.Padding3)
+            if (self.Description:GetX() ~= iDescTargetX) then
+                self.Description:SetX(iDescTargetX)
+            end
         end
     end
 end
