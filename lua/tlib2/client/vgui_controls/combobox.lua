@@ -248,9 +248,12 @@ function PANEL:PerformLayout(iW, iH)
     local dTitle = dMenu.title
     if not dTitle or not dTitle:IsValid() then return end
 
+    local iScrW = ScrW()
     local iScrH = ScrH()
+    local iX, iY = self:LocalToScreen(0, 0)
+
     local _, iDPT, _, iDPB = dMenu:GetDockPadding()
-    local iNewW = math.max(dTitle:GetWide() + dTitle:GetTall(), iScrH * 0.05)
+    local iNewW = (iScrH * 0.05)
     local iNewH = dTitle:GetTall() + (TLib2.Padding4 * 2) + iDPT + iDPB
 
     local tChildren = dMenu.scroll:GetCanvas():GetChildren()
@@ -259,44 +262,27 @@ function PANEL:PerformLayout(iW, iH)
 
         surface.SetFont(dChild:GetFont())
         local iTextW, iTextH = surface.GetTextSize(dChild:GetText())
-        local iInsetX = dChild:GetTextInset()
+        local iInsetX, _ = dChild:GetTextInset()
 
         dChild:InvalidateLayout(true)
-        iNewW = math.max(iNewW, iTextW + iInsetX + iTextH + TLib2.Padding2)
+        iNewW = math.max(iNewW, (iTextW + iInsetX + iTextH + TLib2.Padding2))
         iNewH = iNewH + dChild:GetTall()
     end
 
     iNewH = math.min(iNewH, (iScrH * 0.32))
 
-    local iCurW, iCurH = dMenu:GetSize()
-    if (iCurW ~= iNewW) or (iCurH ~= iNewH) then
-        dMenu:SetSize(iNewW, iNewH)
-    end
+    if (dMenu:GetWide() ~= iNewW) then dMenu:SetWide(iNewW) end
+    if (dMenu:GetTall() ~= iNewH) then dMenu:SetTall(iNewH) end
 
     -- Position the menu
-    local iX, iY = self:LocalToScreen(0, 0)
-    local iScrW = ScrW()
+    local iMinX, iMinY = TLib2.Padding4, TLib2.Padding4
+    local iMaxX, iMaxY = (iScrW - iNewW - TLib2.Padding4), (iScrH - iNewH - TLib2.Padding4)
 
-    local iNewX = iX + self:GetWide() - iNewW
-    if (iNewX < TLib2.Padding4) then
-        iNewX = TLib2.Padding4
-    end
-    if (iNewX + iNewW) > (iScrW - TLib2.Padding4) then
-        iNewX = (iScrW - iNewW - TLib2.Padding4)
-    end
+    local iNewX = math.Clamp((iX + self:GetWide() - iNewW), iMinX, iMaxX)
+    local iNewY = math.Clamp((iY + self:GetTall() + TLib2.Padding4), iMinY, iMaxY)
 
-    local iNewY = (iY + self:GetTall() + TLib2.Padding4)
-    if (iNewY < TLib2.Padding4) then
-        iNewY = TLib2.Padding4
-    end
-    if ((iNewY + iNewH) > (iScrH - TLib2.Padding4)) then
-        iNewY = (iY - iNewH - TLib2.Padding4)
-    end
-
-    local iCurX, iCurY = dMenu:GetPos()
-    if (iCurX ~= iNewX) or (iCurY ~= iNewY) then
-        dMenu:SetPos(iNewX, iNewY)
-    end
+    if (dMenu:GetX() ~= iNewX) then dMenu:SetX(iNewX) end
+    if (dMenu:GetY() ~= iNewY) then dMenu:SetY(iNewY) end
 end
 
 vgui.Register("TLib2:ComboBox", PANEL, "TLib2:Button")
