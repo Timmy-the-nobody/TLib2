@@ -12,6 +12,17 @@ function PANEL:Init()
     self.title = ""
 end
 
+function PANEL:DoClickInternal()
+    TLib2.PlayUISound("tlib2/click.ogg")
+
+    self:OpenMenu()
+end
+
+function PANEL:OnRemove()
+    if not self.screen_canvas or not self.screen_canvas:IsValid() then return end
+    self.screen_canvas:Remove()
+end
+
 function PANEL:GetMultiple()
     return self.multi_select
 end
@@ -31,12 +42,15 @@ function PANEL:SetMultiple(bMultiple)
     end
 end
 
+---`🔸 Client`<br>
+---Closes the menu
 function PANEL:CloseMenu()
-    if self.screen_canvas and self.screen_canvas:IsValid() then
-        self.screen_canvas:Remove()
-    end
+    if not self.screen_canvas or not self.screen_canvas:IsValid() then return end
+    self.screen_canvas:Remove()
 end
 
+---`🔸 Client`<br>
+---Opens the menu
 function PANEL:OpenMenu()
     if self.menu and self.menu:IsValid() then return end
 
@@ -48,10 +62,11 @@ function PANEL:OpenMenu()
     self.screen_canvas.Paint = nil
     function self.screen_canvas:OnMousePressed()
         dPanel:CloseMenu()
+        TLib2.PlayUISound("tlib2/click.ogg")
     end
 
     self.menu = self.screen_canvas:Add("DPanel")
-    self.menu:SetDrawOnTop(true)
+    -- self.menu:SetDrawOnTop(true)
     self.menu:DockPadding(1, 1, 1, 1)
     self.menu:MakePopup()
     function self.menu:Paint(iW, iH)
@@ -61,7 +76,6 @@ function PANEL:OpenMenu()
 
     self.menu.title = self.menu:Add("TLib2:Button")
     self.menu.title:Dock(TOP)
-    -- self.menu.title:DockPadding(TLib2.Padding4, TLib2.Padding4, TLib2.Padding4, TLib2.Padding4)
     self.menu.title:SetFont("TLib2.7")
     self.menu.title:SetTextColor(TLib2.Colors.Base3)
     self.menu.title:SetTextInset(TLib2.Padding3, 0)
@@ -110,7 +124,7 @@ function PANEL:OpenMenu()
         end
 
         function dOption:DoClick()
-            dPanel:__OnClickOption(i)
+            dPanel:__OnClickOption(i, self)
             dPanel.menu.scroll:ScrollToChild(self)
         end
 
@@ -122,59 +136,54 @@ function PANEL:OpenMenu()
     self:InvalidateLayout(true)
 end
 
+---`🔸 Client`<br>
+---Sets the combobox's title
+---@param sTitle string @Title of the combobox
 function PANEL:SetTitle(sTitle)
     self.title = sTitle
 end
 
-function PANEL:DoClick()
-    self:OpenMenu()
-end
-
-function PANEL:OnRemove()
-    if self.screen_canvas and self.screen_canvas:IsValid() then
-        self.screen_canvas:Remove()
-    end
-end
-
-function PANEL:OnAttemptSelect(iIndex, sLabel, xData)
-    return true
-end
-
-function PANEL:OnAttemptUnselect(iIndex, sLabel, xData)
-    return true
-end
-
+---`🔸 Client`<br>
+---Called when an option is selected
+---@param iIndex number @Index of the option
+---@param sLabel string @Label of the option
+---@param xData any @Data of the option
 function PANEL:OnSelect(iIndex, sLabel, xData)
 end
 
+---`🔸 Client`<br>
+---Called when an option is unselected
+---@param iIndex number @Index of the option
+---@param sLabel string @Label of the option
+---@param xData any @Data of the option
 function PANEL:OnUnselect(iIndex, sLabel, xData)
 end
 
+---`🔸 Client`<br>
+---Internal method called when an option is clicked
+---@param iIndex number @Index of the option
 function PANEL:__OnClickOption(iIndex)
     local tOption = self.options[iIndex]
     if not tOption then return end
 
-    -- Multiple selection
     if self:GetMultiple() then
         self:SetSelectedOption(iIndex, not self:IsOptionSelected(iIndex))
-        return
+    else
+        self:SetSelectedOption(iIndex, true)
+        self:CloseMenu()
     end
-
-    -- Single selection
-    self:SetSelectedOption(iIndex, true)
-    self:CloseMenu()
 end
 
+---`🔸 Client`<br>
+---Sets an option as selected/unselected
+---@param iIndex number @Index of the option
+---@param bSelected boolean @Whether the option is selected or not
+---@param bSilent boolean @Whether the On[Select/Unselect] event should be fired
 function PANEL:SetSelectedOption(iIndex, bSelected, bSilent)
     if not self.options[iIndex] then return end
 
     if bSelected then
         if self.selected_options[iIndex] then return end
-
-        if self.OnAttemptSelect then
-            local bReturn = self:OnAttemptSelect(iIndex, self.options[iIndex].label, self.options[iIndex].data)
-            if (bReturn == false) then return end
-        end
 
         if not self:GetMultiple() then
             for i, _ in pairs(self.selected_options) do
@@ -192,11 +201,6 @@ function PANEL:SetSelectedOption(iIndex, bSelected, bSilent)
     else
         if not self.selected_options[iIndex] then return end
 
-        if self.OnAttemptUnselect then
-            local bReturn = self:OnAttemptUnselect(iIndex, self.options[iIndex].label, self.options[iIndex].data)
-            if (bReturn == false) then return end
-        end
-
         self.selected_options[iIndex] = nil
         if not bSilent then
             self:OnUnselect(iIndex, self.options[iIndex].label, self.options[iIndex].data)
@@ -204,21 +208,31 @@ function PANEL:SetSelectedOption(iIndex, bSelected, bSilent)
     end
 end
 
+---`🔸 Client`<br>
+---Checks if an option is selected
+---@param iIndex number @Index of the option
+---@return boolean @Whether the option is selected
 function PANEL:IsOptionSelected(iIndex)
     return (self.selected_options[iIndex] == true)
 end
 
+---`🔸 Client`<br>
+---Gets the selected options
+---@return table
 function PANEL:GetSelectedOptions()
     return self.selected_options
 end
 
+---`🔸 Client`<br>
+---Adds an option
+---@param sLabel string @Label of the option
+---@param xData any @Data of the option
+---@param bSelected boolean @Whether the option is selected
+---@return number @Index of the option
 function PANEL:AddOption(sLabel, xData, bSelected)
     local iInd = (#self.options + 1)
 
-    self.options[iInd] = {
-        label = sLabel,
-        data = xData
-    }
+    self.options[iInd] = {label = sLabel, data = xData}
 
     if bSelected then
         self:SetSelectedOption(iInd, true, true)
@@ -227,6 +241,9 @@ function PANEL:AddOption(sLabel, xData, bSelected)
     return iInd
 end
 
+---`🔸 Client`<br>
+---Removes an option by index
+---@param iIndex number @Index of the option
 function PANEL:RemoveOption(iIndex)
     if not self.options[iIndex] then return end
 
@@ -240,6 +257,8 @@ function PANEL:RemoveOption(iIndex)
     self.options = tNewOptions
 end
 
+---`🔸 Client`<br>
+---Clears the options
 function PANEL:ClearOptions()
     self.options = {}
     self.selected_options = {}
