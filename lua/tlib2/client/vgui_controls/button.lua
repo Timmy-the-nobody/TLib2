@@ -17,16 +17,32 @@ function PANEL:Init()
     self.outline_color_hover = TLib2.Colors.Base3
 end
 
-function PANEL:SetBackgroundColor(oCol, oColHover)
+function PANEL:GetBackgroundColor()
+    return self.bg_color
+end
+
+function PANEL:SetBackgroundColor(oCol)
     self.bg_color = oCol
 end
 
-function PANEL:SetOutlineColor(oCol, oColHover)
+function PANEL:GetOutlineColor()
+    return self.outline_color
+end
+
+function PANEL:SetOutlineColor(oCol)
     self.outline_color = oCol
+end
+
+function PANEL:GetBackgroundHoverColor()
+    return self.bg_color_hover
 end
 
 function PANEL:SetBackgroundHoverColor(oCol)
     self.bg_color_hover = oCol
+end
+
+function PANEL:GetOutlineHoverColor()
+    return self.outline_color_hover
 end
 
 function PANEL:SetOutlineHoverColor(oCol)
@@ -59,6 +75,13 @@ end
 ---@param bAdjustWidth boolean @Whether to adjust the width of the button
 ---@param bAlignRight boolean @Whether to align the button to the right
 function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)
+    if not sIcon then
+        if self.fa_icon_pnl and IsValid(self.fa_icon_pnl) then
+            self.fa_icon_pnl:Remove()
+        end
+        return
+    end
+
     sFont = sFont or "TLib2.FA.7"
 
     surface.SetFont(sFont)
@@ -75,8 +98,9 @@ function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)
     self.fa_icon_pnl:DockMargin(iMargin, 0, iMargin, 0)
     self.fa_icon_pnl:SetWide(iFAIconW)
     self.fa_icon_pnl:SetMouseInputEnabled(false)
+    self.fa_icon_pnl.fa_icon = sIcon
     self.fa_icon_pnl.Paint = function(_, iW, iH)
-        TLib2.DrawFAIcon(sIcon, sFont or "TLib2.FA.7", (iW * 0.5), (iH * 0.5), self:GetTextColor(), 1, 1)
+        TLib2.DrawFAIcon(self.fa_icon_pnl.fa_icon, sFont or "TLib2.FA.7", (iW * 0.5), (iH * 0.5), self:GetTextColor(), 1, 1)
     end
 
     if bAdjustWidth then
@@ -113,7 +137,91 @@ function PANEL:Paint(iW, iH)
 end
 
 function PANEL:DoClickInternal(iButton)
-    TLib2.PlayUISound("buttons/lightswitch2.wav")
+    TLib2.PlayUISound("tlib2/click.ogg")
 end
+
+local tNotifTypes = {
+    [NOTIFY_GENERIC] = {
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/confirmation.ogg")
+        end
+    },
+    [NOTIFY_ERROR] = {
+        color = TLib2.Colors.Warn,
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/error.ogg")
+        end
+    },
+    [NOTIFY_UNDO] = {
+        color = TLib2.Colors.Accent,
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/drop.ogg")
+        end
+    },
+    [NOTIFY_HINT] = {
+        color = TLib2.Colors.Accent,
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/drop.ogg")
+        end
+    },
+    [NOTIFY_CLEANUP] = {
+        color = TLib2.Colors.Accent,
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/drop.ogg")
+        end
+    }
+}
+
+function PANEL:DoNotify(iType, sText, bAdjustWidth, fDuration, fnOnFinish)
+    if self.__notifinfo then return end
+    if not tNotifTypes[iType] then return end
+
+    self:InvalidateLayout(true)
+
+    self.__notifinfo = {
+        bg_color = self:GetBackgroundColor(),
+        bg_color_hover = self:GetBackgroundHoverColor(),
+        outline_color = self:GetOutlineColor(),
+        outline_color_hover = self:GetOutlineHoverColor(),
+        width = self:GetWide(),
+        text = self:GetText()
+    }
+
+    self:SetText(sText or "")
+
+    if tNotifTypes[iType].color then
+        self:SetFlatColorTheme(tNotifTypes[iType].color)
+    end
+
+    if tNotifTypes[iType].on_click then
+        tNotifTypes[iType].on_click(self)
+    end
+
+
+    if bAdjustWidth then
+        self:AdjustWidth()
+    end
+
+    timer.Simple((type(fDuration) == "number") and fDuration or 2, function()
+        if not IsValid(self) then return end
+
+        self:SetBackgroundColor(self.__notifinfo.bg_color)
+        self:SetBackgroundHoverColor(self.__notifinfo.bg_color_hover)
+        self:SetOutlineColor(self.__notifinfo.outline_color)
+        self:SetOutlineHoverColor(self.__notifinfo.outline_color_hover)
+        self:SetText(self.__notifinfo.text)
+        
+        if bAdjustWidth and (self:GetWide() ~= self.__notifinfo.width) then
+            self:SetWide(self.__notifinfo.width)
+        end
+        
+        self.__notifinfo = nil
+
+        if (type(fnOnFinish) == "function") then
+            fnOnFinish()
+        end
+    end)
+end
+    
 
 vgui.Register("TLib2:Button", PANEL, "DButton")
