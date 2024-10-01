@@ -113,6 +113,10 @@ function PANEL:OpenMenu()
             dPanel:__OnClickOption(i)
             dPanel.menu.scroll:ScrollToChild(self)
         end
+
+        function dOption:DoClickInternal()
+            TLib2.PlayUISound("tlib2/select.ogg")
+        end
     end
 
     self:InvalidateLayout(true)

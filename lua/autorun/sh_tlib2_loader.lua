@@ -12,8 +12,14 @@ resource.AddFile("resource/fonts/fa6/fa-v4compatibility.ttf")
 resource.AddFile("resource/fonts/rajdhani-bold.ttf")
 resource.AddFile("resource/fonts/rajdhani-regular.ttf")
 
-resource.AddFile("materials/tlib2/grad_round_vignette.png")
-resource.AddFile("materials/tlib2/grad_square_vignette.png")
+local tFiles, _ = file.Find("materials/tlib2/*", "GAME")
+for i = 1, #tFiles do
+    resource.AddFile("materials/tlib2/"..tFiles[i])
+end
+local tFiles, _ = file.Find("sound/tlib2/*", "GAME")
+for i = 1, #tFiles do
+    resource.AddFile("sound/tlib2/"..tFiles[i])
+end
 -- TODO end
 
 TLib2 = TLib2 or {}

@@ -41,7 +41,7 @@ function PANEL:Init()
     self.__toggle_detour = self.Toggle
     function self:Toggle(...)
         self:__toggle_detour(...)
-        TLib2.PlayUISound("buttons/lightswitch2.wav")
+        TLib2.PlayUISound("tlib2/toggle.ogg", 1, self:GetChecked() and 100 or 75)
     end
 end
 
@@ -95,7 +95,7 @@ function PANEL:PerformLayout(iW, iH)
     local iTall = math.max(self.Button:GetTall(), self.Label:GetTall())
 
     if self.Description and self.Description:IsValid() and (self.Description:GetText() ~= "") then
-        if (self.description:GetWide() ~= iW) then
+        if (self.Description:GetWide() ~= iW) then
             self.Description:SetWide(iW)
         end
 

@@ -115,11 +115,15 @@ function PANEL:SetExpanded(bExpanded)
     if bExpanded then
         self:SizeTo(ScrW(), ScrH(), fAnimTime, 0, 0.5)
         self:MoveTo(0, 0, fAnimTime, 0, 0.5)
+
+        TLib2.PlayUISound("tlib2/maximize.ogg")
     else
         local iDefaultW, iDefaultH = self:GetDefaultSize()
 
         self:SizeTo(iDefaultW, iDefaultH, fAnimTime, 0, 0.5)
         self:MoveTo((ScrW() - iDefaultW) * 0.5, (ScrH() - iDefaultH) * 0.5, fAnimTime, 0, 0.5)
+
+        TLib2.PlayUISound("tlib2/minimize.ogg")
     end
 end
 

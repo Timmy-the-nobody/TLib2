@@ -24,9 +24,9 @@ function PANEL:Init()
     self.expand_btn:SetText("")
     self.expand_btn:SetCursor("hand")
     function self.expand_btn:DoClick()
-        TLib2.PlayUISound("buttons/lightswitch2.wav")
-
         dSideBar:ToggleExpand()
+
+        TLib2.PlayUISound(dSideBar:IsExpanded() and "tlib2/maximize.ogg" or "tlib2/minimize.ogg")
     end
 
     local sMaximizeFA = TLib2.GetFAIcon("f054")
@@ -113,7 +113,7 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
 
         dSideBar:SetSelected(iID)
 
-        TLib2.PlayUISound("buttons/lightswitch2.wav")
+        TLib2.PlayUISound("tlib2/switch.ogg")
     end
 
     if not self:GetSelected() then

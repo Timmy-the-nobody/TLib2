@@ -28,7 +28,7 @@ function PANEL:Init()
 
         local iRightW = self.right:GetWide()
         surface.SetDrawColor(TLib2.Colors.Base3)
-    
+
         for i = 0, self.x_axis.steps do
             local iX = self.left:GetWide() + (self.right:GetWide() * (i / (self.x_axis.steps))) - 1
 
@@ -37,6 +37,7 @@ function PANEL:Init()
             DisableClipping(bOldClipping)
         end
     end
+
     self.left = self:Add("DPanel")
     self.left:Dock(LEFT)
     self.left:SetWide(ScrH() * 0.25)

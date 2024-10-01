@@ -78,13 +78,17 @@ function PANEL:__HandleStyle()
     end
 end
 
+function PANEL:OnKeyCode(iKey)
+    if self.__next_playable_sound and (CurTime() < self.__next_playable_sound) then
+        return
+    end
+    
+    TLib2.PlayUISound("tlib2/typing.ogg", 0.25, (iKey == KEY_BACKSPACE) and 90 or math.Rand(95, 105))
+    self.__next_playable_sound = (CurTime() + 0.05)
+end
+
 function PANEL:OnChange()
     self:__HandleStyle()
-
-    if not self.__next_playable_sound or (CurTime() > self.__next_playable_sound) then
-        sound.Play("ambient/machines/keyboard2_clicks.wav", LocalPlayer():GetPos(), 100, math.Rand(100, 110), 1, 0)
-        self.__next_playable_sound = (CurTime() + 0.25)
-    end
 
     local dParent = self:GetParent()
     while dParent do

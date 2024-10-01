@@ -6,7 +6,6 @@ function PANEL:Init()
     self:SetTextColor(TLib2.Colors.Base4)
     self:SetDrawLanguageID(false)
     self:SetPaintBackground(false)
-    -- self:SetUpdateOnType(true)
     self:SetTextColor(TLib2.Colors.Base4)
     self:SetCursorColor(TLib2.Colors.Base3)
     self:SetHighlightColor(TLib2.Colors.Base2)
@@ -18,6 +17,9 @@ function PANEL:Init()
     self.Down.Paint = function(dPanel, iW, iH)
         TLib2.DrawFAIcon("f0d7", "TLib2.FA.8", (iW * 0.5), (iH * 0.5), dPanel:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base3, 1, 1)
     end
+
+    self.Up.DoClickInternal = function() TLib2.PlayUISound("tlib2/click.ogg") end
+    self.Down.DoClickInternal = function() TLib2.PlayUISound("tlib2/click.ogg") end
 
     self.outline_color = TLib2.Colors.Base2
     self.outline_color_editing = TLib2.Colors.Accent
