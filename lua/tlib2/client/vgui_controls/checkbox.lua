@@ -10,10 +10,9 @@ function PANEL:Init()
     self.Button.DoClick = function() self:Toggle() end
     self.Button.check_approach = 0
 
+    self.Label:SetCursor("hand")
     self.Label:SetFont("TLib2.6")
     self.Label:SetTextColor(TLib2.Colors.Base4)
-    self.Label:SetCursor("hand")
-    -- self.Label:SetTall(self.Button:GetTall())
 
     function self.Button:Paint(iW, iH)
         local bChecked = self:GetChecked()

@@ -54,7 +54,6 @@ function PANEL:Init()
     end
 
     function self.header:OnMouseReleased(...)
-        if dPanel:IsExpanded() then return end
         dPanel:OnMouseReleased(...)
     end
 
