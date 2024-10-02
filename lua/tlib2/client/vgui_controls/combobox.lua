@@ -7,9 +7,10 @@ function PANEL:Init()
     self:SetTall(TLib2.VGUIControlH2)
 
     self.options = {}
-    self.multi_select = false
+    self.multiple_select = false
     self.selected_options = {}
     self.title = ""
+    self.menu_max_height = (ScrH() * 0.32)
 end
 
 function PANEL:DoClickInternal()
@@ -23,21 +24,23 @@ function PANEL:OnRemove()
     self.screen_canvas:Remove()
 end
 
+---`🔸 Client`<br>
+---Returns whether the combobox allows multiple options to be selected
+---@return boolean
 function PANEL:GetMultiple()
-    return self.multi_select
+    return self.multiple_select
 end
 
+---`🔸 Client`<br>
+---Sets whether the combobox allows multiple options to be selected
+---@param bMultiple boolean
 function PANEL:SetMultiple(bMultiple)
-    self.multi_select = tobool(bMultiple)
+    self.multiple_select = tobool(bMultiple)
 
-    if not self.multi_select then
-        local iFirstSelected = nil
-        for iOption, _ in pairs(self.selected_options) do
-            iFirstSelected = iOption
-            break
-        end
-        if iFirstSelected then
+    if not self.multiple_select then
+        for iOption, _ in pairs(self:GetSelectedOptions()) do
             self.selected_options = {[iFirstSelected] = true}
+            break
         end
     end
 end
@@ -50,6 +53,23 @@ function PANEL:CloseMenu()
 end
 
 ---`🔸 Client`<br>
+---Returns the maximum height of the menu
+---@return number
+function PANEL:GetMenuMaxHeight()
+    return self.menu_max_height
+end
+
+---`🔸 Client`<br>
+---Sets the maximum height of the menu (when exceeded, the menu will be scrollable)
+---@param iMaxH number
+function PANEL:SetMenuMaxHeight(iMaxH)
+    if (type(iMaxH) ~= "number") then return end
+
+    self.menu_max_height = iMaxH
+    self:InvalidateLayout(true)
+end
+
+---`🔸 Client`<br>
 ---Opens the menu
 function PANEL:OpenMenu()
     if self.menu and self.menu:IsValid() then return end
@@ -59,6 +79,7 @@ function PANEL:OpenMenu()
     self.screen_canvas = vgui.Create("Panel")
     self.screen_canvas:SetSize(ScrW(), ScrH())
     self.screen_canvas:MakePopup()
+    self.screen_canvas:SetDrawOnTop(true)
     self.screen_canvas.Paint = nil
     function self.screen_canvas:OnMousePressed()
         dPanel:CloseMenu()
@@ -66,7 +87,6 @@ function PANEL:OpenMenu()
     end
 
     self.menu = self.screen_canvas:Add("DPanel")
-    -- self.menu:SetDrawOnTop(true)
     self.menu:DockPadding(1, 1, 1, 1)
     self.menu:MakePopup()
     function self.menu:Paint(iW, iH)
@@ -80,7 +100,7 @@ function PANEL:OpenMenu()
     self.menu.title:SetTextColor(TLib2.Colors.Base3)
     self.menu.title:SetTextInset(TLib2.Padding3, 0)
     self.menu.title:SetContentAlignment(4)
-    self.menu.title:SetText(self.title)
+    self.menu.title:SetText(self:GetTitle())
     function self.menu.title:Paint(iW, iH)
         surface.SetDrawColor(TLib2.Colors.Base2)
         surface.DrawLine(0, (iH - 1), iW, (iH - 1))
@@ -97,18 +117,16 @@ function PANEL:OpenMenu()
         dPanel:CloseMenu()
     end
 
-    local iOptionsCount = #self.options
-
     self.menu.scroll = self.menu:Add("TLib2:Scroll")
     self.menu.scroll:Dock(FILL)
     self.menu.scroll:SetVBarMargin(0)
+    self.menu.scroll:GetCanvas():DockPadding(TLib2.Padding4, TLib2.Padding4, TLib2.Padding4, TLib2.Padding4)
     self.menu.scroll.Paint = nil
 
-    self.menu.scroll:GetCanvas():DockPadding(TLib2.Padding4, TLib2.Padding4, TLib2.Padding4, TLib2.Padding4)
-
-    for i = 1, iOptionsCount do
+    local tOptions = self:GetOptions()
+    for i = 1, #tOptions do
         local dOption = self.menu.scroll:Add("TLib2:Button")
-        dOption:SetText(self.options[i].label)
+        dOption:SetText(tOptions[i].label)
         dOption:SetFont("TLib2.7")
         dOption:Dock(TOP)
         dOption:SetContentAlignment(4)
@@ -134,6 +152,13 @@ function PANEL:OpenMenu()
     end
 
     self:InvalidateLayout(true)
+end
+
+---`🔸 Client`<br>
+---Returns the combobox's title
+---@return string @Title of the combobox
+function PANEL:GetTitle(sTitle)
+    return self.title
 end
 
 ---`🔸 Client`<br>
@@ -224,6 +249,13 @@ function PANEL:GetSelectedOptions()
 end
 
 ---`🔸 Client`<br>
+---Returns the combobox's options
+---@return table @Options
+function PANEL:GetOptions()
+    return self.options
+end
+
+---`🔸 Client`<br>
 ---Adds an option
 ---@param sLabel string @Label of the option
 ---@param xData any @Data of the option
@@ -279,6 +311,7 @@ function PANEL:PerformLayout(iW, iH)
     local iNewW = (iScrH * 0.05)
     local iNewH = dTitle:GetTall() + (TLib2.Padding4 * 2) + iDPT + iDPB
 
+    -- Set the menu size
     local tChildren = dMenu.scroll:GetCanvas():GetChildren()
     for i = 1, #tChildren do
         local dChild = tChildren[i]
@@ -287,15 +320,13 @@ function PANEL:PerformLayout(iW, iH)
         local iTextW, iTextH = surface.GetTextSize(dChild:GetText())
         local iInsetX, _ = dChild:GetTextInset()
 
-        dChild:InvalidateLayout(true)
         iNewW = math.max(iNewW, (iTextW + iInsetX + iTextH + TLib2.Padding2))
-        iNewH = iNewH + dChild:GetTall()
+        iNewH = math.min(iNewH + dChild:GetTall(), self:GetMenuMaxHeight())
     end
 
-    iNewH = math.min(iNewH, (iScrH * 0.32))
-
-    if (dMenu:GetWide() ~= iNewW) then dMenu:SetWide(iNewW) end
-    if (dMenu:GetTall() ~= iNewH) then dMenu:SetTall(iNewH) end
+    if (dMenu:GetWide() ~= iNewW) or (dMenu:GetTall() ~= iNewH) then
+        dMenu:SetSize(iNewW, iNewH)
+    end
 
     -- Position the menu
     local iMinX, iMinY = TLib2.Padding4, TLib2.Padding4
@@ -304,8 +335,10 @@ function PANEL:PerformLayout(iW, iH)
     local iNewX = math.Clamp((iX + self:GetWide() - iNewW), iMinX, iMaxX)
     local iNewY = math.Clamp((iY + self:GetTall() + TLib2.Padding4), iMinY, iMaxY)
 
-    if (dMenu:GetX() ~= iNewX) then dMenu:SetX(iNewX) end
-    if (dMenu:GetY() ~= iNewY) then dMenu:SetY(iNewY) end
+    if (dMenu:GetX() ~= iNewX) or (dMenu:GetY() ~= iNewY) then
+        dMenu:SetPos(iNewX, iNewY)
+        print("setpos")
+    end
 end
 
 vgui.Register("TLib2:ComboBox", PANEL, "TLib2:Button")
