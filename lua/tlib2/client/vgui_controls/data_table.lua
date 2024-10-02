@@ -252,7 +252,7 @@ function PANEL:AddRow(xData, ...)
     if self.row_buttons then
         for i = 1, #self.row_buttons do
             local tButton = self.row_buttons[i]
-            tButton.vgui = dRow:Add("DButton")
+            tButton.vgui = dRow:Add("TLib2:Button")
 
             local dButton = tButton.vgui
             dButton:SetText("")
