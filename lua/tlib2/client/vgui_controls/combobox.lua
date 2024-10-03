@@ -88,7 +88,6 @@ function PANEL:OpenMenu()
 
     self.menu = self.screen_canvas:Add("DPanel")
     self.menu:DockPadding(1, 1, 1, 1)
-    self.menu:MakePopup()
     function self.menu:Paint(iW, iH)
         draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
         draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base1)
@@ -131,12 +130,12 @@ function PANEL:OpenMenu()
         dOption:Dock(TOP)
         dOption:SetContentAlignment(4)
         dOption:SetTextInset((TLib2.Padding3 * 2) + (ScrH() * 0.015), 0)
-        dOption:SetBackgroundColor(color_transparent)
-        dOption:SetBackgroundHoverColor(TLib2.Colors.Base2)
-        dOption:SetOutlineColor(color_transparent)
-        dOption:SetOutlineHoverColor(color_transparent)
 
-        function dOption:PaintOver(iW, iH)
+        function dOption:Paint(iW, iH)
+            if self:IsHovered() then
+                draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
+            end
+
             if not dPanel:IsOptionSelected(i) then return end
             TLib2.DrawFAIcon("f00c", "TLib2.FA.7", TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base3, 0, 1)
         end
@@ -200,6 +199,14 @@ function PANEL:__OnClickOption(iIndex)
 end
 
 ---`🔸 Client`<br>
+---Checks if an option is selected
+---@param iIndex number @Index of the option
+---@return boolean @Whether the option is selected
+function PANEL:IsOptionSelected(iIndex)
+    return (self.selected_options[iIndex] == true)
+end
+
+---`🔸 Client`<br>
 ---Sets an option as selected/unselected
 ---@param iIndex number @Index of the option
 ---@param bSelected boolean @Whether the option is selected or not
@@ -231,14 +238,6 @@ function PANEL:SetSelectedOption(iIndex, bSelected, bSilent)
             self:OnUnselect(iIndex, self.options[iIndex].label, self.options[iIndex].data)
         end
     end
-end
-
----`🔸 Client`<br>
----Checks if an option is selected
----@param iIndex number @Index of the option
----@return boolean @Whether the option is selected
-function PANEL:IsOptionSelected(iIndex)
-    return (self.selected_options[iIndex] == true)
 end
 
 ---`🔸 Client`<br>
