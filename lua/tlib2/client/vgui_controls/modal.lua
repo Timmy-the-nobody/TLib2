@@ -14,10 +14,16 @@ function PANEL:Init()
     self:MakePopup()
 	self.startTime = SysTime()
 
-    self.close_button_container = self:Add("DPanel")
-    self.close_button_container:Dock(TOP)
-    self.close_button_container:SetTall(0)
-    self.close_button_container.Paint = nil
+    self.close_button = self:Add("TLib2:Button")
+    self.close_button:SetVisible(false)
+    self.close_button:SetFont("TLib2.6")
+    self.close_button:SetText("")
+    self.close_button:SetSize(TLib2.VGUIControlH2, TLib2.VGUIControlH2)
+    self.close_button:SetFAIcon("f00d", "TLib2.FA.6", true)
+    self.close_button:SetTextColor(TLib2.Colors.Base4)
+    self.close_button.DoClick = function()
+        self:Remove()
+    end
 
     self.title = self:Add("DLabel")
     self.title:Dock(TOP)
@@ -43,9 +49,6 @@ function PANEL:Init()
 end
 
 function PANEL:OnRemove()
-    if self.bg_fullscreen and self.bg_fullscreen:IsValid() then
-        self.bg_fullscreen:Remove()
-    end
 end
 
 function PANEL:SetFAIcon(sFAIcon)
@@ -61,31 +64,16 @@ function PANEL:SetSubtitle(sSubtitle)
 end
 
 function PANEL:SetShowCloseButton(bShowCloseButton)
-    if not bShowCloseButton then
-        if self.close_button and self.close_button:IsValid() then
-            self.close_button:Remove()
-        end
-        self.close_button_container:DockMargin(0, 0, 0, 0)
-        return
-    end
+    if bShowCloseButton then
+        self.close_button:SetVisible(true)
 
-    if self.close_button and self.close_button:IsValid() then return end
+        self.title:DockMargin(0, 0, TLib2.VGUIControlH2 + (TLib2.Padding4 * 2), TLib2.Padding3)
+        self.subtitle:DockMargin(0, 0, TLib2.VGUIControlH2 + (TLib2.Padding4 * 2), TLib2.Padding3)
+    else
+        self.close_button:SetVisible(false)
 
-    self.close_button_container:DockMargin(0, 0, 0, TLib2.Padding3)
-
-    self.close_button = self.close_button_container:Add("TLib2:Button")
-    self.close_button:Dock(RIGHT)
-    self.close_button:DockMargin(0, 0, 0, 0)
-    self.close_button:SetFont("TLib2.6")
-    self.close_button:SetText("")
-    self.close_button:SetTall(ScrH() * 0.024)
-    self.close_button:SetFAIcon("f00d", "TLib2.FA.6", true)
-    self.close_button:SetTextColor(TLib2.Colors.Base4)
-    self.close_button:SetWide(self.close_button:GetTall())
-
-    local dModal = self
-    function self.close_button:DoClick()
-        dModal:Remove()
+        self.title:DockMargin(0, 0, 0, TLib2.Padding3)
+        self.subtitle:DockMargin(0, 0, 0, TLib2.Padding3)
     end
 end
 
@@ -93,19 +81,13 @@ function PANEL:Paint(iW, iH)
     Derma_DrawBackgroundBlur(self, self.startTime)
 
     draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
-    draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base0)
+    draw.RoundedBox((TLib2.BorderRadius - 2), 1, 1, (iW - 2), (iH - 2), TLib2.Colors.Base0)
 end
 
 function PANEL:PerformLayout(iW, iH)
     if not self:IsValid() then return end
 
-    if (self.bg_fullscreen) then
-        self.bg_fullscreen:SetSize(ScrW(), ScrH())
-    end
-    if (self.close_button_container) then
-        self.close_button_container:SizeToChildren(false, true)
-    end
-    if (self.content_container) then
+    if self.content_container then
         self.content_container:SizeToChildren(false, true)
     end
 
@@ -114,6 +96,15 @@ function PANEL:PerformLayout(iW, iH)
     local iNewX, iNewY = (ScrW() - iW) * 0.5, (ScrH() - iH) * 0.5
     if (iX ~= iNewX) or (iY ~= iNewY) then
         self:SetPos(iNewX, iNewY)
+    end
+
+    if self.close_button and self.close_button:IsValid() then
+        local iButtonX, iButtonY = self.close_button:GetPos()
+        local iTargetX, iTargetY = (iW - self.close_button:GetWide() - TLib2.VGUIControlH2), TLib2.VGUIControlH2
+
+        if (iButtonX ~= iTargetX) or (iButtonY ~= iTargetY) then
+            self.close_button:SetPos(iTargetX, iTargetY)
+        end
     end
 end
 
@@ -134,9 +125,7 @@ function PANEL:AddButton(sLabel, fnCallback)
     dBtn:SetText(sLabel)
 
     function dBtn:DoClick()
-        if (type(fnCallback) ~= "function") then return end
-
-        if not fnCallback() then
+        if (type(fnCallback) ~= "function") or not fnCallback() then
             dModal:Remove()
         end
     end
@@ -154,13 +143,3 @@ function PANEL:AddTextEntry()
 end
 
 vgui.Register("TLib2:Modal", PANEL, "DFrame")
-
--- local modal = vgui.Create("TLib2:Modal")
--- modal:SetShowCloseButton(true)
--- modal:SetTitle("Delete zone?")
--- modal:SetSubtitle("Are you sure you want to delte this zone? This Action cannot be undone.")
--- modal:SetFAIcon("f055")
--- modal:AddTextEntry()
--- modal:AddSeparator()
--- modal:AddButton("Yes", function() end)
--- modal:AddButton("No", function() end)
