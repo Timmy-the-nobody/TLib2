@@ -33,8 +33,8 @@ function PANEL:Init()
 
         local iTitleX = TLib2.Padding4
         if dPanel.title_faicon then
-            TLib2.DrawFAIcon(dPanel.title_faicon, "TLib2.FA.6", (iH + TLib2.Padding4) * 0.5, (iH * 0.5), TLib2.Colors.Base4, 1, 1)
-            iTitleX = iH + TLib2.Padding4
+            TLib2.DrawFAIcon(dPanel.title_faicon, "TLib2.FA.6", (iH * 0.5) + TLib2.Padding4, (iH * 0.5), TLib2.Colors.Base4, 1, 1)
+            iTitleX = iH + (TLib2.Padding4 * 2)
         end
 
         if dPanel.title then
@@ -292,15 +292,14 @@ function PANEL:PerformLayout(iW, iH)
             end
         end
 
-        local iX, iY = self.resize_btn:GetPos()
-        local iTargetX, iTargetY = (iW - TLib2.VGUIControlH2), (iH - TLib2.VGUIControlH2)
+        if self.resize_btn:IsVisible() then
+            local iX, iY = self.resize_btn:GetPos()
+            local iTargetX, iTargetY = (iW - TLib2.VGUIControlH2), (iH - TLib2.VGUIControlH2)
 
-        if (iX ~= iTargetX) then
-            self.resize_btn:SetX(iTargetX)
-        end
-
-        if (iY ~= iTargetY) then
-            self.resize_btn:SetY(iTargetY)
+            if (iX ~= iTargetX) or (iY ~= iTargetY) then
+                self.resize_btn:SetPos(iTargetX, iTargetY)
+                self.resize_btn:MoveToFront()
+            end
         end
     end
 end
