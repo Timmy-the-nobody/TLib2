@@ -1,25 +1,16 @@
--- TODO: Remove old FA fonts?
-resource.AddFile("resource/fonts/fa5/fa-regular-400.ttf")
-resource.AddFile("resource/fonts/fa5/fa-brands-400.ttf")
-resource.AddFile("resource/fonts/fa5/fa-solid-900.ttf")
-
+-- TODO: Put this in workshop and remove from here
 resource.AddFile("resource/fonts/fa6/fa-brands-400.ttf")
 resource.AddFile("resource/fonts/fa6/fa-regular-400.ttf")
 resource.AddFile("resource/fonts/fa6/fa-solid-900.ttf")
 resource.AddFile("resource/fonts/fa6/fa-v4compatibility.ttf")
-
--- TODO: Put this in workshop and remove from here
 resource.AddFile("resource/fonts/rajdhani-bold.ttf")
 resource.AddFile("resource/fonts/rajdhani-regular.ttf")
 
 local tFiles, _ = file.Find("materials/tlib2/*", "GAME")
-for i = 1, #tFiles do
-    resource.AddFile("materials/tlib2/"..tFiles[i])
-end
+for i = 1, #tFiles do resource.AddFile("materials/tlib2/"..tFiles[i]) end
+
 local tFiles, _ = file.Find("sound/tlib2/*", "GAME")
-for i = 1, #tFiles do
-    resource.AddFile("sound/tlib2/"..tFiles[i])
-end
+for i = 1, #tFiles do resource.AddFile("sound/tlib2/"..tFiles[i]) end
 -- TODO end
 
 TLib2 = TLib2 or {}
