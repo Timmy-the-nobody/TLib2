@@ -2,6 +2,9 @@ local PANEL = {}
 
 local surface = surface
 local draw = draw
+local render = render
+local Lerp = Lerp
+local RealFrameTime = RealFrameTime
 
 local matGradDown = Material("vgui/gradient-d")
 local sFAUp = TLib2.GetFAIcon("f0d8")
@@ -78,7 +81,7 @@ function PANEL:AddColumn(sLabel, fnSelector, fnFormat, bSortable, fWidth)
     dColumn.hover_lerp = 0
 
     function dColumn:Paint(iW, iH)
-        self.hover_lerp = Lerp(FrameTime() * 16, self.hover_lerp, self:IsHovered() and 1 or 0)
+        self.hover_lerp = Lerp(RealFrameTime() * 16, self.hover_lerp, self:IsHovered() and 1 or 0)
         if (self.hover_lerp > 0.001) then
             local fGradH = math.floor(iH * self.hover_lerp)
             surface.SetMaterial(matGradDown)
