@@ -2,7 +2,12 @@ local PANEL = {}
 
 local surface = surface
 
-local matGradD = Material("vgui/gradient-d")
+local matGradD = Material("vgui/gradient-d", "noclamp smooth")
+local tDefaultSkin = derma.GetNamedSkin("Default")
+local fnShadowTex = false
+if tDefaultSkin and tDefaultSkin.tex then
+    fnShadowTex = tDefaultSkin.tex.Shadow
+end
 
 function PANEL:Init()
     local dPanel = self
@@ -40,6 +45,9 @@ function PANEL:Init()
         if dPanel.title then
             draw.SimpleText(dPanel.title, "TLib2.6", iTitleX, (iH * 0.5), TLib2.Colors.Base4, 0, 1)
         end
+
+        surface.SetDrawColor(TLib2.Colors.Base2)
+        surface.DrawLine(0, (iH - 1), iW, (iH - 1))
     end
 
     function self.header:OnMousePressed(...)
@@ -57,14 +65,9 @@ function PANEL:Init()
         dPanel:OnMouseReleased(...)
     end
 
-    self.header_line = self:Add("DPanel")
-    self.header_line:Dock(TOP)
-    self.header_line:SetTall(1)
-    self.header_line:SetBackgroundColor(TLib2.Colors.Base2)
 
     self.close_btn = self.header:Add("DButton")
     self.close_btn:Dock(RIGHT)
-    self.close_btn:DockMargin((iScrH * 0.002), 0, 0, 0)
     self.close_btn:SetWide(self.header:GetTall())
     self.close_btn:SetText("")
     self.close_btn:SetCursor("hand")
@@ -195,6 +198,12 @@ function PANEL:SetAnimationTime(fTime)
 end
 
 function PANEL:Paint(iW, iH)
+    if fnShadowTex then
+        local bOldClipping = DisableClipping(true)
+        tDefaultSkin.tex.Shadow(-TLib2.Padding4, -TLib2.Padding4, iW + (TLib2.Padding4 * 3), iH + (TLib2.Padding4 * 3), color_white)
+        DisableClipping(bOldClipping)
+    end
+
     surface.SetDrawColor(TLib2.Colors.Base0)
     surface.DrawRect(0, 0, iW, iH)
 end
