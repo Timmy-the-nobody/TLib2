@@ -2,6 +2,7 @@ local type = type
 local math = math
 local render = render
 local surface = surface
+local matBlur = Material("pp/blurscreen", "noclamp smooth")
 
 local pLP
 
@@ -69,6 +70,16 @@ function TLib2.DrawDashedBox(iX, iY, iW, iH, iSegLen, iSpacing, iThickness, oCol
     end
 end
 
+function TLib2.DrawOutlinedBox(iX, iY, iW, iH, iThickness, oColor)
+    surface.SetDrawColor(oColor)
+
+    surface.DrawRect(0, 0, iThickness, iH)
+    surface.DrawRect(iThickness, 0, iW - (iThickness * 2), iThickness)
+    surface.DrawRect(iW - iThickness, 0, iThickness, iH)
+    surface.DrawRect(iThickness, (iH - iThickness), iW - (iThickness * 2), iThickness)
+end
+
+
 ---`🔸 Client`<br>
 ---Plays a UI sound
 ---@param sSound string @The sound
@@ -79,4 +90,26 @@ function TLib2.PlayUISound(sSound, fVolume, iPitch)
     if not pLP or not pLP:IsValid() then return end
 
     pLP:EmitSound(sSound, 100, (iPitch or 100), (fVolume or 1))
+end
+
+---`🔸 Client`<br>
+---Blurs a panel
+---@param dPanel Panel @The panel
+---@param fAmount number @The amount
+function TLib2.Blur(dPanel, fAmount)
+    local iX, iY = dPanel:LocalToScreen(0, 0)
+    local iScrW, iScrH = ScrW(), ScrH()
+
+    fAmount = (fAmount or 2)
+
+    surface.SetDrawColor(color_white)
+    surface.SetMaterial(matBlur)
+    
+    for i = 1, 3 do
+        matBlur:SetFloat("$blur", (i / 3) * fAmount)
+        matBlur:Recompute()
+
+        render.UpdateScreenEffectTexture()
+        surface.DrawTexturedRect((iX * -1), (iY * -1), iScrW, iScrH)
+    end
 end
