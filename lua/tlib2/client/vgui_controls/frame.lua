@@ -302,6 +302,143 @@ function PANEL:PerformLayout(iW, iH)
             end
         end
     end
+
+    if self.notifs then
+        local iTotalH = 0
+        for i = 1, #self.notifs do
+            local dNotif = self.notifs[i]
+            if not dNotif:IsValid() then continue end
+
+            local iNotifH = dNotif:GetTall()
+
+            local iX = (iW - dNotif:GetWide()) * 0.5
+            local iY = (iH - iNotifH) - TLib2.Padding2 - iTotalH - (TLib2.Padding4 * (i - 1))
+            
+            iTotalH = (iTotalH + iNotifH)
+
+            if (dNotif:GetX() ~= iX) or (dNotif:GetY() ~= iY) then
+                dNotif:SetPos(iX, iY)
+            end
+        end
+    end
+end
+
+local tNotifTypes = {
+    [NOTIFY_GENERIC] = {
+        color = TLib2.Colors.Accent,
+        fa_icon = "f0eb",
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/confirmation.ogg")
+        end
+    },
+    [NOTIFY_ERROR] = {
+        color = TLib2.Colors.Warn,
+        fa_icon = "f2d3",
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/error.ogg")
+        end
+    },
+    [NOTIFY_UNDO] = {
+        color = TLib2.Colors.Accent,
+        fa_icon = "f0e2",
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/drop.ogg")
+        end
+    },
+    [NOTIFY_HINT] = {
+        color = Color(243, 156, 18),
+        fa_icon = "f059",
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/drop.ogg")
+        end
+    },
+    [NOTIFY_CLEANUP] = {
+        color = Color(243, 156, 18),
+        fa_icon = "f0c4",
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/drop.ogg")
+        end
+    }
+}
+
+function PANEL:Notify(iNotifType, sText, fDuration)
+    if not iNotifType or not tNotifTypes[iNotifType] then
+        iNotifType = 1
+    end
+
+    fDuration = fDuration or 5
+    local tNotif = tNotifTypes[iNotifType]
+
+    self.notifs = self.notifs or {}
+
+    local iMaxNotifs = 4
+    if #self.notifs >= iMaxNotifs then
+        for i = 1, (#self.notifs - iMaxNotifs) do
+            self.notifs[i]:KillNotif()
+        end
+    end
+
+    local dNotif = self:Add("DButton")
+    self.notifs[#self.notifs + 1] = dNotif
+
+    surface.SetFont("TLib2.6")
+    local iTextW, iTextH = surface.GetTextSize(sText or "")
+    local iStartTime = CurTime()
+    local iBoxH = (iTextH + TLib2.Padding3)
+
+    dNotif:SetText("")
+    dNotif:SetFont("TLib2.6")
+    dNotif:SetTextColor(TLib2.Colors.Base4)
+    dNotif:SetSize(0, iBoxH)
+    dNotif:SizeTo(iTextW + iBoxH + (TLib2.Padding4 * 3), iBoxH, 0.2, 0, 1)
+    dNotif:SetAlpha(0)
+    dNotif:AlphaTo(200, 0.5)
+    dNotif:SetExpensiveShadow(2, TLib2.Colors.Base0)
+    dNotif:SetCursor("arrow")
+    dNotif:SetDrawOnTop(true)
+    dNotif:SetMouseInputEnabled(false)
+    dNotif.w_approach = 0
+    dNotif.shadow_color = ColorAlpha(TLib2.ColorManip(tNotif.color, 0.5, 0.5), 200)
+
+    function dNotif:Paint(iW, iH)
+        local iPercentage = math.Clamp((CurTime() - iStartTime) / fDuration, 0, 1)
+        local fProgressW = iW - ((iW - 2 - iH) * iPercentage)
+
+        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
+        draw.RoundedBox((TLib2.BorderRadius - 2), 1, 1, (iW - 2), (iH - 2), TLib2.Colors.Base1)
+        
+        surface.SetDrawColor(tNotif.color)
+        surface.DrawLine((iH - 1), (iH - 2), fProgressW, (iH - 2))
+
+        draw.RoundedBoxEx((TLib2.BorderRadius - 2), 1, 1, (iH - 2), (iH - 2), tNotif.color, true, false, true, false)
+        TLib2.DrawFAIcon(tNotif.fa_icon, "TLib2.FA.5", (iH * 0.5) + 1, (iH * 0.5) + 1, self.shadow_color, 1, 1)
+        TLib2.DrawFAIcon(tNotif.fa_icon, "TLib2.FA.5", (iH * 0.5), (iH * 0.5), TLib2.Colors.Base4, 1, 1)
+
+        draw.SimpleText(sText or "", "TLib2.6", (iH + TLib2.Padding4), (iH * 0.5), TLib2.Colors.Base4, 0, 1)
+    end
+
+    dNotif.KillNotif = function()
+        dNotif:MoveTo(self:GetWide(), dNotif:GetY(), 0.2, 0, 1, function()
+            if not self:IsValid() then return end
+
+            local tNewNotifs = {}
+            for i = 1, #self.notifs do
+                if self.notifs[i] ~= dNotif then
+                    tNewNotifs[#tNewNotifs + 1] = self.notifs[i]
+                end
+            end
+            self.notifs = tNewNotifs
+
+            if dNotif:IsValid() then
+                dNotif:Remove()
+            end
+        end)
+    end
+
+    timer.Simple(fDuration, function()
+        if not dNotif:IsValid() then return end
+        dNotif:KillNotif()
+    end)
 end
 
 vgui.Register("TLib2:Frame", PANEL, "DFrame")

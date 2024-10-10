@@ -336,7 +336,6 @@ function PANEL:PerformLayout(iW, iH)
 
     if (dMenu:GetX() ~= iNewX) or (dMenu:GetY() ~= iNewY) then
         dMenu:SetPos(iNewX, iNewY)
-        print("setpos")
     end
 end
 

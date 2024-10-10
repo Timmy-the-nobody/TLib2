@@ -159,13 +159,13 @@ local tNotifTypes = {
         end
     },
     [NOTIFY_HINT] = {
-        color = TLib2.Colors.Accent,
+        color = Color(243, 156, 18),
         on_click = function(dButton)
             TLib2.PlayUISound("tlib2/drop.ogg")
         end
     },
     [NOTIFY_CLEANUP] = {
-        color = TLib2.Colors.Accent,
+        color = Color(243, 156, 18),
         on_click = function(dButton)
             TLib2.PlayUISound("tlib2/drop.ogg")
         end
@@ -176,7 +176,7 @@ function PANEL:DoNotify(iType, sText, bAdjustWidth, fDuration, fnOnFinish)
     if self.__notifinfo then return end
     if not tNotifTypes[iType] then return end
 
-    self:InvalidateLayout(true)
+    -- self:InvalidateLayout(true)
 
     self.__notifinfo = {
         bg_color = self:GetBackgroundColor(),
