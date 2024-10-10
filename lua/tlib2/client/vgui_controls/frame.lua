@@ -200,7 +200,7 @@ end
 function PANEL:Paint(iW, iH)
     if fnShadowTex then
         local bOldClipping = DisableClipping(true)
-        tDefaultSkin.tex.Shadow(-TLib2.Padding4, -TLib2.Padding4, iW + (TLib2.Padding4 * 3), iH + (TLib2.Padding4 * 3), color_white)
+        tDefaultSkin.tex.Shadow(-TLib2.Padding3, -TLib2.Padding3, iW + (TLib2.Padding3 * 2), iH + (TLib2.Padding3 * 2), color_white)
         DisableClipping(bOldClipping)
     end
 
