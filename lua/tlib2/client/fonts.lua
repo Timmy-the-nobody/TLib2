@@ -1,8 +1,6 @@
 local math = math
 local surface = surface
 
-local iBorderRadius = 0
-local tPadding = {}
 local tFAChars = {}
 
 -- Absolute size fonts
@@ -14,7 +12,7 @@ surface.CreateFont("TLib2.Abs.5", {font = "Rajdhani Bold", size = 22, weight = 5
 surface.CreateFont("TLib2.Abs.6", {font = "Rajdhani Regular", size = 21, weight = 550, antialias = true})
 surface.CreateFont("TLib2.Abs.7", {font = "Rajdhani Regular", size = 19, weight = 550, antialias = true})
 
--- Absolute size icons
+-- Absolute size FA fonts
 surface.CreateFont("TLib2.Abs.FA.1", {font = "Font Awesome 5 Free Solid", size = 80, antialias = true, extended = true})
 surface.CreateFont("TLib2.Abs.FA.2", {font = "Font Awesome 5 Free Solid", size = 48, antialias = true, extended = true})
 surface.CreateFont("TLib2.Abs.FA.3", {font = "Font Awesome 5 Free Solid", size = 32, antialias = true, extended = true})
@@ -35,7 +33,7 @@ local function handleScreenSizeChange()
     surface.CreateFont("TLib2.6", {font = "Rajdhani Regular", size = math.Round(iH * (21 * 0.001)), weight = 550, antialias = true})
     surface.CreateFont("TLib2.7", {font = "Rajdhani Regular", size = math.Round(iH * (19 * 0.001)), weight = 550, antialias = true})
 
-    -- Font Awesome (responsive/solid)
+    -- Responsive FA fonts
     surface.CreateFont("TLib2.FA.1", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (80 * 0.001)), antialias = true, extended = true})
     surface.CreateFont("TLib2.FA.2", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (48 * 0.001)), antialias = true, extended = true})
     surface.CreateFont("TLib2.FA.3", {font = "Font Awesome 6 Free Solid", size = math.Round(iH * (32 * 0.001)), antialias = true, extended = true})
