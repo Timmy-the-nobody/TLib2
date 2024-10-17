@@ -230,11 +230,7 @@ function PANEL:SetResizable(bResizable)
     self.resize_btn:AlignBottom(0)
     self.resize_btn:MoveToFront()
     self.resize_btn.dragging = false
-    
-    function self.resize_btn:PerformLayout(iW, iH)
-        self:MoveToFront()
-    end
-    
+ 
     function self.resize_btn:OnMousePressed(iMouseBtn)
         if (iMouseBtn ~= MOUSE_LEFT) then return end
 
@@ -291,7 +287,9 @@ function PANEL:PerformLayout(iW, iH)
     end
 
     if self.resize_btn and self.resize_btn:IsValid() then
-        if (self:GetWide() >= ScrW()) and (self:GetTall() >= ScrH()) then
+        self.resize_btn:MoveToFront()
+
+        if (iW >= ScrW()) and (iH >= ScrH()) then
             if self.resize_btn:IsVisible() then
                 self.resize_btn:Hide()
             end
