@@ -276,6 +276,10 @@ function PANEL:SetResizable(bResizable)
 end
 
 function PANEL:PerformLayout(iW, iH)
+    if self.PerformLayoutInternal then
+        self:PerformLayoutInternal(iW, iH)
+    end
+
     if self.header and self.header:IsValid() then
         local iHeaderH = self.header:GetTall()
         if self.close_btn and self.close_btn:IsValid() and (self.close_btn:GetWide() ~= iHeaderH) then
