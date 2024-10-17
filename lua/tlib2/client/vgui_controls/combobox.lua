@@ -241,10 +241,19 @@ function PANEL:SetSelectedOption(iIndex, bSelected, bSilent)
 end
 
 ---`🔸 Client`<br>
----Gets the selected options
----@return table
+---Gets the selected options as an associative table (key = index, value = true)
+---@return table<number, boolean> @Selected options
 function PANEL:GetSelectedOptions()
     return self.selected_options
+end
+
+---`🔸 Client`<br>
+---Returns the first selected option
+---@return number? @Index of the option, or nil if no option is selected
+function PANEL:GetFirstSelectedOption()
+    for i, _ in pairs(self.selected_options) do
+        return i
+    end
 end
 
 ---`🔸 Client`<br>
@@ -307,13 +316,15 @@ function PANEL:PerformLayout(iW, iH)
     local iX, iY = self:LocalToScreen(0, 0)
 
     local _, iDPT, _, iDPB = dMenu:GetDockPadding()
-    local iNewW = (iScrH * 0.05)
+    local iNewW = math.max(dTitle:GetWide() + (TLib2.Padding4 * 2), (iScrH * 0.05))
     local iNewH = dTitle:GetTall() + (TLib2.Padding4 * 2) + iDPT + iDPB
 
     -- Set the menu size
     local tChildren = dMenu.scroll:GetCanvas():GetChildren()
     for i = 1, #tChildren do
         local dChild = tChildren[i]
+        if not dChild or not dChild:IsValid() then continue end
+        if not dChild.GetFont or not dChild.GetText then continue end
 
         surface.SetFont(dChild:GetFont())
         local iTextW, iTextH = surface.GetTextSize(dChild:GetText())
