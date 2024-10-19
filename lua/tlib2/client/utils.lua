@@ -70,16 +70,6 @@ function TLib2.DrawDashedBox(iX, iY, iW, iH, iSegLen, iSpacing, iThickness, oCol
     end
 end
 
-function TLib2.DrawOutlinedBox(iX, iY, iW, iH, iThickness, oColor)
-    surface.SetDrawColor(oColor)
-
-    surface.DrawRect(0, 0, iThickness, iH)
-    surface.DrawRect(iThickness, 0, iW - (iThickness * 2), iThickness)
-    surface.DrawRect(iW - iThickness, 0, iThickness, iH)
-    surface.DrawRect(iThickness, (iH - iThickness), iW - (iThickness * 2), iThickness)
-end
-
-
 ---`🔸 Client`<br>
 ---Plays a UI sound
 ---@param sSound string @The sound
