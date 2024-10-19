@@ -5,6 +5,10 @@ local draw = draw
 function PANEL:Init()
     self.lblTitle:SetText("")
 
+    if self.header and self.header:IsValid() then
+        self.header:Remove()
+    end
+
     self:SetSize(ScrH() * 0.36, 0)
     self:ShowCloseButton(false)
     self:DockPadding(TLib2.Padding2, TLib2.Padding2, TLib2.Padding2, TLib2.Padding2)
@@ -84,10 +88,8 @@ function PANEL:Paint(iW, iH)
     draw.RoundedBox((TLib2.BorderRadius - 2), 1, 1, (iW - 2), (iH - 2), TLib2.Colors.Base0)
 end
 
-function PANEL:PerformLayout(iW, iH)
-    if not self:IsValid() then return end
-
-    if self.content_container then
+function PANEL:PerformLayoutInternal(iW, iH)
+    if self.content_container and self.content_container:IsValid() then
         self.content_container:SizeToChildren(false, true)
     end
 
@@ -142,4 +144,4 @@ function PANEL:AddTextEntry()
     return dTextEntry
 end
 
-vgui.Register("TLib2:Modal", PANEL, "DFrame")
+vgui.Register("TLib2:Modal", PANEL, "TLib2:Frame")
