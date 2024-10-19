@@ -20,8 +20,15 @@ function PANEL:GetHelperText()
 end
 
 function PANEL:SetHelperText(sText)
-    if (type(sText) ~= "string") then return end
+    if (type(sText) ~= "string") then
+        self.helper_text = ""
+        TLib2.SetTooltip(self, nil)
+        return
+    end
+
     self.helper_text = sText
+
+    TLib2.SetTooltip(self, sText)
 end
 
 function PANEL:GetFAIcon()
@@ -48,28 +55,6 @@ function PANEL:Paint(iW, iH)
         self.hover_approach = 0
 
         TLib2.DrawFAIcon(self.fa_icon, "TLib2.FA.5", (iH * 0.5), (iH * 0.5), TLib2.Colors.Base2, 1, 1)
-    end
-end
-
-function PANEL:OnCursorEntered()
-    if self.tooltip and self.tooltip:IsValid() then return end
-
-    self.tooltip = vgui.Create("TLib2:Tooltip")
-    self.tooltip:SetAnchor(self)
-    self.tooltip:SetText(self:GetHelperText())
-end
-
-function PANEL:OnCursorExited()
-    if not self.tooltip or not self.tooltip:IsValid() then return end
-
-    self.tooltip:Remove()
-    self.tooltip = nil
-end
-
-function PANEL:OnRemove()
-    if self.tooltip and self.tooltip:IsValid() then
-        self.tooltip:Remove()
-        self.tooltip = nil
     end
 end
 

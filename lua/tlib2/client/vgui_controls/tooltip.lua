@@ -1,3 +1,60 @@
+local vgui = vgui
+local draw = draw
+local surface = surface
+local DisableClipping = DisableClipping
+
+local tTTPanels = {}
+local dDrawnTT = false
+local dTargetTT = false
+
+---`🔸 Client`<br>
+---Sets a tooltip for a panel.
+---@param dPanel Panel @Panel to set the tooltip for
+---@param sText? string @The tooltip text, anything else will clear the tooltip
+function TLib2.SetTooltip(dPanel, sText)
+    if not ispanel(dPanel) then return end
+
+    tTTPanels[dPanel] = (type(sText) == "string") and sText or nil
+end
+
+local function clearTooltip()
+    if not dTargetTT then return end
+
+    if dDrawnTT and dDrawnTT:IsValid() then
+        dDrawnTT:Remove()
+    end
+
+    dDrawnTT = false
+    dTargetTT = false
+end
+
+hook.Add("Think", "TLib2:Tooltip:Think", function()
+    local dHovered = vgui.GetHoveredPanel()
+    if not dHovered or not dHovered:IsValid() then return end
+    if not tTTPanels[dHovered] or (dTargetTT == dHovered) then return end
+
+    clearTooltip()
+
+    dDrawnTT = vgui.Create("TLib2:Tooltip")
+    dDrawnTT:SetText(tTTPanels[dHovered])
+    dDrawnTT:SetAnchor(dHovered)
+
+    function dDrawnTT:Think()
+        if not dHovered:IsValid() then
+            tTTPanels[dHovered] = nil
+            clearTooltip()
+            return
+        end
+
+        local dNewHovered = vgui.GetHoveredPanel()
+        if not dNewHovered or not dNewHovered:IsValid() or (dNewHovered ~= dHovered) then
+            clearTooltip()
+        end
+    end
+
+    dTargetTT = dHovered
+end)
+
 local PANEL = {}
 
 local draw = draw
