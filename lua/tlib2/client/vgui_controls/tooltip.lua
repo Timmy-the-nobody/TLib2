@@ -3,7 +3,7 @@ local draw = draw
 local surface = surface
 local DisableClipping = DisableClipping
 
-local tTTPanels = {}
+TLib2.__tooltips = TLib2.__tooltips or {}
 local dDrawnTT = false
 local dTargetTT = false
 
@@ -14,7 +14,7 @@ local dTargetTT = false
 function TLib2.SetTooltip(dPanel, sText)
     if not ispanel(dPanel) then return end
 
-    tTTPanels[dPanel] = (type(sText) == "string") and sText or nil
+    TLib2.__tooltips[dPanel] = (type(sText) == "string") and sText or nil
 end
 
 local function clearTooltip()
@@ -31,17 +31,17 @@ end
 hook.Add("Think", "TLib2:Tooltip:Think", function()
     local dHovered = vgui.GetHoveredPanel()
     if not dHovered or not dHovered:IsValid() then return end
-    if not tTTPanels[dHovered] or (dTargetTT == dHovered) then return end
+    if not TLib2.__tooltips[dHovered] or (dTargetTT == dHovered) then return end
 
     clearTooltip()
 
     dDrawnTT = vgui.Create("TLib2:Tooltip")
-    dDrawnTT:SetText(tTTPanels[dHovered])
+    dDrawnTT:SetText(TLib2.__tooltips[dHovered])
     dDrawnTT:SetAnchor(dHovered)
 
     function dDrawnTT:Think()
         if not dHovered:IsValid() then
-            tTTPanels[dHovered] = nil
+            TLib2.__tooltips[dHovered] = nil
             clearTooltip()
             return
         end
