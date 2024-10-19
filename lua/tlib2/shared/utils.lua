@@ -1,3 +1,8 @@
+local table = table
+local string = string
+local os = os
+local type = type
+
 ---`🔸 Client`<br>`🔹 Server`<br>
 ---Returns a sequential table of all usergroups
 ---@param bIgnoreULX boolean @Whether to ignore ULX usergroups (https://github.com/TeamUlysses/ulx)
@@ -112,4 +117,25 @@ function TLib2.AddMoney(pPlayer, iMoney)
     if ix and pPlayer.GetCharacter then
         return TLib2.SetMoney(pPlayer, TLib2.GetMoney(pPlayer) + iMoney)
     end
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Checks if the given filter matches any of the given strings
+---@param sFilter string @The filter
+---@param ... string @The strings
+---@return boolean
+function TLib2.SearchTerm(sFilter, ...)
+    if (type(sFilter) ~= "string") or (#sFilter == 0) then
+        return true
+    end
+
+    local tInput = {...}
+    for i = 1, #tInput do
+        local sInput = tInput[i]
+        if (type(sInput) == "string") and string.find(sInput, sFilter, 1, true) then
+            return true
+        end
+    end
+
+    return false
 end
