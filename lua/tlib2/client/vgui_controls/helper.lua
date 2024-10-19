@@ -27,7 +27,6 @@ function PANEL:SetHelperText(sText)
     end
 
     self.helper_text = sText
-
     TLib2.SetTooltip(self, sText)
 end
 

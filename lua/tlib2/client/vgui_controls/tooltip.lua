@@ -55,6 +55,9 @@ hook.Add("Think", "TLib2:Tooltip:Think", function()
     dTargetTT = dHovered
 end)
 
+-- Control
+----------------------------------------------------------------------
+
 local PANEL = {}
 
 local draw = draw
@@ -114,14 +117,19 @@ function PANEL:PerformLayout(iW, iH)
     local iMaxW = (ScrH() * 0.2)
     local iNewW = (iTextW > iMaxW) and iMaxW or iTextW
 
-    self:SetWide(iNewW)
+    if (iW ~= iNewW) then
+        self:SetWide(iNewW)
+    end
 
-    if not self.anchor or not self.anchor:IsValid() then return end
+    if self.anchor and self.anchor:IsValid() then
+        local iX, iY = self.anchor:LocalToScreen(0, 0)
+        iX = iX + (self.anchor:GetWide() * 0.5) - (iNewW * 0.5)
+        iY = iY - self:GetTall() - (TLib2.Padding4 * 2)
 
-    local iX, iY = self.anchor:LocalToScreen(0, 0)
-    iX = iX + (self.anchor:GetWide() * 0.5)
-
-    self:SetPos(iX - (iNewW * 0.5), iY - self:GetTall() - (TLib2.Padding4 * 2))
+        if (self:GetX() ~= iX) or (self:GetY() ~= iY) then
+            self:SetPos(iX, iY)
+        end
+    end
 end
 
 vgui.Register("TLib2:Tooltip", PANEL, "DLabel")
