@@ -83,6 +83,7 @@ function PANEL:OnMousePressed(iButton)
 
     hook.Add("PlayerButtonUp", "TLib2:DataTable:PlayerButtonUp", function(_, iButton)
         if not IsFirstTimePredicted() then return end
+
         if (iButton ~= MOUSE_LEFT) then return end
         if not self:IsValid() then return end
 

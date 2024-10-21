@@ -5,6 +5,7 @@ local surface = surface
 local TLib2 = TLib2
 
 function PANEL:Init()
+    self:SetText("")
     self:SetTall(TLib2.VGUIControlH2)
     self:SetFont("TLib2.6")
     self:SetTextColor(TLib2.Colors.Base4)

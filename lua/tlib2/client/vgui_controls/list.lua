@@ -45,7 +45,6 @@ function PANEL:Init()
 
     self.button = self.header:Add("TLib2:Button")
     self.button:Dock(RIGHT)
-    self.button:SetText("")
     self.button:SetFAIcon("f0c0", "TLib2.FA.6", true, true)
     
     function self.button:DoClick()

@@ -101,7 +101,6 @@ function PANEL:CreateColorMixer()
         dReset:SetTall(TLib2.VGUIControlH2)
         dReset:Dock(BOTTOM)
         dReset:DockMargin(0, TLib2.Padding4, 0, 0)
-        dReset:SetText("")
         dReset:SetFAIcon("f2ea", "TLib2.FA.7", true, true)
         dReset:SetBackgroundColor(TLib2.Colors.Base0)
 
