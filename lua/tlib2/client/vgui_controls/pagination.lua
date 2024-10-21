@@ -45,7 +45,6 @@ function PANEL:Init()
     self.item_count:Dock(RIGHT)
     self.item_count:DockMargin(TLib2.Padding4, 0, 0, 0)
     self.item_count:SetText("1")
-    self.item_count:SetFAIcon("f0d7", "TLib2.FA.8", true, true)
     self.item_count.OnSelect = function(_, iIndex, sLabel, xData)
         self.item_count:SetText(sLabel)
         self.item_count:AdjustWidth()
@@ -85,6 +84,8 @@ end
 
 function PANEL:SetTotalPages(iPages)
     self.total_pages = iPages
+
+    self:UpdateButtons()
 end
 
 function PANEL:GetPage()
@@ -114,10 +115,10 @@ function PANEL:OnPageChange(iPage)
 end
 
 function PANEL:GetItemsPerPage()
-    return self.items_per_page
+    return self.items_per_page_choices
 end
 
-function PANEL:SetItemsPerPage(...)
+function PANEL:SetItemsPerPageChoices(...)
     local tArgs = {...}
     local tItemCounts = {}
 
@@ -127,7 +128,7 @@ function PANEL:SetItemsPerPage(...)
     end
 
     if (#tItemCounts == 0) then
-        self.items_per_page = nil
+        self.items_per_page_choices = nil
         self.item_count:SetVisible(false)
         return
     end
@@ -136,7 +137,7 @@ function PANEL:SetItemsPerPage(...)
         return iA < iB
     end)
 
-    self.items_per_page = tItemCounts
+    self.items_per_page_choices = tItemCounts
 
     self.item_count:ClearOptions()
     self.item_count:SetVisible(true)
@@ -147,6 +148,9 @@ function PANEL:SetItemsPerPage(...)
 
     self.item_count:SetText(tItemCounts[1])
     timer.Simple(0, function()
+        if not self or not self:IsValid() then return end
+        if not self.item_count or not self.item_count:IsValid() then return end
+
         self.item_count:AdjustWidth()
     end)
 end
@@ -166,6 +170,10 @@ function PANEL:UpdateButtons()
     self.prev_page:SetClickable(self.current_page > 1)
     self.next_page:SetClickable(self.current_page < self.total_pages)
     self.last_page:SetClickable(self.current_page < self.total_pages)
+
+    if self:GetPage() > self:GetTotalPages() then
+        self:SetPage(1)
+    end
 
     self.display_text = (self.format_display_text or "Page %s/%s"):format(self.current_page, self.total_pages)
 end
