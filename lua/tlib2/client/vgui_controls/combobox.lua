@@ -11,6 +11,8 @@ function PANEL:Init()
     self.selected_options = {}
     self.title = ""
     self.menu_max_height = (ScrH() * 0.32)
+
+    self:SetFAIcon("f0d7", "TLib2.FA.8", true, true)
 end
 
 function PANEL:DoClickInternal()
