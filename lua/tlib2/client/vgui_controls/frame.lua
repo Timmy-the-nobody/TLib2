@@ -13,6 +13,7 @@ function PANEL:Init()
     local dPanel = self
     local iScrH = ScrH()
 
+    self:SetAnimationEnabled(false)
     self:DockPadding(0, 0, 0, 0)
     
     self.anim_time = 0.25
@@ -271,7 +272,7 @@ function PANEL:SetResizable(bResizable)
             TLib2.DrawFAIcon("f424", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Accent, 1, 1)
             return
         end
-        TLib2.DrawFAIcon("f424", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base3, 1, 1)
+        TLib2.DrawFAIcon("f424", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Base4 or TLib2.Colors.Base2, 1, 1)
     end
 end
 
@@ -293,7 +294,7 @@ function PANEL:PerformLayout(iW, iH)
     if self.resize_btn and self.resize_btn:IsValid() then
         self.resize_btn:MoveToFront()
 
-        if (iW >= ScrW()) and (iH >= ScrH()) then
+        if (iW == ScrW()) and (iH == ScrH()) then
             if self.resize_btn:IsVisible() then
                 self.resize_btn:Hide()
             end
