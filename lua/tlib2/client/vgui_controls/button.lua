@@ -5,6 +5,7 @@ local surface = surface
 local TLib2 = TLib2
 
 function PANEL:Init()
+    self:SetAnimationEnabled(false)
     self:SetText("")
     self:SetTall(TLib2.VGUIControlH2)
     self:SetFont("TLib2.6")
@@ -77,7 +78,7 @@ end
 ---@param bAlignRight boolean @Whether to align the button to the right
 function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)
     if not sIcon then
-        if self.fa_icon_pnl and IsValid(self.fa_icon_pnl) then
+        if self.fa_icon_pnl and self.fa_icon_pnl:IsValid() then
             self.fa_icon_pnl:Remove()
         end
         return
@@ -113,15 +114,17 @@ function PANEL:AdjustWidth()
     local iTextW, _ = self:GetTextSize()
     local iMargin = (self:GetTall() * 0.25)
 
-    self:SetWide(iTextW + (self.fa_icon_pnl and self.fa_icon_pnl:GetWide() or 0) + (iMargin * (iTextW == 0 and 2 or 3)))
+    self:SetWide(iTextW + ((self.fa_icon_pnl and self.fa_icon_pnl:IsValid()) and self.fa_icon_pnl:GetWide() or 0) + (iMargin * (iTextW == 0 and 2 or 3)))
 end
 
 function PANEL:SetClickable(bClickable)
     if bClickable then
         self:SetEnabled(true)
+        self:SetMouseInputEnabled(true)
         self:SetAlpha(255)
     else
         self:SetEnabled(false)
+        self:SetMouseInputEnabled(false)
         self:SetAlpha(100)
     end
 end
