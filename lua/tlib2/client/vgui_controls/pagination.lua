@@ -114,7 +114,7 @@ end
 function PANEL:OnPageChange(iPage)
 end
 
-function PANEL:GetItemsPerPage()
+function PANEL:GetItemsPerPageChoices()
     return self.items_per_page_choices
 end
 
@@ -138,15 +138,23 @@ function PANEL:SetItemsPerPageChoices(...)
     end)
 
     self.items_per_page_choices = tItemCounts
+    self.items_per_page = tItemCounts[1]
 
     self.item_count:ClearOptions()
     self.item_count:SetVisible(true)
+    self.item_count:SetText(tItemCounts[1])
     self.item_count:SetFAIcon("f107", "TLib2.FA.8", true, true)
     for i = 1, #tItemCounts do
-        self.item_count:AddOption(tItemCounts[i], tItemCounts[i], (i == 1))
+        local iVal = tItemCounts[i]
+        if (iVal == self.items_per_page) then
+            self.item_count:AddOption(iVal, iVal, true)
+            self.item_count:SetText(iVal)
+        else
+            self.item_count:AddOption(iVal, iVal, faalse)
+        end
     end
 
-    self.item_count:SetText(tItemCounts[1])
+
     timer.Simple(0, function()
         if not self or not self:IsValid() then return end
         if not self.item_count or not self.item_count:IsValid() then return end
