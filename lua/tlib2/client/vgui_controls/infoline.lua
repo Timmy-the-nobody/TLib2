@@ -1,6 +1,7 @@
 local PANEL = {}
 
 function PANEL:Init()
+    self:SetTall(TLib2.VGUIControlH2)
 end
 
 function PANEL:SetContents(tContents)
@@ -13,12 +14,12 @@ function PANEL:SetContents(tContents)
         dLine:Dock(v.dock or LEFT)
         dLine:SetFont(v.font or "TLib2.7")
         dLine:SetTextColor(v.color or "", TLib2.Colors.Base3)
+        dLine:SetContentAlignment(v.alignment or 4)
         dLine:SetText(v.text or "")
-        dLine:InvalidateLayout(true)
         dLine:SizeToContents()
 
         if v.fa_icon then
-            dLine:SetWide(dLine:GetTall())
+            dLine:SetWide(self:GetTall())
             dLine:DockMargin(0, 0, TLib2.Padding3, 0)
         end
 
