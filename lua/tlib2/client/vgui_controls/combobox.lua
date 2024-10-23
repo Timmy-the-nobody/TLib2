@@ -102,6 +102,7 @@ function PANEL:OpenMenu()
     self.menu.title:SetTextInset(TLib2.Padding3, 0)
     self.menu.title:SetContentAlignment(4)
     self.menu.title:SetText(self:GetTitle())
+    self.menu.title:SizeToContents()
     function self.menu.title:Paint(iW, iH)
         surface.SetDrawColor(TLib2.Colors.Base2)
         surface.DrawLine(0, (iH - 1), iW, (iH - 1))
@@ -318,7 +319,7 @@ function PANEL:PerformLayout(iW, iH)
     local iX, iY = self:LocalToScreen(0, 0)
 
     local _, iDPT, _, iDPB = dMenu:GetDockPadding()
-    local iNewW = math.max(dTitle:GetWide() + (TLib2.Padding4 * 2), (iScrH * 0.05))
+    local iNewW = math.max(dTitle:GetWide() + (TLib2.Padding4 * 3), (iScrH * 0.05))
     local iNewH = dTitle:GetTall() + (TLib2.Padding4 * 2) + iDPT + iDPB
 
     -- Set the menu size
