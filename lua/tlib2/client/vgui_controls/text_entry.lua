@@ -56,13 +56,19 @@ function PANEL:Init()
     end
 end
 
+---`🔸 Client`<br>
+---Returns the text entry's FA icon
+---@return string? @The text entry's FA icon, or nil if not set
+function PANEL:GetFAIcon()
+    return self.fa_icon
+end
+
+---`🔸 Client`<br>
+---Sets the text entry's FA icon
+---@param sFAIcon string @The text entry's FA icon
 function PANEL:SetFAIcon(sFAIcon)
     self.fa_icon = TLib2.GetFAIcon(sFAIcon)
     self:__HandleStyle()
-end
-
-function PANEL:SetMaxCharacter(iMaxChars)
-    self.max_chars = iMaxChars
 end
 
 function PANEL:__HandleStyle()
@@ -76,15 +82,6 @@ function PANEL:__HandleStyle()
         self.btn_right:SetMouseInputEnabled(true)
         self.is_empty = false
     end
-end
-
-function PANEL:OnKeyCode(iKey)
-    if self.__next_playable_sound and (CurTime() < self.__next_playable_sound) then
-        return
-    end
-    
-    TLib2.PlayUISound("tlib2/typing.ogg", 0.25, (iKey == KEY_BACKSPACE) and 90 or math.Rand(95, 105))
-    self.__next_playable_sound = (CurTime() + 0.05)
 end
 
 function PANEL:OnChange()
@@ -101,15 +98,15 @@ function PANEL:OnChange()
 
         dParent = dParent:GetParent()
     end
+end
 
-    if self.max_chars then
-        -- TODO: Check why char limit doesn't work
-        local sVal = self:GetValue() or ""
-
-        if (#sVal > self.max_chars) then
-            self:SetValue(string.sub(sVal, 1, self.max_chars))
-        end
+function PANEL:OnKeyCode(iKey)
+    if self.__next_playable_sound and (CurTime() < self.__next_playable_sound) then
+        return
     end
+    
+    TLib2.PlayUISound("tlib2/typing.ogg", 0.25, (iKey == KEY_BACKSPACE) and 90 or math.Rand(95, 105))
+    self.__next_playable_sound = (CurTime() + 0.05)
 end
 
 function PANEL:IsPlaceholderVisible()
