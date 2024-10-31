@@ -60,17 +60,25 @@ end)
 ----------------------------------------------------------------------
 
 local tAnchorDirs = {
-    [TOP] = function(iAX, iAY, iAW, iAH, iTTW, iTTH)
-        return iAX + ((iAW - iTTW) * 0.5), iAY - iTTH - (TLib2.Padding4 * 2)
+    [TOP] = function(iAnchorX, iAnchorY, iAnchorW, iAnchorH, iTooltipW, iTooltipH)
+        return
+            iAnchorX + ((iAnchorW - iTooltipW) * 0.5),
+            iAnchorY - iTooltipH - (TLib2.Padding4 * 2)
     end,
-    [BOTTOM] = function(iAX, iAY, iAW, iAH, iTTW, iTTH)
-        return iAX + ((iAW - iTTW) * 0.5), iAY + iAH + (TLib2.Padding4 * 2)
+    [BOTTOM] = function(iAnchorX, iAnchorY, iAnchorW, iAnchorH, iTooltipW, iTooltipH)
+        return
+            iAnchorX + ((iAnchorW - iTooltipW) * 0.5),
+            iAnchorY + iAnchorH + (TLib2.Padding4 * 2)
     end,
-    [LEFT] = function(iAX, iAY, iAW, iAH, iTTW, iTTH)
-        return iAX - iTTW - (TLib2.Padding4 * 2), iAY + ((iAH - iTTH) * 0.5)
+    [LEFT] = function(iAnchorX, iAnchorY, iAnchorW, iAnchorH, iTooltipW, iTooltipH)
+        return
+            iAnchorX - iTooltipW - (TLib2.Padding4 * 2),
+            iAnchorY + ((iAnchorH - iTooltipH) * 0.5)
     end,
-    [RIGHT] = function(iAX, iAY, iAW, iAH, iTTW, iTTH)
-        return iAX + iAW + (TLib2.Padding4 * 2), iAY + ((iAH - iTTH) * 0.5)
+    [RIGHT] = function(iAnchorX, iAnchorY, iAnchorW, iAnchorH, iTooltipW, iTooltipH)
+        return
+            iAnchorX + iAnchorW + (TLib2.Padding4 * 2),
+            iAnchorY + ((iAnchorH - iTooltipH) * 0.5)
     end
 }
 
@@ -81,18 +89,11 @@ local surface = surface
 local DisableClipping = DisableClipping
 
 function PANEL:Init()
-    self:SetAlpha(0)
-    self:AlphaTo(255, 0.2, 0)
-
     self:SetDrawOnTop(true)
-    self:SetFont("TLib2.7")
-    self:SetContentAlignment(5)
-    self:SetTextColor(TLib2.Colors.Base4)
-    self:SetWrap(true)
-    self:SetAutoStretchVertical(true)
+    self:SetAlpha(0)
+    self:AlphaTo(255, 0.2, 0.1)
 
     self.padding = TLib2.Padding3
-    self.anchor_dir = TOP
 end
 
 function PANEL:Think()
@@ -122,7 +123,7 @@ end
 ---Returns the anchor direction
 ---@return number @Anchor direction (TOP, BOTTOM, LEFT, RIGHT)
 function PANEL:GetAnchorDir()
-    return self.anchor_dir
+    return self.anchor_dir or TOP
 end
 
 ---`🔸 Client`<br>
@@ -142,38 +143,70 @@ function PANEL:Paint(iW, iH)
     draw.RoundedBox(TLib2.BorderRadius, iBoxX, iBoxY, iBoxW, iBoxH, TLib2.Colors.Base2)
     draw.RoundedBox(TLib2.BorderRadius - 2, iBoxX + 1, iBoxY + 1, iBoxW - 2, iBoxH - 2, TLib2.Colors.Base0)
 
+    if self.markup then
+        self.markup:Draw(0, 0)
+    end
+
     DisableClipping(bOldDisableClipping)
 end
 
+function PANEL:UpdateMarkup()
+    local sFont = self:GetFont()
+    local sTextCol = tostring(self:GetTextColor())
+    local sText = markup.Escape(self:GetText())
+
+    self.markup = markup.Parse(("<font=%s><colour=%s>%s</colour></font>"):format(sFont, sTextCol, sText), (ScrH() * 0.2))
+
+    local iW, iH = self.markup:Size()
+    self:SetSize(iW, iH)
+end
+
+function PANEL:GetFont()
+    return self.font or "TLib2.7"
+end
+
+function PANEL:SetFont(sFont)
+    self.font = sFont
+    self:UpdateMarkup()
+end
+
+function PANEL:GetTextColor()
+    return self.text_col or TLib2.Colors.Base4
+end
+
+function PANEL:SetTextColor(oCol)
+    self.text_col = oCol
+    self:UpdateMarkup()
+end
+
+function PANEL:GetText()
+    return self.text or ""
+end
+
+function PANEL:SetText(sText)
+    self.text = sText
+    self:UpdateMarkup()
+end
+
 function PANEL:PerformLayout(iW, iH)
-    surface.SetFont(self:GetFont())
-    local iTextW, iTextH = surface.GetTextSize(self:GetText())
-
-    local iMaxW = (ScrH() * 0.2)
-    local iNewW = (iTextW > iMaxW) and iMaxW or iTextW
-
-    if (iW ~= iNewW) then
-        self:SetWide(iNewW)
-    end
-
     local dAnchor = self:GetAnchor()
-    if dAnchor and dAnchor:IsValid() then
-        local iAnchX, iAnchY = dAnchor:LocalToScreen(0, 0)
-        local iAnchW, iAnchH = dAnchor:GetSize()
+    if not dAnchor or not dAnchor:IsValid() then return end
 
-        local iX, iY = tAnchorDirs[self:GetAnchorDir()](
-            iAnchX,
-            iAnchY,
-            iAnchW,
-            iAnchH,
-            iNewW,
-            iH
-        )
+    local iAnchX, iAnchY = dAnchor:LocalToScreen(0, 0)
+    local iAnchW, iAnchH = dAnchor:GetSize()
 
-        if (self:GetX() ~= iX) or (self:GetY() ~= iY) then
-            self:SetPos(iX, iY)
-        end
+    local iX, iY = tAnchorDirs[self:GetAnchorDir()](
+        iAnchX,
+        iAnchY,
+        iAnchW,
+        iAnchH,
+        iW,
+        iH
+    )
+
+    if (self:GetX() ~= iX) or (self:GetY() ~= iY) then
+        self:SetPos(iX, iY)
     end
 end
 
-vgui.Register("TLib2:Tooltip", PANEL, "DLabel")
+vgui.Register("TLib2:Tooltip", PANEL, "DPanel")
