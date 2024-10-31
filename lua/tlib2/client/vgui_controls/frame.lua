@@ -13,7 +13,7 @@ function PANEL:Init()
     local dPanel = self
     local iScrH = ScrH()
 
-    self:SetAnimationEnabled(false)
+    -- self:SetAnimationEnabled(false)
     self:DockPadding(0, 0, 0, 0)
     
     self.anim_time = 0.25
@@ -390,26 +390,22 @@ function PANEL:Notify(iNotifType, sText, fDuration)
         end
     end
 
-    local dNotif = self:Add("DButton")
+    local dNotif = self:Add("DPanel")
     self.notifs[#self.notifs + 1] = dNotif
 
-    surface.SetFont("TLib2.6")
-    local iTextW, iTextH = surface.GetTextSize(sText or "")
+    local sMarkup = ("<font=TLib2.6><color=%s>%s</color></font>"):format(tostring(TLib2.Colors.Base4), sText or "")
+    local oMarkup = markup.Parse(sMarkup, (self:GetWide() * 0.5))
+    local iTextW, iTextH = oMarkup:Size()
     local iStartTime = CurTime()
     local iBoxH = (iTextH + TLib2.Padding3)
 
-    dNotif:SetText("")
-    dNotif:SetFont("TLib2.6")
-    dNotif:SetTextColor(TLib2.Colors.Base4)
     dNotif:SetSize(0, iBoxH)
     dNotif:SizeTo(iTextW + iBoxH + (TLib2.Padding4 * 3), iBoxH, 0.2, 0, 1)
     dNotif:SetAlpha(0)
     dNotif:AlphaTo(200, 0.5)
     dNotif:SetExpensiveShadow(2, TLib2.Colors.Base0)
-    dNotif:SetCursor("arrow")
     dNotif:SetDrawOnTop(true)
     dNotif:SetMouseInputEnabled(false)
-    dNotif.w_approach = 0
     dNotif.shadow_color = ColorAlpha(TLib2.ColorManip(tNotif.color, 0.5, 0.5), 200)
 
     function dNotif:Paint(iW, iH)
@@ -426,7 +422,7 @@ function PANEL:Notify(iNotifType, sText, fDuration)
         TLib2.DrawFAIcon(tNotif.fa_icon, "TLib2.FA.5", (iH * 0.5) + 1, (iH * 0.5) + 1, self.shadow_color, 1, 1)
         TLib2.DrawFAIcon(tNotif.fa_icon, "TLib2.FA.5", (iH * 0.5), (iH * 0.5), TLib2.Colors.Base4, 1, 1)
 
-        draw.SimpleText(sText or "", "TLib2.6", (iH + TLib2.Padding4), (iH * 0.5), TLib2.Colors.Base4, 0, 1)
+        oMarkup:Draw((iH + TLib2.Padding4), TLib2.Padding4, "TLib2.6")
     end
 
     dNotif.KillNotif = function()
