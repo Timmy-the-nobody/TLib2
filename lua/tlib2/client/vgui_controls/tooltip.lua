@@ -89,11 +89,10 @@ local surface = surface
 local DisableClipping = DisableClipping
 
 function PANEL:Init()
+    self:SetMouseInputEnabled(false)
     self:SetDrawOnTop(true)
     self:SetAlpha(0)
     self:AlphaTo(255, 0.2, 0.1)
-
-    self.padding = TLib2.Padding3
 end
 
 function PANEL:Think()
@@ -135,19 +134,12 @@ function PANEL:SetAnchorDir(iDir)
 end
 
 function PANEL:Paint(iW, iH)
-    local bOldDisableClipping = DisableClipping(true)
-
-    local iBoxW, iBoxH = (iW + self.padding), (iH + self.padding)
-    local iBoxX, iBoxY = (iW - iBoxW) * 0.5, (iH - iBoxH) * 0.5
-
-    draw.RoundedBox(TLib2.BorderRadius, iBoxX, iBoxY, iBoxW, iBoxH, TLib2.Colors.Base2)
-    draw.RoundedBox(TLib2.BorderRadius - 2, iBoxX + 1, iBoxY + 1, iBoxW - 2, iBoxH - 2, TLib2.Colors.Base0)
+    draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
+    draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base0)
 
     if self.markup then
-        self.markup:Draw(0, 0)
+        self.markup:Draw((TLib2.Padding3 * 0.5), (TLib2.Padding3 * 0.5))
     end
-
-    DisableClipping(bOldDisableClipping)
 end
 
 function PANEL:UpdateMarkup()
@@ -158,7 +150,7 @@ function PANEL:UpdateMarkup()
     self.markup = markup.Parse(("<font=%s><colour=%s>%s</colour></font>"):format(sFont, sTextCol, sText), (ScrH() * 0.2))
 
     local iW, iH = self.markup:Size()
-    self:SetSize(iW, iH)
+    self:SetSize(iW + TLib2.Padding3, iH + TLib2.Padding3)
 end
 
 function PANEL:GetFont()
@@ -195,14 +187,10 @@ function PANEL:PerformLayout(iW, iH)
     local iAnchX, iAnchY = dAnchor:LocalToScreen(0, 0)
     local iAnchW, iAnchH = dAnchor:GetSize()
 
-    local iX, iY = tAnchorDirs[self:GetAnchorDir()](
-        iAnchX,
-        iAnchY,
-        iAnchW,
-        iAnchH,
-        iW,
-        iH
-    )
+    local iX, iY = tAnchorDirs[self:GetAnchorDir()](iAnchX, iAnchY, iAnchW, iAnchH, iW, iH)
+
+    iX = math.Clamp(iX, TLib2.Padding4, ScrW() - iW - TLib2.Padding4)
+    iY = math.Clamp(iY, TLib2.Padding4, ScrH() - iH - TLib2.Padding4)
 
     if (self:GetX() ~= iX) or (self:GetY() ~= iY) then
         self:SetPos(iX, iY)
