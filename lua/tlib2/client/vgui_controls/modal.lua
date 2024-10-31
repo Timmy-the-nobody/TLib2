@@ -118,16 +118,14 @@ function PANEL:AddSeparator()
 end
 
 function PANEL:AddButton(sLabel, fnCallback)
-    local dModal = self
     local dBtn = self.content_container:Add("TLib2:Button")
     dBtn:SetTall(TLib2.VGUIControlH1)
     dBtn:Dock(TOP)
     dBtn:DockMargin(0, TLib2.Padding3, 0, 0)
     dBtn:SetText(sLabel)
-
-    function dBtn:DoClick()
+    dBtn.DoClick = function()
         if (type(fnCallback) ~= "function") or not fnCallback() then
-            dModal:Remove()
+            self:Remove()
         end
     end
 

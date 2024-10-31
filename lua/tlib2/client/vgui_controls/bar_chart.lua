@@ -88,6 +88,7 @@ function PANEL:AddData(sLabel, fValue)
     dProgress:DockPadding(0, TLib2.Padding4, 0, TLib2.Padding4)
     dProgress.approach_w = 0
     dProgress.bar_h = 0.5
+    dProgress.color_hover = TLib2.ColorManip(TLib2.Colors.Accent, 0.8, 0.8)
 
     dProgress.PerformLayout = function(_, iW, iH)
         local iProgressW = self.right:GetWide() * (fValue / self.x_axis.max)
@@ -107,7 +108,7 @@ function PANEL:AddData(sLabel, fValue)
         dProgress.approach_w = math.Approach(dProgress.approach_w, iW - 2, RealFrameTime() * 256)
         dProgress.approach_w = math.min(dProgress.approach_w, iW)
 
-        surface.SetDrawColor(bHovered and TLib2.Colors.Action or TLib2.Colors.Accent)
+        surface.SetDrawColor(bHovered and dProgress.color_hover or TLib2.Colors.Accent)
         surface.DrawRect(1, (iH - fBarH) * 0.5, dProgress.approach_w, fBarH)
 
         draw.SimpleText(self.y_axis.format_value(iKey, fValue), "TLib2.6", dProgress.approach_w - TLib2.Padding4, (iH * 0.5), TLib2.Colors.Base4, 2, 1)
