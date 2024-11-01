@@ -38,7 +38,6 @@ hook.Add("Think", "TLib2:Tooltip:Think", function()
     dDrawnTT = vgui.Create("TLib2:Tooltip")
     dDrawnTT:SetText(TLib2.__tooltips[dHovered])
     dDrawnTT:SetAnchor(dHovered)
-    dDrawnTT:SetAnchorDir(BOTTOM)
 
     function dDrawnTT:Think()
         if not dHovered:IsValid() then
@@ -138,7 +137,9 @@ function PANEL:Paint(iW, iH)
     draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base0)
 
     if self.markup then
-        self.markup:Draw((TLib2.Padding3 * 0.5), (TLib2.Padding3 * 0.5))
+        local iMarkupW, iMarkupH = self.markup:Size()
+
+        self.markup:Draw((iW - iMarkupW) * 0.5, (iH - iMarkupH) * 0.5)
     end
 end
 
@@ -150,7 +151,7 @@ function PANEL:UpdateMarkup()
     self.markup = markup.Parse(("<font=%s><colour=%s>%s</colour></font>"):format(sFont, sTextCol, sText), (ScrH() * 0.2))
 
     local iW, iH = self.markup:Size()
-    self:SetSize(iW + TLib2.Padding3, iH + TLib2.Padding3)
+    self:SetSize(iW + TLib2.Padding3, iH + TLib2.Padding4)
 end
 
 function PANEL:GetFont()
