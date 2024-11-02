@@ -1,3 +1,8 @@
+local surface = surface
+local draw = draw
+local math = math
+local DisableClipping = DisableClipping
+
 local PANEL = {}
 
 function PANEL:Init()
@@ -101,19 +106,26 @@ function PANEL:AddData(sLabel, fValue)
         dProgress:InvalidateLayout()
     end
 
+    local iValueW, iValueH = 0, 0
+
     dProgress.Paint = function(_, iW, iH)
         local bHovered = dProgress:IsHovered()
         local fBarH = (dProgress.bar_h * iH)
 
-        dProgress.approach_w = math.Approach(dProgress.approach_w, iW - 2, RealFrameTime() * 256)
-        dProgress.approach_w = math.min(dProgress.approach_w, iW)
+        dProgress.approach_w = math.min(math.Approach(dProgress.approach_w, iW - 2, RealFrameTime() * 512), iW)
 
         surface.SetDrawColor(bHovered and dProgress.color_hover or TLib2.Colors.Accent)
         surface.DrawRect(1, (iH - fBarH) * 0.5, dProgress.approach_w, fBarH)
-
-        draw.SimpleText(self.y_axis.format_value(iKey, fValue), "TLib2.6", dProgress.approach_w - TLib2.Padding4, (iH * 0.5), TLib2.Colors.Base4, 2, 1)
-
+        
         local bOldClipping = DisableClipping(true)
+            local iInfoX = (dProgress.approach_w)
+
+            draw.RoundedBox(TLib2.BorderRadius, iInfoX - (iValueW * 0.5), (iH - iValueH) * 0.5, iValueW, iValueH, TLib2.Colors.Base2)
+            draw.RoundedBox(TLib2.BorderRadius - 2, iInfoX - (iValueW * 0.5) + 1, (iH - iValueH) * 0.5 + 1, iValueW - 2, iValueH - 2, TLib2.Colors.Base1)
+
+            iValueW, iValueH = draw.SimpleText(self.y_axis.format_value(iKey, fValue), "TLib2.7", iInfoX, (iH * 0.5), TLib2.Colors.Base4, 1, 1)
+            iValueW = (iValueW + TLib2.Padding3)
+
             draw.SimpleText(sLabel, "TLib2.7", -TLib2.Padding2, (iH * 0.5), bHovered and TLib2.Colors.Base4 or TLib2.Colors.Base3, 2, 1)
         DisableClipping(bOldClipping)
     end
@@ -138,9 +150,6 @@ function PANEL:RemoveData(iKey)
     self.data = tNewData
 end
 
-function PANEL:Paint(iW, iH)
-end
-
 function PANEL:PerformLayout(iW, iH)
     local iTall = 0
     for i = 1, #self.data do
@@ -161,6 +170,9 @@ function PANEL:PerformLayout(iW, iH)
     if (iH ~= iTall) then
         self:SetTall(iTall)
     end
+end
+
+function PANEL:Paint(iW, iH)
 end
 
 vgui.Register("TLib2:BarChart", PANEL, "DPanel")
