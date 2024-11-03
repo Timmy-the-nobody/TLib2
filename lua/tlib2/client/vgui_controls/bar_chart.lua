@@ -2,6 +2,7 @@ local surface = surface
 local draw = draw
 local math = math
 local DisableClipping = DisableClipping
+local RealFrameTime = RealFrameTime
 
 local PANEL = {}
 
