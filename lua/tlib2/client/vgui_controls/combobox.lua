@@ -321,6 +321,7 @@ function PANEL:PerformLayout(iW, iH)
 
     surface.SetFont(dTitle:GetFont())
     local iTitleW, iTitleH = surface.GetTextSize(dTitle:GetText())
+    iTitleW = iTitleW + dTitle:GetTall()
 
     if (dTitle:GetWide() ~= iTitleW) then
         dTitle:SetWide(iTitleW)
