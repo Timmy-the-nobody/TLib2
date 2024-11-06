@@ -2,6 +2,7 @@ local PANEL = {}
 
 local draw = draw
 local surface = surface
+local math = math
 
 function PANEL:Init()
     self:SetTall(TLib2.VGUIControlH2)
@@ -318,11 +319,18 @@ function PANEL:PerformLayout(iW, iH)
     local iScrH = ScrH()
     local iX, iY = self:LocalToScreen(0, 0)
 
+    surface.SetFont(dTitle:GetFont())
+    local iTitleW, iTitleH = surface.GetTextSize(dTitle:GetText())
+
+    if (dTitle:GetWide() ~= iTitleW) then
+        dTitle:SetWide(iTitleW)
+    end
+
     local _, iDPT, _, iDPB = dMenu:GetDockPadding()
     local iNewW = math.max(dTitle:GetWide() + (TLib2.Padding4 * 3), (iScrH * 0.05))
     local iNewH = dTitle:GetTall() + (TLib2.Padding4 * 2) + iDPT + iDPB
 
-    -- Set the menu size
+    -- Menu size
     local tChildren = dMenu.scroll:GetCanvas():GetChildren()
     for i = 1, #tChildren do
         local dChild = tChildren[i]
@@ -341,7 +349,7 @@ function PANEL:PerformLayout(iW, iH)
         dMenu:SetSize(iNewW, iNewH)
     end
 
-    -- Position the menu
+    -- Menu pos
     local iMinX, iMinY = TLib2.Padding4, TLib2.Padding4
     local iMaxX, iMaxY = (iScrW - iNewW - TLib2.Padding4), (iScrH - iNewH - TLib2.Padding4)
 
