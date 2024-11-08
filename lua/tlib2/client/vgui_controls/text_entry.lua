@@ -8,8 +8,8 @@ local matGradR = Material("vgui/gradient-r")
 function PANEL:Init()
     local dTextEntry = self
 
-    self.is_empty = true
-    self.fa_icon = TLib2.GetFAIcon("f002")
+    self.is_empty = (self:GetValue() == "")
+    self.fa_icon = "f002"
     self.outline_color = TLib2.Colors.Base2
     self.outline_color_editing = TLib2.Colors.Accent
    
@@ -23,7 +23,7 @@ function PANEL:Init()
     self:SetCursorColor(TLib2.Colors.Base3)
     self:SetHighlightColor(TLib2.Colors.Base2)
 
-    self.btn_right = self:Add("DButton")
+    self.btn_right = self:Add("TLib2:Button")
     self.btn_right:Dock(RIGHT)
     self.btn_right:SetText("")
     self.btn_right:SetMouseInputEnabled(false)
@@ -32,18 +32,16 @@ function PANEL:Init()
     local iPadding = math.ceil(TLib2.BorderRadius * 0.5)
     function self.btn_right:Paint(iW, iH)
         if not dTextEntry.is_empty then
-            surface.SetDrawColor(TLib2.Colors.Base0)
+            surface.SetDrawColor(TLib2.Colors.Base1)
             surface.SetMaterial(matGradR)
-
             surface.DrawTexturedRect(0, (iPadding * 0.5), (iW - iPadding), (iH - iPadding))
             surface.DrawTexturedRect(0, (iPadding * 0.5), (iW - iPadding), (iH - iPadding))
         end
 
-        TLib2.DrawFAIcon(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5) + 2, (iH * 0.5) + 2, TLib2.Colors.Base0, 1, 1)
-
         if dTextEntry.is_empty then
-            TLib2.DrawFAIcon(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
+            TLib2.DrawFAIcon(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), TLib2.Colors.Base2, 1, 1)
         else
+            TLib2.DrawFAIcon(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5) + 1, (iH * 0.5) + 1, TLib2.Colors.Base2, 1, 1)
             TLib2.DrawFAIcon(self.active_fa_icon, "TLib2.FA.7", iW - (iH * 0.5), (iH * 0.5), self:IsHovered() and TLib2.Colors.Warn or TLib2.Colors.Base3, 1, 1)
         end
     end
@@ -78,7 +76,7 @@ function PANEL:__HandleStyle()
         self.btn_right:SetMouseInputEnabled(false)
         self.is_empty = true
     else
-        self.btn_right.active_fa_icon = TLib2.GetFAIcon("f00d")
+        self.btn_right.active_fa_icon = "f00d"
         self.btn_right:SetMouseInputEnabled(true)
         self.is_empty = false
     end

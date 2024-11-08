@@ -148,7 +148,7 @@ function PANEL:UpdateMarkup()
     local sTextCol = tostring(self:GetTextColor())
     local sText = markup.Escape(self:GetText())
 
-    self.markup = markup.Parse(("<font=%s><colour=%s>%s</colour></font>"):format(sFont, sTextCol, sText), (ScrH() * 0.2))
+    self.markup = markup.Parse(("<font=%s><colour=%s>%s</colour></font>"):format(sFont, sTextCol, sText), (ScrH() * 0.25))
 
     local iW, iH = self.markup:Size()
     self:SetSize(iW + TLib2.Padding3, iH + TLib2.Padding4)
