@@ -233,3 +233,43 @@ function TLib2.TimestampToDate(iTimestamp)
 
     return tDate.year, tDate.month, tDate.day, tDate.hour, tDate.min, tDate.sec
 end
+
+local tTimeValues = {
+    {label = "y", seconds = 31536000},
+    {label = "m", seconds = 2592000},
+    {label = "w", seconds = 604800},
+    {label = "d", seconds = 86400},
+    {label = "h", seconds = 3600},
+    {label = "min", seconds = 60},
+    {label = "s", seconds = 1}
+}
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns a human readable time string from the given number of seconds
+---@param iSeconds number @The number of seconds
+---@param bAbbreviated boolean @Whether the time string should be abbreviated
+---@param bSimplified boolean @Whether the time string should be simplified
+---@return string @The human readable time string
+function TLib2.FormatTime(iSeconds, bSimplified)
+    local iTime = math.floor(iSeconds)
+    if (iTime <= 0) then
+        return "0s"
+    end
+
+    local sTimeStr = ""
+    for i = 1, #tTimeValues do
+        local v = tTimeValues[i]
+
+        local iVal = math.floor(iTime / v.seconds)
+        if (iVal <= 0) then continue end
+
+        iTime = (iTime - (iVal * v.seconds))
+        sTimeStr = sTimeStr..iVal..v.label.." "
+
+        if bSimplified then
+            return sTimeStr:sub(1, -2)
+        end
+    end
+
+    return sTimeStr:sub(1, -2)
+end
