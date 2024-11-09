@@ -273,6 +273,9 @@ function PANEL:CloseMenu()
     if (type(self.OnCloseMenu) == "function") then
         self:OnCloseMenu()
     end
+
+    hook.Remove("GUIMousePressed", "TLib2.DatePicker")
+    hook.Remove("VGUIMousePressed", "TLib2.DatePicker")
 end
 
 ---`🔸 Client`<br>
@@ -284,7 +287,6 @@ function PANEL:OpenMenu()
     self.menu:DockPadding(TLib2.Padding3, TLib2.Padding3, TLib2.Padding3, TLib2.Padding3)
     self.menu:MakePopup()
     self.menu:SetWide(ScrH() * 0.28)
-    self.menu:SetDrawOnTop(true)
     self.menu.Paint = function(_, iW, iH)
         draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
         draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base0)
@@ -473,6 +475,20 @@ function PANEL:OpenMenu()
     if (type(self.OnOpenMenu) == "function") then
         self:OnOpenMenu(self.menu)
     end
+
+    hook.Add("GUIMousePressed", "TLib2.DatePicker", function(iMouseCode)
+        if (iMouseCode == MOUSE_LEFT) then
+            self:CloseMenu()
+        end
+    end)
+
+    hook.Add("VGUIMousePressed", "TLib2.DatePicker", function(dPanel, iMouseCode)
+        if (iMouseCode ~= MOUSE_LEFT) then return end
+        if (dPanel == self.menu) then return end
+        if self.menu:IsChildHovered(false) then return end
+
+        self:CloseMenu()
+    end)
 end
 
 ---`🔸 Client`<br>
