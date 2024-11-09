@@ -75,5 +75,6 @@ requireCL("tlib2/client/vgui_controls/pagination.lua")
 requireCL("tlib2/client/vgui_controls/infoline.lua")
 requireCL("tlib2/client/vgui_controls/helper.lua")
 requireCL("tlib2/client/vgui_controls/bar_chart.lua")
+requireCL("tlib2/client/vgui_controls/date_picker.lua")
 
 print("[TLib2] Loaded!")
