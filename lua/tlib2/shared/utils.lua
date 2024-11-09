@@ -139,3 +139,97 @@ function TLib2.SearchTerm(sFilter, ...)
 
     return false
 end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Checks if the given date is valid
+---@param iYear number @The year
+---@param iMonth number @The month
+---@param iDay number @The day
+---@return boolean @Whether the date is valid or not
+function TLib2.IsDateValid(iYear, iMonth, iDay)
+    if (type(iYear) ~= "number") or (type(iMonth) ~= "number") or (type(iDay) ~= "number") then
+        return false
+    end
+
+    local iTimestamp = os.time({year = iYear, month = iMonth, day = iDay})
+    if not iTimestamp then return false end
+
+    local tValidDate = os.date("*t", iTimestamp)
+    return (tValidDate.year == iYear and tValidDate.month == iMonth and tValidDate.day == iDay)
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns the day of the week of the given date
+---@param iYear number @The year
+---@param iMonth number @The month
+---@param iDay number @The day
+---@return number @The day of the week (1 = Sunday, 7 = Saturday)
+function TLib2.GetDayOfWeek(iYear, iMonth, iDay)
+    return tonumber(os.date("%w", os.time({year = iYear, month = iMonth, day = iDay}))) + 1
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns the number of days in the given month
+---@param iYear number @The year
+---@param iMonth number @The month
+---@return number @The number of days in the month
+function TLib2.GetDaysInMonth(iYear, iMonth)
+    return tonumber(os.date("%d", os.time({year = iYear, month = iMonth + 1, day = 1}) - 86400))
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns the first day of the given month
+---@param iYear number @The year
+---@param iMonth number @The month
+---@return number @The first day of the month (1 = Sunday, 7 = Saturday)
+function TLib2.GetFirstDayOfMonth(iYear, iMonth)
+    return TLib2.GetDayOfWeek(iYear, iMonth, 1)
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns the last day of the given month
+---@param iYear number @The year
+---@param iMonth number @The month
+---@return number @The last day of the month (1 = Sunday, 7 = Saturday)
+function TLib2.GetLastDayOfMonth(iYear, iMonth)
+    return TLib2.GetDayOfWeek(iYear, iMonth, TLib2.GetDaysInMonth(iYear, iMonth))
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns the timestamp from the given date
+---@param iYear number @The year
+---@param iMonth number @The month
+---@param iDay number @The day.
+---@param iHour number? @The hour
+---@param iMin number? @The minute
+---@return number? @The timestamp
+function TLib2.DateToTimestamp(iYear, iMonth, iDay, iHour, iMin, iSec)
+    if not TLib2.IsDateValid(iYear, iMonth, iDay) then return end
+
+    return os.time({
+        year = iYear,
+        month = iMonth,
+        day = iDay,
+        hour = iHour or 0,
+        min = iMin or 0,
+        sec = iSec or 0
+    })
+end
+
+---`🔸 Client`<br>`🔹 Server`<br>
+---Returns the date from the given timestamp
+---@param iTimestamp number @The timestamp
+---@return number @The year
+---@return number @The month
+---@return number @The day
+---@return number @The hour
+---@return number @The minute
+---@return number @The second
+function TLib2.TimestampToDate(iTimestamp)
+    if (type(iTimestamp) ~= "number") or (iTimestamp < 0) then return end
+
+    local tDate = os.date("*t", iTimestamp)
+    if not tDate then return end
+
+    return tDate.year, tDate.month, tDate.day, tDate.hour, tDate.min, tDate.sec
+end
