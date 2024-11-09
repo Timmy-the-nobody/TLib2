@@ -31,7 +31,7 @@ local tMonthLabels = {
 
 function PANEL:Init()
     local iYear, iMonth = TLib2.TimestampToDate(os.time())
-    
+
     self.calendar_page = {year = iYear, month = iMonth}
     self.time_picker = true
     
@@ -267,15 +267,15 @@ end
 function PANEL:CloseMenu()
     if not self.menu or not self.menu:IsValid() then return end
 
+    hook.Remove("GUIMousePressed", "TLib2.DatePicker")
+    hook.Remove("VGUIMousePressed", "TLib2.DatePicker")
+
     self.menu:Remove()
     self.menu = nil
 
     if (type(self.OnCloseMenu) == "function") then
         self:OnCloseMenu()
     end
-
-    hook.Remove("GUIMousePressed", "TLib2.DatePicker")
-    hook.Remove("VGUIMousePressed", "TLib2.DatePicker")
 end
 
 ---`🔸 Client`<br>
@@ -477,9 +477,8 @@ function PANEL:OpenMenu()
     end
 
     hook.Add("GUIMousePressed", "TLib2.DatePicker", function(iMouseCode)
-        if (iMouseCode == MOUSE_LEFT) then
-            self:CloseMenu()
-        end
+        if (iMouseCode ~= MOUSE_LEFT) then return end
+        self:CloseMenu()
     end)
 
     hook.Add("VGUIMousePressed", "TLib2.DatePicker", function(dPanel, iMouseCode)
