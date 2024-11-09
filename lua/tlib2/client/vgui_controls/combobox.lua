@@ -49,13 +49,6 @@ function PANEL:SetMultiple(bMultiple)
 end
 
 ---`🔸 Client`<br>
----Closes the menu
-function PANEL:CloseMenu()
-    if not self.screen_canvas or not self.screen_canvas:IsValid() then return end
-    self.screen_canvas:Remove()
-end
-
----`🔸 Client`<br>
 ---Returns the maximum height of the menu
 ---@return number
 function PANEL:GetMenuMaxHeight()
@@ -73,19 +66,24 @@ function PANEL:SetMenuMaxHeight(iMaxH)
 end
 
 ---`🔸 Client`<br>
+---Closes the menu
+function PANEL:CloseMenu()
+    if not self.screen_canvas or not self.screen_canvas:IsValid() then return end
+    self.screen_canvas:Remove()
+end
+
+---`🔸 Client`<br>
 ---Opens the menu
 function PANEL:OpenMenu()
     if self.menu and self.menu:IsValid() then return end
-
-    local dPanel = self
 
     self.screen_canvas = vgui.Create("Panel")
     self.screen_canvas:SetSize(ScrW(), ScrH())
     self.screen_canvas:MakePopup()
     self.screen_canvas:SetDrawOnTop(true)
     self.screen_canvas.Paint = nil
-    function self.screen_canvas:OnMousePressed()
-        dPanel:CloseMenu()
+    self.screen_canvas.OnMousePressed = function()
+        self:CloseMenu()
         TLib2.PlayUISound("tlib2/click.ogg")
     end
 
@@ -113,12 +111,13 @@ function PANEL:OpenMenu()
     dMenuClose:Dock(RIGHT)
     dMenuClose:SetText("")
     dMenuClose:SetSize(self.menu.title:GetTall(), self.menu.title:GetTall())
+    dMenuClose.DoClick = function()
+        self:CloseMenu()
+    end
     function dMenuClose:Paint(iW, iH)
         TLib2.DrawFAIcon("f00d", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors[self:IsHovered() and "Warn" or "Base3"], 1, 1)
     end
-    function dMenuClose:DoClick()
-        dPanel:CloseMenu()
-    end
+
 
     self.menu.scroll = self.menu:Add("TLib2:Scroll")
     self.menu.scroll:Dock(FILL)
@@ -134,23 +133,20 @@ function PANEL:OpenMenu()
         dOption:Dock(TOP)
         dOption:SetContentAlignment(4)
         dOption:SetTextInset((TLib2.Padding3 * 2) + (ScrH() * 0.015), 0)
-
-        function dOption:Paint(iW, iH)
-            if self:IsHovered() then
+        dOption.DoClick = function()
+            self:__OnClickOption(i, dOption)
+            self.menu.scroll:ScrollToChild(dOption)
+        end
+        dOption.DoClickInternal = function()
+            TLib2.PlayUISound("tlib2/select.ogg")
+        end
+        dOption.Paint = function(_, iW, iH)
+            if dOption:IsHovered() then
                 draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
             end
 
-            if not dPanel:IsOptionSelected(i) then return end
+            if not self:IsOptionSelected(i) then return end
             TLib2.DrawFAIcon("f00c", "TLib2.FA.7", TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base3, 0, 1)
-        end
-
-        function dOption:DoClick()
-            dPanel:__OnClickOption(i, self)
-            dPanel.menu.scroll:ScrollToChild(self)
-        end
-
-        function dOption:DoClickInternal()
-            TLib2.PlayUISound("tlib2/select.ogg")
         end
     end
 
@@ -359,6 +355,12 @@ function PANEL:PerformLayout(iW, iH)
 
     if (dMenu:GetX() ~= iNewX) or (dMenu:GetY() ~= iNewY) then
         dMenu:SetPos(iNewX, iNewY)
+    end
+end
+
+function PANEL:OnRemove()
+    if self.screen_canvas and self.screen_canvas:IsValid() then
+        self.screen_canvas:Remove()
     end
 end
 
