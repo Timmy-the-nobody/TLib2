@@ -4,6 +4,38 @@ local draw = draw
 local surface = surface
 local TLib2 = TLib2
 
+local tNotifTypes = {
+    [NOTIFY_GENERIC] = {
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/confirmation.ogg")
+        end
+    },
+    [NOTIFY_ERROR] = {
+        color = TLib2.Colors.Warn,
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/error.ogg")
+        end
+    },
+    [NOTIFY_UNDO] = {
+        color = TLib2.Colors.Accent,
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/drop.ogg")
+        end
+    },
+    [NOTIFY_HINT] = {
+        color = Color(243, 156, 18),
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/drop.ogg")
+        end
+    },
+    [NOTIFY_CLEANUP] = {
+        color = Color(243, 156, 18),
+        on_click = function(dButton)
+            TLib2.PlayUISound("tlib2/drop.ogg")
+        end
+    }
+}
+
 function PANEL:Init()
     self:SetAnimationEnabled(false)
     self:SetText("")
@@ -19,38 +51,65 @@ function PANEL:Init()
     self.outline_color_hover = TLib2.Colors.Base3
 end
 
+---`🔸 Client`<br>
+---Returns the button's background color
+---@return Color @The color
 function PANEL:GetBackgroundColor()
     return self.bg_color
 end
 
+---`🔸 Client`<br>
+---Sets the button's background color
+---@param oCol Color @The color to use
 function PANEL:SetBackgroundColor(oCol)
     self.bg_color = oCol
 end
 
+---`🔸 Client`<br>
+---Returns the button's outline color
+---@return Color @The color
 function PANEL:GetOutlineColor()
     return self.outline_color
 end
 
+---`🔸 Client`<br>
+---Sets the button's outline color
+---@param oCol Color @The color to use
 function PANEL:SetOutlineColor(oCol)
     self.outline_color = oCol
 end
 
+---`🔸 Client`<br>
+---Returns the button's background hover color
+---@return Color @The color
 function PANEL:GetBackgroundHoverColor()
     return self.bg_color_hover
 end
 
+---`🔸 Client`<br>
+---Returns the button's background hover color
+---@return Color @The color to use
 function PANEL:SetBackgroundHoverColor(oCol)
     self.bg_color_hover = oCol
 end
 
+---`🔸 Client`<br>
+---Returns the button's outline hover color
+---@return Color @The color
 function PANEL:GetOutlineHoverColor()
     return self.outline_color_hover
 end
 
+---`🔸 Client`<br>
+---Sets the button's outline hover color
+---@param oCol Color @The color to use
 function PANEL:SetOutlineHoverColor(oCol)
     self.outline_color_hover = oCol
 end
 
+---`🔸 Client`<br>
+---Sets the button's color theme (handles background and outline colors)
+---@param oCol Color @The color to use
 function PANEL:SetColorTheme(oCol)
     if not IsColor(oCol) then return end
 
@@ -62,6 +121,9 @@ function PANEL:SetColorTheme(oCol)
     self:SetOutlineHoverColor(TLib2.ColorManip(oCol, 0.5, 0.5))
 end
 
+---`🔸 Client`<br>
+---Sets the button's flat color theme (handles background and outline colors)
+---@param oCol Color @The color to use
 function PANEL:SetFlatColorTheme(oCol)
     if not IsColor(oCol) then return end
 
@@ -72,6 +134,8 @@ function PANEL:SetFlatColorTheme(oCol)
     self:SetOutlineHoverColor(TLib2.ColorManip(oCol, 0.9, 0.9))
 end
 
+---`🔸 Client`<br>
+---Sets the button's FA icon
 ---@param sIcon string @The icon to use
 ---@param sFont string @The font to use
 ---@param bAdjustWidth boolean @Whether to adjust the width of the button
@@ -110,6 +174,8 @@ function PANEL:SetFAIcon(sIcon, sFont, bAdjustWidth, bAlignRight)
     end
 end
 
+---`🔸 Client`<br>
+---Adjusts the width of the button based on the text it contains and/or FA icon
 function PANEL:AdjustWidth()
     local iTextW, _ = self:GetTextSize()
     local iMargin = (self:GetTall() * 0.25)
@@ -117,6 +183,9 @@ function PANEL:AdjustWidth()
     self:SetWide(iTextW + ((self.fa_icon_pnl and self.fa_icon_pnl:IsValid()) and self.fa_icon_pnl:GetWide() or 0) + (iMargin * (iTextW == 0 and 2 or 3)))
 end
 
+---`🔸 Client`<br>
+---Sets whether the button is clickable
+---@param bClickable boolean @Whether the button is clickable
 function PANEL:SetClickable(bClickable)
     if bClickable then
         self:SetEnabled(true)
@@ -129,58 +198,16 @@ function PANEL:SetClickable(bClickable)
     end
 end
 
-function PANEL:Paint(iW, iH)
-    local bOutlineHover = (self.outline_color_hover and bHovered) and true or false
-
-    if self.outline_color or bOutlineHover then
-        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, bOutlineHover and self.outline_color_hover or self.outline_color)
-        draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, (iW - 2), (iH - 2), (self.bg_color_hover and self:IsHovered()) and self.bg_color_hover or self.bg_color)
-    else
-        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, (self.bg_color_hover and self:IsHovered()) and self.bg_color_hover or self.bg_color)
-    end
-end
-
-function PANEL:DoClickInternal(iButton)
-    TLib2.PlayUISound("tlib2/click.ogg")
-end
-
-local tNotifTypes = {
-    [NOTIFY_GENERIC] = {
-        on_click = function(dButton)
-            TLib2.PlayUISound("tlib2/confirmation.ogg")
-        end
-    },
-    [NOTIFY_ERROR] = {
-        color = TLib2.Colors.Warn,
-        on_click = function(dButton)
-            TLib2.PlayUISound("tlib2/error.ogg")
-        end
-    },
-    [NOTIFY_UNDO] = {
-        color = TLib2.Colors.Accent,
-        on_click = function(dButton)
-            TLib2.PlayUISound("tlib2/drop.ogg")
-        end
-    },
-    [NOTIFY_HINT] = {
-        color = Color(243, 156, 18),
-        on_click = function(dButton)
-            TLib2.PlayUISound("tlib2/drop.ogg")
-        end
-    },
-    [NOTIFY_CLEANUP] = {
-        color = Color(243, 156, 18),
-        on_click = function(dButton)
-            TLib2.PlayUISound("tlib2/drop.ogg")
-        end
-    }
-}
-
+---`🔸 Client`<br>
+---Makes the button display a notification
+---@param iType number @The type of notification
+---@param sText? string @The text of the notification
+---@param bAdjustWidth? boolean @Whether to adjust the width of the button
+---@param fDuration? number @The duration of the notification
+---@param fnOnFinish? function @The function to be called when the notification finishes
 function PANEL:DoNotify(iType, sText, bAdjustWidth, fDuration, fnOnFinish)
     if self.__notifinfo then return end
     if not tNotifTypes[iType] then return end
-
-    -- self:InvalidateLayout(true)
 
     self.__notifinfo = {
         bg_color = self:GetBackgroundColor(),
@@ -226,6 +253,20 @@ function PANEL:DoNotify(iType, sText, bAdjustWidth, fDuration, fnOnFinish)
         end
     end)
 end
-    
+
+function PANEL:Paint(iW, iH)
+    local bOutlineHover = (self.outline_color_hover and bHovered) and true or false
+
+    if self.outline_color or bOutlineHover then
+        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, bOutlineHover and self.outline_color_hover or self.outline_color)
+        draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, (iW - 2), (iH - 2), (self.bg_color_hover and self:IsHovered()) and self.bg_color_hover or self.bg_color)
+    else
+        draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, (self.bg_color_hover and self:IsHovered()) and self.bg_color_hover or self.bg_color)
+    end
+end
+
+function PANEL:DoClickInternal(iButton)
+    TLib2.PlayUISound("tlib2/click.ogg")
+end
 
 vgui.Register("TLib2:Button", PANEL, "DButton")
