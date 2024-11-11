@@ -356,7 +356,7 @@ function PANEL:OpenMenu()
     end
 
     for i = 1, #tDaysLabels do
-        local dDayLabel = dDaysLabels:Add("DLabel")
+        local dDayLabel = dDaysLabels:Add("DButton")
         dDayLabel:Dock(LEFT)
         dDayLabel:SetText(tDaysLabels[i].abbr)
         dDayLabel:SetFont("TLib2.6")
@@ -364,6 +364,12 @@ function PANEL:OpenMenu()
         dDayLabel:SetTextColor(TLib2.Colors.Base3)
         dDayLabel:SizeToContents()
         dDayLabel.Paint = nil
+        dDayLabel.OnCursorEntered = function()
+            self.menu.hovered_day = i
+        end
+        dDayLabel.OnCursorExited = function()
+            self.menu.hovered_day = nil
+        end
     end
 
     dDaysLabels:SizeToChildren(false, true)
@@ -568,6 +574,7 @@ function PANEL:__RebuildCalendar()
                 iBtnDay = iCurDay
             end
 
+            local iWeekDay = TLib2.GetDayOfWeek(iBtnYear, iBtnMonth, iBtnDay)
             local bDateSelected = ((iBtnYear == iYear) and (iBtnMonth == iMonth) and (iBtnDay == iDay))
 
             local dDate = dDaysContainer:Add("TLib2:Button")
@@ -589,16 +596,21 @@ function PANEL:__RebuildCalendar()
             end
 
             dDate.Paint = function(_, iW, iH)
+                if self.menu.hovered_day and (self.menu.hovered_day == iWeekDay) then
+                    surface.SetDrawColor(TLib2.Colors.Base1)
+                    surface.DrawRect(0, 0, iW, iH)
+                end
+
                 local bHovered = dDate:IsHovered()
                 if not (bDateSelected or bHovered) then return end
 
-                local iBtnW = iH - (TLib2.Padding4)
-                local iBtnH = iH - (TLib2.Padding4 * 2)
+                local iBtnW, iBtnH = iH - (TLib2.Padding4), iH - (TLib2.Padding4 * 2)
+                local iBtnX, iBtnY = (iW - iBtnW) * 0.5, (iH - iBtnH) * 0.5
 
-                draw.RoundedBox(TLib2.BorderRadius, (iW - iBtnW) * 0.5, (iH - iBtnH) * 0.5 , iBtnW, iBtnH, bDateSelected and TLib2.Colors.Accent or TLib2.Colors.Base2)
+                draw.RoundedBox(TLib2.BorderRadius, iBtnX, iBtnY, iBtnW, iBtnH, bDateSelected and TLib2.Colors.Accent or TLib2.Colors.Base2)
 
                 if bDateSelected then
-                    draw.RoundedBox(TLib2.BorderRadius - 2, (iW - iBtnW) * 0.5 + 1, (iH - iBtnH) * 0.5 + 1, iBtnW - 2, iBtnH - 2, oSelectedCol)
+                    draw.RoundedBox((TLib2.BorderRadius - 2), (iBtnX + 1), (iBtnY + 1), (iBtnW - 2), (iBtnH - 2), oSelectedCol)
                 end
             end
 
