@@ -80,7 +80,6 @@ function PANEL:OpenMenu()
     self.screen_canvas = vgui.Create("Panel")
     self.screen_canvas:SetSize(ScrW(), ScrH())
     self.screen_canvas:MakePopup()
-    self.screen_canvas:SetDrawOnTop(true)
     self.screen_canvas.Paint = nil
     self.screen_canvas.OnMousePressed = function()
         self:CloseMenu()
@@ -89,6 +88,7 @@ function PANEL:OpenMenu()
 
     self.menu = self.screen_canvas:Add("DPanel")
     self.menu:DockPadding(1, 1, 1, 1)
+    self.menu:SetDrawOnTop(true)
     function self.menu:Paint(iW, iH)
         draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base2)
         draw.RoundedBox(TLib2.BorderRadius - 2, 1, 1, iW - 2, iH - 2, TLib2.Colors.Base1)
@@ -118,7 +118,6 @@ function PANEL:OpenMenu()
         TLib2.DrawFAIcon("f00d", "TLib2.FA.7", (iW * 0.5), (iH * 0.5), TLib2.Colors[self:IsHovered() and "Warn" or "Base3"], 1, 1)
     end
 
-
     self.menu.scroll = self.menu:Add("TLib2:Scroll")
     self.menu.scroll:Dock(FILL)
     self.menu.scroll:SetVBarMargin(0)
@@ -126,6 +125,8 @@ function PANEL:OpenMenu()
     self.menu.scroll.Paint = nil
 
     local tOptions = self:GetOptions()
+    local iFirstSelectedOption = self:GetFirstSelectedOption()
+
     for i = 1, #tOptions do
         local dOption = self.menu.scroll:Add("TLib2:Button")
         dOption:SetText(tOptions[i].label)
@@ -147,6 +148,21 @@ function PANEL:OpenMenu()
 
             if not self:IsOptionSelected(i) then return end
             TLib2.DrawFAIcon("f00c", "TLib2.FA.7", TLib2.Padding3, (iH * 0.5), TLib2.Colors.Base3, 0, 1)
+        end
+
+        if iFirstSelectedOption and (i == iFirstSelectedOption) then
+            timer.Simple(0, function()
+                if not dOption:IsValid() then return end
+                if not self.menu or not self.menu:IsValid() then return end
+                if not self.menu.scroll or not self.menu.scroll:IsValid() then return end
+
+                local _, iBtnY = self.menu.scroll:GetChildPosition(dOption)
+
+                iBtnY = iBtnY + (dOption:GetTall() * 0.5)
+                iBtnY = iBtnY - (self.menu.scroll:GetTall() * 0.5)
+            
+                self.menu.scroll.VBar:SetScroll(iBtnY, 0.5, 0, 0.5)
+            end)
         end
     end
 

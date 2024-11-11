@@ -314,13 +314,17 @@ function PANEL:OpenMenu()
         end
     end
 
-    self.menu.month_year_label = dMonthHeader:Add("DLabel")
+    self.menu.month_year_label = dMonthHeader:Add("TLib2:ComboBox")
     self.menu.month_year_label:Dock(FILL)
     self.menu.month_year_label:SetTall(TLib2.VGUIControlH1)
-    self.menu.month_year_label:SetFont("TLib2.6")
     self.menu.month_year_label:SetTextColor(TLib2.Colors.Base4)
     self.menu.month_year_label:SetContentAlignment(5)
+    self.menu.month_year_label:SetFAIcon(nil)
     self.menu.month_year_label.Paint = nil
+    self.menu.month_year_label.OnSelect = function(_, iIndex, sLabel, xData)
+        local tSplit = xData:Split(".")
+        self:SetCalendarPage(tonumber(tSplit[1]), tonumber(tSplit[2]))
+    end
 
     local dNextMonth = dMonthHeader:Add("TLib2:Button")
     dNextMonth:Dock(RIGHT)
@@ -488,9 +492,12 @@ function PANEL:OpenMenu()
     end)
 
     hook.Add("VGUIMousePressed", "TLib2.DatePicker", function(dPanel, iMouseCode)
-        if (iMouseCode ~= MOUSE_LEFT) then return end
-        if (dPanel == self.menu) then return end
+        if (iMouseCode ~= MOUSE_LEFT) or (dPanel == self.menu) then return end
         if self.menu:IsChildHovered(false) then return end
+
+        if self.menu.month_year_label.menu and self.menu.month_year_label.menu:IsValid() then
+            if self.menu.month_year_label.menu:IsChildHovered(false) then return end
+        end
 
         self:CloseMenu()
     end)
@@ -537,7 +544,28 @@ function PANEL:__RebuildCalendar()
     local iDaysInLastMonth = TLib2.GetDaysInMonth(iLastYear, iLastMonth)
     
     self.menu.clock_container:SetVisible(self:IsTimePickerVisible())
-    self.menu.month_year_label:SetText(tMonthLabels[iCalMonth]:upper().." "..iCalYear)
+
+    self.menu.month_year_label:SetText(tMonthLabels[iCalMonth].." "..iCalYear)
+    self.menu.month_year_label:ClearOptions()
+    for i = -12, 12 do
+        local iOtherYear = iCalYear
+        local iOtherMonth = iCalMonth
+        local bCurrentYM = false
+
+        if (i == 0) then
+            bCurrentYM = true
+        else
+            iOtherMonth = (iCalMonth + (1 * i))
+
+            if (iOtherMonth < 1) then
+                iOtherYear, iOtherMonth = (iCalYear - 1),  12
+            elseif (iOtherMonth > 12) then
+                iOtherYear, iOtherMonth = (iCalYear + 1), iOtherMonth - 12
+            end
+        end
+
+        self.menu.month_year_label:AddOption(tMonthLabels[iOtherMonth].." "..iOtherYear, iOtherYear.."."..iOtherMonth, bCurrentYM)
+    end
 
     if self.menu.clock_hours and self.menu.clock_hours:IsValid() then
         if (self.menu.clock_hours:GetValue() ~= iHour) then
@@ -643,7 +671,6 @@ function PANEL:Think()
 
     if (self.menu:GetX() ~= iNewX) or (self.menu:GetY() ~= iNewY) then
         self.menu:SetPos(iNewX, iNewY)
-        self.menu:MoveToFront()
     end
 end
 

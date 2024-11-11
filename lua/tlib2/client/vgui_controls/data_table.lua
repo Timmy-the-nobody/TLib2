@@ -349,7 +349,6 @@ function PANEL:PerformLayout(iW, iH)
 end
 
 function PANEL:Paint(iW, iH)
-    -- draw.RoundedBox(0, 0, 0, iW, iH, Color(50, 50, 50)) -- Gray background
 end
 
 vgui.Register("TLib2:DataTable", PANEL, "DPanel")
