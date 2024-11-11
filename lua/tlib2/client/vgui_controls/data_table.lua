@@ -304,6 +304,14 @@ function PANEL:AddRow(xData, ...)
     return dRow
 end
 
+function PANEL:SetEmptyText(sText)
+    self.empty_text = sText
+end
+
+function PANEL:GetEmptyText()
+    return self.empty_text or "No data"
+end
+
 function PANEL:PerformLayout(iW, iH)
     local iScrollBarW = 0
     if (self.scroll:GetVBar().CanvasSize > iH) then
@@ -331,7 +339,7 @@ function PANEL:PerformLayout(iW, iH)
 
     if (#self.rows == 0) then
         if not self.scroll:GetBackgroundInfo() then
-            self.scroll:SetBackgroundInfo("No Data Found", "f07c")
+            self.scroll:SetBackgroundInfo(self:GetEmptyText(), "f07c")
         end
     else
         if self.scroll:GetBackgroundInfo() then
