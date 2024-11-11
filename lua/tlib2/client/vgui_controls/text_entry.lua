@@ -65,7 +65,7 @@ end
 ---Sets the text entry's FA icon
 ---@param sFAIcon string @The text entry's FA icon
 function PANEL:SetFAIcon(sFAIcon)
-    self.fa_icon = TLib2.GetFAIcon(sFAIcon)
+    self.fa_icon = sFAIcon
     self:__HandleStyle()
 end
 
