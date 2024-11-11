@@ -269,7 +269,7 @@ function TLib2.FormatTime(iSeconds, iMaxValues)
         sTimeStr = sTimeStr..iVal..v.label.." "
         iValues = (iValues + 1)
 
-        if (iMaxValues and (iValues >= iMaxValues)) then
+        if (type(iMaxValues) == "number") and (iValues >= iMaxValues) then
             return sTimeStr:sub(1, -2)
         end
     end
