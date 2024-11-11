@@ -248,15 +248,17 @@ local tTimeValues = {
 ---Returns a human readable time string from the given number of seconds
 ---@param iSeconds number @The number of seconds
 ---@param bAbbreviated boolean @Whether the time string should be abbreviated
----@param bSimplified boolean @Whether the time string should be simplified
+---@param iMaxValues integer @The maximum amount of values to return (ex: if 2 is give, it will return "2m 5min" instead of "2h 5min 2s")
 ---@return string @The human readable time string
-function TLib2.FormatTime(iSeconds, bSimplified)
+function TLib2.FormatTime(iSeconds, iMaxValues)
     local iTime = math.floor(iSeconds)
     if (iTime <= 0) then
         return "0s"
     end
 
     local sTimeStr = ""
+    local iValues = 0
+
     for i = 1, #tTimeValues do
         local v = tTimeValues[i]
 
@@ -265,8 +267,9 @@ function TLib2.FormatTime(iSeconds, bSimplified)
 
         iTime = (iTime - (iVal * v.seconds))
         sTimeStr = sTimeStr..iVal..v.label.." "
+        iValues = (iValues + 1)
 
-        if bSimplified then
+        if (iMaxValues and (iValues >= iMaxValues)) then
             return sTimeStr:sub(1, -2)
         end
     end
