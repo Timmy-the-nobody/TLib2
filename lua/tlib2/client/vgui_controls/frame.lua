@@ -13,7 +13,6 @@ function PANEL:Init()
     local dPanel = self
     local iScrH = ScrH()
 
-    -- self:SetAnimationEnabled(false)
     self:DockPadding(0, 0, 0, 0)
     
     self.anim_time = 0.25
@@ -108,10 +107,16 @@ function PANEL:Init()
     end
 end
 
+---`🔸 Client`<br>
+---Returns whether the frame is expanded (maximized to full screen)
+---@return boolean @Whether the frame is expanded
 function PANEL:IsExpanded()
     return ((self:GetWide() == ScrW()) and (self:GetTall() == ScrH()))
 end
 
+---`🔸 Client`<br>
+---Sets whether the frame is expanded (maximized to full screen)
+---@param bExpanded boolean @Whether the frame is expanded
 function PANEL:SetExpanded(bExpanded)
     local fAnimTime = self:GetAnimatonTime()
 
@@ -130,71 +135,118 @@ function PANEL:SetExpanded(bExpanded)
     end
 end
 
+---`🔸 Client`<br>
+---Toggles whether the frame is expanded (maximized to full screen)
 function PANEL:ToggleExpand()
     self:SetExpanded(not self:IsExpanded())
 end
 
+---`🔸 Client`<br>
+---Returns the minimum size the frame can be
+---@return number @The minimum size the frame can be
 function PANEL:GetMinWidth()
     return self.min_w
 end
 
+---`🔸 Client`<br>
+---Sets the minimum size the frame can be
+---@param iWidth number @The minimum size the frame can be
 function PANEL:SetMinWidth(iWidth)
     if (type(iWidth) ~= "number") then return end
-    self.min_w = iWidth
+    self.min_w = math.Round(iWidth)
 end
 
+---`🔸 Client`<br>
+---Returns the minimum height the frame can be
+---@return number @The minimum height the frame can be
 function PANEL:GetMinHeight()
     return self.min_h
 end
 
+---`🔸 Client`<br>
+---Sets the minimum height the frame can be
+---@param iHeight number @The minimum height the frame can be
 function PANEL:SetMinHeight(iHeight)
     if (type(iHeight) ~= "number") then return end
-    self.min_h = iHeight
+    self.min_h = math.Round(iHeight)
 end
 
+---`🔸 Client`<br>
+---Util method that return the minimum width and the minimum height of the frame
+---@return number @The minimum width the frame can be
+---@return number @The minimum height the frame can be
 function PANEL:GetMinSize()
     return self:GetMinWidth(), self:GetMinHeight()
 end
 
+---`🔸 Client`<br>
+---Util method that sets the minimum width and the minimum height of the frame
+---@param iWidth number @The minimum width the frame can be
+---@param iHeight number @The minimum height the frame can be
 function PANEL:SetMinSize(iWidth, iHeight)
     self:SetMinWidth(iWidth)
     self:SetMinHeight(iHeight)
 end
 
+---`🔸 Client`<br>
+---Returns the default width
+---@return number @The default width
 function PANEL:GetDefaultWidth()
     return self.default_w
 end
 
+---`🔸 Client`<br>
+---Sets the default width
+---@param iWidth number @The default width
 function PANEL:SetDefaultWidth(iWidth)
     if (type(iWidth) ~= "number") then return end
-    self.default_w = iWidth
+    self.default_w = math.Round(iWidth)
 end
 
+---`🔸 Client`<br>
+---Returns the default height
+---@return number @The default height
 function PANEL:GetDefaultHeight()
     return self.default_h
 end
 
+---`🔸 Client`<br>
+---Sets the default height
+---@param iHeight number @The default height
 function PANEL:SetDefaultHeight(iHeight)
     if (type(iHeight) ~= "number") then return end
-    self.default_h = iHeight
+    self.default_h = math.Round(iHeight)
 end
 
+---`🔸 Client`<br>
+---Util method that return the default width and the default height of the frame
+---@return number @The default width the frame can be
+---@return number @The default height the frame can be
 function PANEL:GetDefaultSize()
     return self:GetDefaultWidth(), self:GetDefaultHeight()
 end
 
+---`🔸 Client`<br>
+---Util method that sets the default width and the default height of the frame
+---@param iW number @The default width the frame can be
+---@param iH number @The default height the frame can be
 function PANEL:SetDefaultSize(iW, iH)
     self:SetDefaultWidth(iW)
     self:SetDefaultHeight(iH)
 end
 
+---`🔸 Client`<br>
+---Returns the time it takes for the frame to animate
+---@return number @The time it takes for the frame to animate
 function PANEL:GetAnimatonTime()
     return self.anim_time
 end
 
+---`🔸 Client`<br>
+---Sets the time it takes for the frame to animate
+---@param fTime number @The time it takes for the frame to animate
 function PANEL:SetAnimationTime(fTime)
     if (type(fTime) ~= "number") then return end
-
     self.anim_time = fTime
 end
 
@@ -209,11 +261,25 @@ function PANEL:Paint(iW, iH)
     surface.DrawRect(0, 0, iW, iH)
 end
 
+---`🔸 Client`<br>
+---Sets the title of the frame
+---@param sTitle string @The title of the frame
+---@param sFAIcon string @The FA icon of the frame
 function PANEL:SetTitle(sTitle, sFAIcon)
     self.title = sTitle
     self.title_faicon = sFAIcon
 end
 
+---`🔸 Client`<br>
+---Returns if the frame can be resized
+---@return boolean @Whether the frame can be resized
+function PANEL:IsResizable()
+    return self.resize_btn and self.resize_btn:IsValid()
+end
+
+---`🔸 Client`<br>
+---Sets if the frame can be resized
+---@param bResizable boolean @Whether the frame can be resized
 function PANEL:SetResizable(bResizable)
     if self.resize_btn and self.resize_btn:IsValid() then
         self.resize_btn:Remove()
@@ -373,6 +439,11 @@ local tNotifTypes = {
     }
 }
 
+---`🔸 Client`<br>
+---Displays a notification in the frame
+---@param iNotifType? number @The notification type (see `NOTIFY_*`)
+---@param sText? string @The text of the notification
+---@param fDuration? number @The duration of the notification
 function PANEL:Notify(iNotifType, sText, fDuration)
     if not iNotifType or not tNotifTypes[iNotifType] then
         iNotifType = 1

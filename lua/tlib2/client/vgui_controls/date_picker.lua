@@ -2,7 +2,12 @@ local math = math
 local string = string
 local draw = draw
 
+local ScrW = ScrW
+local ScrH = ScrH
+
 local PANEL = {}
+
+local oSelectedDateCol = TLib2.ColorManip(TLib2.Colors.Accent, 0.5, 0.2)
 
 local tDaysLabels = {
     [1] = {full = "Sunday", abbr = "Su"},
@@ -504,14 +509,14 @@ function PANEL:OpenMenu()
 end
 
 ---`🔸 Client`<br>
----Rebuilds the date picker's calendar and button
+---Internally used to rebuild the date picker's calendar and buttons
 function PANEL:__RebuildCalendar()
-    local bDatePickerVisible = self:IsTimePickerVisible()
+    local bTimeVisible = self:IsTimePickerVisible()
     local iYear, iMonth, iDay, iHour, iMin = self:GetDate()
     if iYear then
         local sDayLabel = tDaysLabels[(TLib2.GetDayOfWeek(iYear, iMonth, iDay))].full
 
-        if bDatePickerVisible then
+        if bTimeVisible then
             self:SetText(("%s %02d/%02d/%d %02d:%02d"):format(sDayLabel, iDay, iMonth, iYear, iHour, iMin))
         else
             self:SetText(("%s %02d/%02d/%d"):format(sDayLabel, iDay, iMonth, iYear))
@@ -521,7 +526,7 @@ function PANEL:__RebuildCalendar()
         if sNoDateText then
             self:SetText(sNoDateText)
         else
-            self:SetText(bDatePickerVisible and (".. / .. / .... %02d:%02d"):format(iHour or 0, iMin or 0) or ".. / .. / ....")
+            self:SetText(bTimeVisible and (".. / .. / .... %02d:%02d"):format(iHour or 0, iMin or 0) or ".. / .. / ....")
         end
     end
 
@@ -566,20 +571,9 @@ function PANEL:__RebuildCalendar()
 
         self.menu.month_year_label:AddOption(tMonthLabels[iOtherMonth].." "..iOtherYear, iOtherYear.."."..iOtherMonth, bCurrentYM)
     end
-
-    if self.menu.clock_hours and self.menu.clock_hours:IsValid() then
-        if (self.menu.clock_hours:GetValue() ~= iHour) then
-            self.menu.clock_hours:SetValue(iHour)
-        end
-        if (self.menu.clock_minutes:GetValue() ~= iMin) then
-            self.menu.clock_minutes:SetValue(iMin)
-        end
-    end
+    
 
     dDaysContainer:Clear()
-
-    local oSelectedCol = TLib2.ColorManip(TLib2.Colors.Accent, 0.5, 0.2)
-
     for iGridWeek = 1, 6 do
         for iGridDay = 1, 7 do
             local iGridPos = (iGridWeek - 1) * 7 + (iGridDay + 1)
@@ -638,7 +632,7 @@ function PANEL:__RebuildCalendar()
                 draw.RoundedBox(TLib2.BorderRadius, iBtnX, iBtnY, iBtnW, iBtnH, bDateSelected and TLib2.Colors.Accent or TLib2.Colors.Base2)
 
                 if bDateSelected then
-                    draw.RoundedBox((TLib2.BorderRadius - 2), (iBtnX + 1), (iBtnY + 1), (iBtnW - 2), (iBtnH - 2), oSelectedCol)
+                    draw.RoundedBox((TLib2.BorderRadius - 2), (iBtnX + 1), (iBtnY + 1), (iBtnW - 2), (iBtnH - 2), oSelectedDateCol)
                 end
             end
 
@@ -657,6 +651,15 @@ function PANEL:__RebuildCalendar()
             end
         end
     end
+
+    if self.menu.clock_hours and self.menu.clock_hours:IsValid() then
+        if (self.menu.clock_hours:GetValue() ~= iHour) then
+            self.menu.clock_hours:SetValue(iHour)
+        end
+        if (self.menu.clock_minutes:GetValue() ~= iMin) then
+            self.menu.clock_minutes:SetValue(iMin)
+        end
+    end
 end
 
 function PANEL:Think()
@@ -665,9 +668,18 @@ function PANEL:Think()
     local iW, iH = self:GetSize()
     local iX, iY = self:LocalToScreen(0, 0)
     local iMenuW, iMenuH = self.menu:GetSize()
-    local iMaxX, iMaxY = (ScrW() - iMenuW - TLib2.Padding4), (ScrH() - iMenuH - TLib2.Padding4)
-    local iNewX = math.Clamp(iX + (iW * 0.5) - (iMenuW * 0.5), TLib2.Padding4, iMaxX)
-    local iNewY = math.Clamp(iY + iH + TLib2.Padding4, TLib2.Padding4, iMaxY)
+
+    local iNewX = math.Clamp(
+        iX + (iW * 0.5) - (iMenuW * 0.5),
+        TLib2.Padding4,
+        (ScrW() - iMenuW - TLib2.Padding4)
+    )
+
+    local iNewY = math.Clamp(
+        iY + iH + TLib2.Padding4,
+        TLib2.Padding4,
+        (ScrH() - iMenuH - TLib2.Padding4)
+    )
 
     if (self.menu:GetX() ~= iNewX) or (self.menu:GetY() ~= iNewY) then
         self.menu:SetPos(iNewX, iNewY)
