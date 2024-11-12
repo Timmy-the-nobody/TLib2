@@ -6,9 +6,7 @@ local render = render
 local Lerp = Lerp
 local RealFrameTime = RealFrameTime
 
-local matGradDown = Material("vgui/gradient-d")
-local sFAUp = TLib2.GetFAIcon("f0d8")
-local sFADown = TLib2.GetFAIcon("f0d7")
+local matGradDown = Material("vgui/gradient-d", "noclamp smooth")
 local fDragAnchorW = 0.036
 
 function PANEL:Init()
@@ -19,6 +17,7 @@ function PANEL:Init()
     self.data = {}
     self.sorted_data = {}
     self.row_buttons = {}
+    self.empty_text = "No data"
 
     self.columns_container = self:Add("DPanel")
     self.columns_container:SetTall(ScrH() * 0.03)
@@ -41,15 +40,20 @@ function PANEL:Init()
     self.scroll:Dock(FILL)
 end
 
+---`🔸 Client`<br>
+---Sets the visibility of the columns container
+---@param bVisible boolean @Whether the columns container is visible
 function PANEL:SetColumnsVisible(bVisible)
-    if not bVisible then
-        self.columns_container:Hide()
-    else
-        self.columns_container:Show()
-    end
+    self.columns_container:SetVisible(tobool(bVisible))
 end
 
-function PANEL:AddColumn(sLabel, fnSelector, fnFormat, bSortable, fWidth)
+---`🔸 Client`<br>
+---Adds a column to the data table
+---@param sLabel string @Label of the column
+---@param fnSelector function @Function that returns the data of the column
+---@param fnFormat function @Function that formats the data of the column
+---@param bSortable boolean @Whether the column is sortable
+function PANEL:AddColumn(sLabel, fnSelector, fnFormat, bSortable)
     local dDataTbl = self
     local iColumn = (#self.columns + 1)
 
@@ -57,7 +61,6 @@ function PANEL:AddColumn(sLabel, fnSelector, fnFormat, bSortable, fWidth)
     fnSelector = (type(fnSelector) == "function") and fnSelector or function() return "N/A" end
     fnFormat = (type(fnFormat) == "function") and fnFormat or nil
     bSortable = tobool(bSortable)
-    fWidth = ((type(fWidth) == "number") and (fWidth <= 1) and (fWidth >= 0)) and fWidth or nil
 
     self.columns[iColumn] = {
         index = iColumn,
@@ -65,7 +68,6 @@ function PANEL:AddColumn(sLabel, fnSelector, fnFormat, bSortable, fWidth)
         selector = fnSelector,
         format = fnFormat,
         sortable = bSortable,
-        width = fWidth,
         sort_asc = false,
     }
 
@@ -111,6 +113,9 @@ function PANEL:AddColumn(sLabel, fnSelector, fnFormat, bSortable, fWidth)
     end
 end
 
+---`🔸 Client`<br>
+---Sets the data of the data table
+---@param tData table @Data of the table
 function PANEL:SetData(tData)
     if (type(tData) ~= "table") then return end
 
@@ -124,6 +129,8 @@ function PANEL:SetData(tData)
     self:UpdateRows()
 end
 
+---`🔸 Client`<br>
+---Updates the rows of the data table
 function PANEL:UpdateRows()
     local iVBarScroll = self.scroll:GetVBar():GetScroll()
 
@@ -142,6 +149,10 @@ function PANEL:UpdateRows()
     self.scroll:GetVBar():SetScroll(iVBarScroll)
 end
 
+---`🔸 Client`<br>
+---Sorts the data table by a column
+---@param iColumn number @Index of the column to sort by
+---@param bAsc boolean @Whether to sort in ascending order
 function PANEL:Sort(iColumn, bAsc)
     if not self.columns[iColumn].sortable then return end
 
@@ -165,16 +176,11 @@ function PANEL:Sort(iColumn, bAsc)
     self:UpdateRows()
 end
 
-local function findParentRowRecursive(dVGUI)
-    if not dVGUI or not dVGUI:IsValid() then return end
-
-    if dVGUI.is_data_table_row then
-        return dVGUI
-    end
-
-    return findParentRowRecursive(dVGUI:GetParent())
-end
-
+---`🔸 Client`<br>
+---Adds a row button to the data table
+---@param sFAIcon string @Font Awesome icon
+---@param sLabel string @Label of the button
+---@param fnDoClick function @Function that is called when the button is clicked
 function PANEL:AddRowButton(sFAIcon, sLabel, fnDoClick)
     self.row_buttons[#self.row_buttons + 1] = {
         icon = sFAIcon or "f013",
@@ -185,6 +191,10 @@ function PANEL:AddRowButton(sFAIcon, sLabel, fnDoClick)
     self:UpdateRows()
 end
 
+---`🔸 Client`<br>
+---Adds a row to the data table
+---@param xData any @Data of the row
+---@param ... string @Labels of the columns
 function PANEL:AddRow(xData, ...)
     local tColumnContent = {...}
 
@@ -304,12 +314,19 @@ function PANEL:AddRow(xData, ...)
     return dRow
 end
 
-function PANEL:SetEmptyText(sText)
-    self.empty_text = sText
+---`🔸 Client`<br>
+---Returns the text displayed when the table is empty
+---@return string @The text displayed when the table is empty
+function PANEL:GetEmptyText()
+    return self.empty_text
 end
 
-function PANEL:GetEmptyText()
-    return self.empty_text or "No data"
+---`🔸 Client`<br>
+---Sets the text displayed when the table is empty
+---@param sText string @The text to display when the table is empty
+function PANEL:SetEmptyText(sText)
+    if (type(sText) ~= "string") then return end
+    self.empty_text = sText
 end
 
 function PANEL:PerformLayout(iW, iH)
