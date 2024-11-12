@@ -4,6 +4,7 @@ local math = math
 local DisableClipping = DisableClipping
 local RealFrameTime = RealFrameTime
 
+---@class TLib2:BarChart : DPanel
 local PANEL = {}
 
 function PANEL:Init()

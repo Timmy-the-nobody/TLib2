@@ -1,13 +1,16 @@
-local PANEL = {}
 
 local surface = surface
 local draw = draw
 local render = render
+
 local Lerp = Lerp
 local RealFrameTime = RealFrameTime
 
 local matGradDown = Material("vgui/gradient-d", "noclamp smooth")
 local fDragAnchorW = 0.036
+
+---@class TLib2:DataTable : DPanel
+local PANEL = {}
 
 function PANEL:Init()
     local dDataTbl = self

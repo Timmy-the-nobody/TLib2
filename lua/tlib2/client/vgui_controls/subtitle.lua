@@ -1,3 +1,4 @@
+---@class TLib2:Subtitle : DLabel
 local PANEL = {}
 
 function PANEL:Init()

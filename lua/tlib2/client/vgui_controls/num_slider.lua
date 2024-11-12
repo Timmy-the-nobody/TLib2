@@ -1,7 +1,9 @@
-local PANEL = {}
-
 local draw = draw
 local math = math
+local input = input
+
+---@class TLib2:NumSlider : DNumSlider
+local PANEL = {}
 
 function PANEL:Init()
     self:SetTall(TLib2.VGUIControlH2)
@@ -105,6 +107,5 @@ function PANEL:PerformLayout(iW, iH)
         self.Scratch:SetWide(iH)
     end
 end
-
 
 vgui.Register("TLib2:NumSlider", PANEL, "DNumSlider")

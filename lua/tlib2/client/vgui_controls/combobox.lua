@@ -1,8 +1,9 @@
-local PANEL = {}
-
 local draw = draw
 local surface = surface
 local math = math
+
+---@class TLib2:ComboBox : TLib2:Button
+local PANEL = {}
 
 function PANEL:Init()
     self:SetTall(TLib2.VGUIControlH2)
@@ -18,7 +19,6 @@ end
 
 function PANEL:DoClickInternal()
     TLib2.PlayUISound("tlib2/click.ogg")
-
     self:OpenMenu()
 end
 

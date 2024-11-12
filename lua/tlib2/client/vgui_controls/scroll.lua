@@ -1,6 +1,7 @@
-local PANEL = {}
-
 local surface = surface
+
+---@class TLib2:Scroll : DScrollPanel
+local PANEL = {}
 
 function PANEL:Init()
     local dPanel = self
@@ -62,26 +63,45 @@ function PANEL:Init()
     end
 end
 
+---`🔸 Client`<br>
+---Returns the width of the vertical scrollbar
+---@return number @The width of the vertical scrollbar
 function PANEL:GetVBarWidth()
     return self.vbar_w
 end
 
+---`🔸 Client`<br>
+---Sets the width of the vertical scrollbar
+---@param iWidth number @The width of the vertical scrollbar
 function PANEL:SetVBarWidth(iWidth)
     self.vbar_w = (type(iWidth) == "number") and iWidth or 0
 end
 
+---`🔸 Client`<br>
+---Returns the margin of the vertical scrollbar
+---@return number @The margin of the vertical scrollbar
 function PANEL:GetVBarMargin()
     return self.vbar_m
 end
 
+---`🔸 Client`<br>
+---Sets the margin of the vertical scrollbar
+---@param iMargin number @The margin of the vertical scrollbar
 function PANEL:SetVBarMargin(iMargin)
     self.vbar_m = (type(iMargin) == "number") and iMargin or 0
 end
 
+---`🔸 Client`<br>
+---Returns the background info
+---@return table @The background info
 function PANEL:GetBackgroundInfo()
     return self.bg_info
 end
 
+---`🔸 Client`<br>
+---Sets the background info
+---@param sLabel string @The label of the background info
+---@param sFAIcon? string @The Font Awesome icon of the background info
 function PANEL:SetBackgroundInfo(sLabel, sFAIcon)
     if not sLabel and not sFAIcon then
         self.bg_info = nil

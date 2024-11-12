@@ -1,9 +1,10 @@
-local PANEL = {}
-
-local tSelectedBgColor = TLib2.ColorManip(TLib2.Colors.Accent, 0.25, 0.25)
-
 local draw = draw
 local surface = surface
+
+local oSelectedBgColor = TLib2.ColorManip(TLib2.Colors.Accent, 0.25, 0.25)
+
+---@class TLib2:SideBar : DPanel
+local PANEL = {}
 
 function PANEL:Init()
     local iScrH = ScrH()
@@ -47,6 +48,12 @@ function PANEL:Init()
     end
 end
 
+---`🔸 Client`<br>
+---Adds a button to the sidebar
+---@param sLabel string @Label of the button
+---@param sFAIcon string @Font Awesome icon
+---@param xData any @Data of the button
+---@param fnOnClick function @Function that is called when the button is clicked
 function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
     local iScrH = ScrH()
     local dSideBar = self
@@ -81,7 +88,7 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
                 self.text_color = TLib2.Colors.Accent
                 self.offset_x = (iScrH * 0.005)
 
-                surface.SetDrawColor(tSelectedBgColor)
+                surface.SetDrawColor(oSelectedBgColor)
                 surface.DrawRect(0, 0, iW, iH)
 
                 surface.SetDrawColor(TLib2.Colors.Accent)
@@ -121,15 +128,44 @@ function PANEL:AddButton(sLabel, sFAIcon, xData, fnOnClick)
     end
 end
 
+---`🔸 Client`<br>
+---Returns the index of the selected button
+---@return number @The index of the selected button
 function PANEL:GetSelected()
     return self.selected
 end
 
+---`🔸 Client`<br>
+---Sets the selected button by index
+---@param iButton number @The index of the button
 function PANEL:SetSelected(iButton)
     if not self.buttons[iButton] then return end
     
     self.selected = iButton
-end    
+end
+
+---`🔸 Client`<br>
+---Returns whether the sidebar is expanded
+---@return boolean @Whether the sidebar is expanded
+function PANEL:IsExpanded()
+    return self.expanded
+end
+
+---`🔸 Client`<br>
+---Sets whether the sidebar is expanded
+---@param bExpanded boolean @Whether the sidebar is expanded
+function PANEL:SetExpanded(bExpanded)
+    bExpanded = tobool(bExpanded)
+
+    self.expanded = bExpanded
+    self:SizeTo(bExpanded and self.expanded_width or self.button_height, self:GetTall(), 0.25, 0, 0.5)
+end
+
+---`🔸 Client`<br>
+---Toggles whether the sidebar is expanded
+function PANEL:ToggleExpand()
+    self:SetExpanded(not self:IsExpanded())
+end
 
 function PANEL:Paint(iW, iH)
     surface.SetDrawColor(TLib2.Colors.Base1)
@@ -139,21 +175,6 @@ end
 function PANEL:PaintOver(iW, iH)
     surface.SetDrawColor(TLib2.Colors.Base2)
     surface.DrawLine(iW - 1, 0, iW - 1, iH)
-end
-
-function PANEL:IsExpanded()
-    return self.expanded
-end
-
-function PANEL:SetExpanded(bExpanded)
-    bExpanded = tobool(bExpanded)
-
-    self.expanded = bExpanded
-    self:SizeTo(bExpanded and self.expanded_width or self.button_height, self:GetTall(), 0.25, 0, 0.5)
-end
-
-function PANEL:ToggleExpand()
-    self:SetExpanded(not self:IsExpanded())
 end
 
 vgui.Register("Tlib2:Sidebar", PANEL, "DPanel")

@@ -1,6 +1,7 @@
-local PANEL = {}
-
 local draw = draw
+
+---@class TLib2:Modal : TLib2:Frame
+local PANEL = {}
 
 function PANEL:Init()
     self.lblTitle:SetText("")
@@ -54,18 +55,30 @@ end
 function PANEL:OnRemove()
 end
 
+---`🔸 Client`<br>
+---Sets the FA icon
+---@param sFAIcon string @The FA icon
 function PANEL:SetFAIcon(sFAIcon)
     self.fa_icon = sFAIcon
 end
 
+---`🔸 Client`<br>
+---Sets the title of the modal
+---@param sTitle string @The title
 function PANEL:SetTitle(sTitle)
     self.title:SetText(sTitle)
 end
 
+---`🔸 Client`<br>
+---Sets the subtitle of the modal
+---@param sSubtitle string @The subtitle
 function PANEL:SetSubtitle(sSubtitle)
     self.subtitle:SetText(sSubtitle)
 end
 
+---`🔸 Client`<br>
+---Sets if the modal should show the close button
+---@param bShowCloseButton boolean @Whether to show the close button
 function PANEL:SetShowCloseButton(bShowCloseButton)
     if bShowCloseButton then
         self.close_button:SetVisible(true)
@@ -109,6 +122,9 @@ function PANEL:PerformLayoutInternal(iW, iH)
     end
 end
 
+---`🔸 Client`<br>
+---Adds a separator to the modal
+---@return TLib2:Separator @The separator panel
 function PANEL:AddSeparator()
     local dSeparator = self.content_container:Add("TLib2:Separator")
     dSeparator:Dock(TOP)
@@ -117,6 +133,11 @@ function PANEL:AddSeparator()
     return dSeparator
 end
 
+---`🔸 Client`<br>
+---Adds a button to the modal
+---@param sLabel string @The label of the button
+---@param fnCallback function @The function to call when the button is clicked
+---@return TLib2:Button @The button panel
 function PANEL:AddButton(sLabel, fnCallback)
     local dBtn = self.content_container:Add("TLib2:Button")
     dBtn:SetTall(TLib2.VGUIControlH1)
@@ -132,6 +153,9 @@ function PANEL:AddButton(sLabel, fnCallback)
     return dBtn
 end
 
+---`🔸 Client`<br>
+---Adds a text entry to the modal
+---@return TLib2:TextEntry @The text entry
 function PANEL:AddTextEntry()
     local dTextEntry = self.content_container:Add("TLib2:TextEntry")
     dTextEntry:Dock(TOP)

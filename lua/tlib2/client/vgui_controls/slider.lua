@@ -1,6 +1,7 @@
-local PANEL = {}
-
 local draw = draw
+
+---@class TLib2:Slider : DSlider
+local PANEL = {}
 
 function PANEL:Init()
     local dSlider = self

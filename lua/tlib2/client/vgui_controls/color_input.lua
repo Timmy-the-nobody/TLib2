@@ -1,6 +1,7 @@
-local PANEL = {}
-
 local draw = draw
+
+---@class TLib2:ColorInput : DButton
+local PANEL = {}
 
 function PANEL:Init()
     local dPanel = self
@@ -34,6 +35,8 @@ function PANEL:Init()
     end
 end
 
+---`🔸 Client`<br>
+---Creates the color mixer panel
 function PANEL:CreateColorMixer()
     if self.color_mixer_bg and self.color_mixer_bg:IsValid() then
         self.color_mixer_bg:Remove()
@@ -110,10 +113,16 @@ function PANEL:CreateColorMixer()
     end
 end
 
+---`🔸 Client`<br>
+---Returns the current color of the color input
+---@return Color @The color
 function PANEL:GetColor()
     return self.color
 end
 
+---`🔸 Client`<br>
+---Sets the color of the color input
+---@param oColor Color @The color to use
 function PANEL:SetColor(oColor)
     if not IsColor(oColor) then return end
 
@@ -131,6 +140,16 @@ function PANEL:SetColor(oColor)
     self:InvalidateLayout()
 end
 
+---`🔸 Client`<br>
+---Returns the label of the color input
+---@return string @The text
+function PANEL:GetText()
+    return self.text
+end
+
+---`🔸 Client`<br>
+---Sets the label of the color input
+---@param sText string @The text to use
 function PANEL:SetLabel(sText)
     self.text = sText
 
@@ -144,22 +163,30 @@ function PANEL:SetLabel(sText)
     self:InvalidateLayout()
 end
 
-function PANEL:GetText()
-    return self.text
-end
-
+---`🔸 Client`<br>
+---Returns wether the color input should display an alpha bar
+---@return boolean @Whether the color input should display an alpha bar
 function PANEL:GetAlphaBar()
     return self.alpha_bar
 end
 
+---`🔸 Client`<br>
+---Sets wether the color input should display an alpha bar
+---@param bAlphaBar boolean @Whether the color input should display an alpha bar
 function PANEL:SetAlphaBar(bAlphaBar)
     self.alpha_bar = tobool(bAlphaBar)
 end
 
+---`🔸 Client`<br>
+---Returns the default color of the color input
+---@return Color @The default color
 function PANEL:GetDefaultColor()
     return self.default_color
 end
 
+---`🔸 Client`<br>
+---Sets the default color of the color input
+---@param oColor Color @The default color to use
 function PANEL:SetDefaultColor(oColor)
     if not IsColor(oColor) then
         self.default_color = nil

@@ -1,5 +1,3 @@
-local PANEL = {}
-
 local draw = draw
 local surface = surface
 local TLib2 = TLib2
@@ -35,6 +33,9 @@ local tNotifTypes = {
         end
     }
 }
+
+---@class TLib2:Button : DButton
+local PANEL = {}
 
 function PANEL:Init()
     self:SetAnimationEnabled(false)

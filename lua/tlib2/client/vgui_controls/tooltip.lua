@@ -81,6 +81,7 @@ local tAnchorDirs = {
     end
 }
 
+---@class TLib2:Tooltip : DPanel
 local PANEL = {}
 
 local draw = draw
@@ -143,6 +144,8 @@ function PANEL:Paint(iW, iH)
     end
 end
 
+---`🔸 Client`<br>
+---Updates the tooltip markupn, you shouldn't have to call this manually
 function PANEL:UpdateMarkup()
     local sFont = self:GetFont()
     local sTextCol = tostring(self:GetTextColor())
@@ -154,28 +157,44 @@ function PANEL:UpdateMarkup()
     self:SetSize(iW + TLib2.Padding3, iH + TLib2.Padding4)
 end
 
+---`🔸 Client`<br>
+---Returns the font of the tooltip
+---@return string @Font name
 function PANEL:GetFont()
     return self.font or "TLib2.7"
 end
 
+---`🔸 Client`<br>
+---Sets the font of the tooltip
+---@param sFont string @Font name
 function PANEL:SetFont(sFont)
     self.font = sFont
     self:UpdateMarkup()
 end
 
+---`🔸 Client`<br>
+---Returns the text color of the tooltip
+---@return Color @Text color
 function PANEL:GetTextColor()
     return self.text_col or TLib2.Colors.Base4
 end
 
+---`🔸 Client`<br>
+---Sets the text color of the tooltip
+---@param oCol Color @Text color
 function PANEL:SetTextColor(oCol)
     self.text_col = oCol
     self:UpdateMarkup()
 end
 
+---`🔸 Client`<br>
+---Returns the text of the tooltip
 function PANEL:GetText()
     return self.text or ""
 end
 
+---`🔸 Client`<br>
+---Sets the text of the tooltip
 function PANEL:SetText(sText)
     self.text = sText
     self:UpdateMarkup()

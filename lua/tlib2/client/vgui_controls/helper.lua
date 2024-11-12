@@ -3,6 +3,7 @@ local surface = surface
 local draw = draw
 local math = math
 
+---@class TLib2:Helper : DPanel
 local PANEL = {}
 
 function PANEL:Init()
@@ -15,10 +16,16 @@ function PANEL:Init()
     self.hover_approach = 0
 end
 
+---`🔸 Client`<br>
+---Returns the helper text
+---@return string @Helper text to display when hovered
 function PANEL:GetHelperText()
     return self.helper_text
 end
 
+---`🔸 Client`<br>
+---Sets the helper text
+---@param sText string @Helper text to display when hovered
 function PANEL:SetHelperText(sText)
     if (type(sText) ~= "string") then
         self.helper_text = ""
@@ -30,10 +37,16 @@ function PANEL:SetHelperText(sText)
     TLib2.SetTooltip(self, sText)
 end
 
+---`🔸 Client`<br>
+---Returns the FA icon of the helper button
+---@return string @FA icon
 function PANEL:GetFAIcon()
     return self.fa_icon
 end
 
+---`🔸 Client`<br>
+---Sets the FA icon of the helper button
+---@param sFAIcon string @FA icon
 function PANEL:SetFAIcon(sFAIcon)
     if (type(sFAIcon) ~= "string") then return end
     self.fa_icon = sFAIcon

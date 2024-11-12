@@ -1,3 +1,4 @@
+---@class TLib2:Separator : DPanel
 local PANEL = {}
 
 function PANEL:Init()

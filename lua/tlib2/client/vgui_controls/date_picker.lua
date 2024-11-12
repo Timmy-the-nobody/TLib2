@@ -5,8 +5,6 @@ local draw = draw
 local ScrW = ScrW
 local ScrH = ScrH
 
-local PANEL = {}
-
 local oSelectedDateCol = TLib2.ColorManip(TLib2.Colors.Accent, 0.5, 0.2)
 
 local tDaysLabels = {
@@ -33,6 +31,9 @@ local tMonthLabels = {
     [11] = "November",
     [12] = "December"
 }
+
+---@class TLib2:DatePicker : TLib2:Button
+local PANEL = {}
 
 function PANEL:Init()
     local iYear, iMonth = TLib2.TimestampToDate(os.time())

@@ -1,9 +1,14 @@
+---@class TLib2:InfoLine : DPanel
 local PANEL = {}
 
 function PANEL:Init()
     self:SetTall(TLib2.VGUIControlH2)
 end
 
+---`🔸 Client`<br>
+---Sets the contents of the info line<br>
+---Supported keys: `text`, `font`, `color`, `alignment`, `dock`, `fa_icon`, `url`, `underline`, `underline_color`
+---@param tContents table @Table of contents to display
 function PANEL:SetContents(tContents)
     self:Clear()
 

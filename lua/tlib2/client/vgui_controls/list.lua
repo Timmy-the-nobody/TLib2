@@ -1,6 +1,7 @@
-local PANEL = {}
-
 local draw = draw
+
+---@class TLib2:List : DPanel
+local PANEL = {}
 
 function PANEL:Init()
     local iScrH = ScrH()

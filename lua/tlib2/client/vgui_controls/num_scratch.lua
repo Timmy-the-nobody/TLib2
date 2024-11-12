@@ -1,10 +1,11 @@
-local PANEL = {}
-
 local surface = surface
 local draw = draw
 local math = math
 
-local matGradU = Material("vgui/gradient-u")
+local matGradU = Material("vgui/gradient-u", "noclamp smooth")
+
+---@class TLib2:NumScratch : DNumberScratch
+local PANEL = {}
 
 function PANEL:DrawNotches(level, x, y, w, h, range, value, min, max)
 	local size = level * self:GetZoom()

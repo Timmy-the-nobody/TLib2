@@ -3,6 +3,7 @@ local draw = draw
 
 local matGradC = Material("gui/center_gradient", "nocull smooth")
 
+---@class TLib2:Pagination : DPanel
 local PANEL = {}
 
 function PANEL:Init()

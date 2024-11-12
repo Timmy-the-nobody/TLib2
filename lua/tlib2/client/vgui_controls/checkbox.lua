@@ -1,7 +1,8 @@
-local PANEL = {}
-
 local draw = draw
 local render = render
+
+---@class TLib2:Checkbox : DCheckBoxLabel
+local PANEL = {}
 
 function PANEL:Init()
     self.rtl = false

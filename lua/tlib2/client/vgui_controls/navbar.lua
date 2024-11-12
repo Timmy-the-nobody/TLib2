@@ -1,9 +1,10 @@
 local iBarH = 2 -- The height of the bar at the top of the navbar
 
 ----------------------------------------------------------------------
--- Sheet Tab
+-- Tab
 ----------------------------------------------------------------------
 
+---@class TLib2:NavbarTab : DButton
 local PANEL = {}
 
 function PANEL:Init()
@@ -15,18 +16,30 @@ function PANEL:Init()
     self.lerp_select = 0
 end
 
+---`🔸 Client`<br>
+---Returns the navbar this tab belongs to
+---@return TLib2:Navbar @The navbar
 function PANEL:GetNavbar()
     return self.navbar
 end
 
+---`🔸 Client`<br>
+---Sets the navbar this tab belongs to, you shouldn't need to call this
+---@param dNavbar TLib2:Navbar @The navbar
 function PANEL:SetNavbar(dNavbar)
     self.navbar = dNavbar
 end
 
+---`🔸 Client`<br>
+---Returns the index of this tab
+---@return number @The index
 function PANEL:GetIndex()
     return self.index or -1
 end
 
+---`🔸 Client`<br>
+---Sets the index of this tab, you shouldn't need to call this
+---@param iIndex number @The index
 function PANEL:SetIndex(iIndex)
     self.index = iIndex
 end
@@ -63,6 +76,7 @@ vgui.Register("TLib2:NavbarTab", PANEL, "DButton")
 -- Sheet
 ----------------------------------------------------------------------
 
+---@class TLib2:Navbar : DPanel
 local PANEL = {}
 
 function PANEL:Init()
@@ -75,10 +89,16 @@ function PANEL:Init()
     self.tabs_container.Paint = nil
 end
 
+---`🔸 Client`<br>
+---Returns the index of the currently selected tab
+---@return number @The index of the currently selected tab
 function PANEL:GetSelected()
     return self.selected
 end
 
+---`🔸 Client`<br>
+---Sets the currently selected tab
+---@param iTab number @The index of the tab
 function PANEL:SetSelected(iTab)
     if not self.tabs[iTab] then return end
 
@@ -105,10 +125,19 @@ function PANEL:SetSelected(iTab)
     self.selected = iTab
 end
 
+---`🔸 Client`<br>
+---Returns a tab by index
+---@param iTab number @The index of the tab
+---@return table @The tab table `{id, label, panel, button}`
 function PANEL:GetTab(iTab)
     return self.tabs[iTab]
 end
 
+---`🔸 Client`<br>
+---Adds a tab to the navbar
+---@param sLabel string @The label of the tab
+---@param dPanel table @The panel of the tab
+---@param bSelected boolean @Whether the tab is selected
 function PANEL:AddTab(sLabel, dPanel, bSelected)
     if not dPanel or not dPanel:IsValid() then
         dPanel = vgui.Create("DPanel")
@@ -147,7 +176,6 @@ function PANEL:PerformLayout(iW, iH)
 end
 
 function PANEL:Paint(iW, iH)
-    -- draw.RoundedBox(TLib2.BorderRadius, 0, 0, iW, iH, TLib2.Colors.Base1)
 end
 
 vgui.Register("TLib2:Navbar", PANEL, "DPanel")

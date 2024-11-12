@@ -1,5 +1,3 @@
-local PANEL = {}
-
 local surface = surface
 
 local matGradD = Material("vgui/gradient-d", "noclamp smooth")
@@ -8,6 +6,9 @@ local fnShadowTex = false
 if tDefaultSkin and tDefaultSkin.tex then
     fnShadowTex = tDefaultSkin.tex.Shadow
 end
+
+---@class TLib2:Frame : DFrame
+local PANEL = {}
 
 function PANEL:Init()
     local dPanel = self

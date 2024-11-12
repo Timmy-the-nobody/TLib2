@@ -69,6 +69,8 @@ function PANEL:SetFAIcon(sFAIcon)
     self:__HandleStyle()
 end
 
+---`🔸 Client`<br>
+---Used internally to handle style updates, you should not need to call this
 function PANEL:__HandleStyle()
     local sVal = self:GetValue() or ""
     if (sVal == "") then
@@ -80,6 +82,13 @@ function PANEL:__HandleStyle()
         self.btn_right:SetMouseInputEnabled(true)
         self.is_empty = false
     end
+end
+
+---`🔸 Client`<br>
+---Sets the visibility of the button
+---@param bVisible boolean @Whether the button should be visible
+function PANEL:SetButtonVisible(bVisible)
+    self.btn_right:SetVisible(bVisible)
 end
 
 function PANEL:OnChange()
@@ -117,10 +126,6 @@ function PANEL:PerformLayout(iW, iH)
     if not self.btn_right or not self.btn_right:IsValid() then return end
 
     self.btn_right:SetWide(iH)
-end
-
-function PANEL:SetButtonVisible(bVisible)
-    self.btn_right:SetVisible(bVisible)
 end
 
 function PANEL:Paint(iW, iH)

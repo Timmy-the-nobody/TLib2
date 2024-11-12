@@ -1,3 +1,4 @@
+---@class TLib2:NumWang : DNumberWang
 local PANEL = {}
 
 function PANEL:Init()
