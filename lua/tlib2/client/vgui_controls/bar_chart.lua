@@ -63,6 +63,10 @@ function PANEL:Init()
     end
 end
 
+---`🔸 Client`<br>
+---Sets the X axis settings<br>
+---Supported settings: `min` (number), `max` (number), `steps` (number), `format_step` (function)
+---@param tAxis table @Table of axis settings
 function PANEL:SetXAxis(tAxis)
     self.x_axis = self.x_axis or {}
     for k, v in pairs(tAxis) do
@@ -70,6 +74,10 @@ function PANEL:SetXAxis(tAxis)
     end
 end
 
+---`🔸 Client`<br>
+---Sets the Y axis settings<br>
+---Supported settings: `visible` (boolean), `labels_enabled` (boolean), `format_value` (function)
+---@param tAxis table @Table of axis settings
 function PANEL:SetYAxis(tAxis)
     self.y_axis = self.y_axis or {}
     for k, v in pairs(tAxis) do
@@ -77,6 +85,11 @@ function PANEL:SetYAxis(tAxis)
     end
 end
 
+---`🔸 Client`<br>
+---Adds data to the chart
+---@param sLabel string @Label of the data
+---@param fValue number @Value of the data
+---@return number @Index of the data
 function PANEL:AddData(sLabel, fValue)
     local iKey = (#self.data + 1)
     self.data[iKey] = {
@@ -137,6 +150,9 @@ function PANEL:AddData(sLabel, fValue)
     return iKey
 end
 
+---`🔸 Client`<br>
+---Removes data from the chart by index
+---@param iKey number @Index of the data
 function PANEL:RemoveData(iKey)
     local tNewData = {}
     for i = 1, #self.data do
