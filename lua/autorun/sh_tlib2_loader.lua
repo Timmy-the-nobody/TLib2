@@ -16,9 +16,7 @@ for i = 1, #tFiles do resource.AddFile("sound/tlib2/"..tFiles[i]) end
 TLib2 = TLib2 or {}
 
 local function requireSH(sPath)
-    if SERVER then
-        AddCSLuaFile(sPath)
-    end
+    if SERVER then AddCSLuaFile(sPath) end
     return include(sPath)
 end
 
@@ -28,12 +26,8 @@ local function requireSV(sPath)
 end
 
 local function requireCL(sPath)
-    if SERVER then
-        AddCSLuaFile(sPath)
-    end
-    if CLIENT then
-        return include(sPath)
-    end
+    if SERVER then AddCSLuaFile(sPath) end
+    if CLIENT then return include(sPath) end
 end
 
 print("[TLib2] Loading...")

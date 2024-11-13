@@ -1,6 +1,7 @@
 local surface = surface
 local draw = draw
 local math = math
+
 local DisableClipping = DisableClipping
 local RealFrameTime = RealFrameTime
 
@@ -92,60 +93,44 @@ end
 ---@return number @Index of the data
 function PANEL:AddData(sLabel, fValue)
     local iKey = (#self.data + 1)
+    local iValueW, iValueH = 0, 0
+    local fApproachW = 0
+    local oHoverCol = TLib2.ColorManip(TLib2.Colors.Accent, 0.8, 0.8)
+    local oHorizontalLineCol = ColorAlpha(TLib2.Colors.Base2, 100)
+
     self.data[iKey] = {
-        label = sLabel,
-        value = fValue,
+        label = (type(sLabel) == "string") and sLabel or "",
+        value = (type(fValue) == "number") and fValue or 0,
         line_panel = self.right:Add("DPanel")
     }
 
-    local dDataLine = self.data[iKey].line_panel
-    dDataLine:Dock(TOP)
-    dDataLine:SetTall(TLib2.VGUIControlH2)
-    dDataLine.Paint = nil
+    local dLine = self.data[iKey].line_panel
+    dLine:Dock(TOP)
+    dLine:SetTall(TLib2.VGUIControlH2)
 
-    local dProgress = dDataLine:Add("DPanel")
-    dProgress:Dock(LEFT)
-    dProgress:DockPadding(0, TLib2.Padding4, 0, TLib2.Padding4)
-    dProgress.approach_w = 0
-    dProgress.bar_h = 0.5
-    dProgress.color_hover = TLib2.ColorManip(TLib2.Colors.Accent, 0.8, 0.8)
+    dLine.Paint = function(_, iW, iH)
+        local bHovered = dLine:IsHovered()
+        local fBarW = iW * (fValue / self.x_axis.max)
+        local fBarH = (iH * 0.5)
 
-    dProgress.PerformLayout = function(_, iW, iH)
-        local iProgressW = self.right:GetWide() * (fValue / self.x_axis.max)
-        if (iW ~= iProgressW) then
-            dProgress:SetWide(math.max(iProgressW, 3))
-        end
-    end
+        fApproachW = math.min(math.Approach(fApproachW, fBarW - 2, RealFrameTime() * 512), (fBarW - 2))
 
-    dDataLine.PerformLayout = function(_, iW, iH)
-        dProgress:InvalidateLayout()
-    end
+        surface.SetDrawColor(oHorizontalLineCol)
+        surface.DrawLine(0, (iH * 0.5), iW, (iH * 0.5))
 
-    local iValueW, iValueH = 0, 0
+        surface.SetDrawColor(bHovered and oHoverCol or TLib2.Colors.Accent)
+        surface.DrawRect(1, (iH - fBarH) * 0.5, fApproachW, fBarH)
 
-    dProgress.Paint = function(_, iW, iH)
-        local bHovered = dProgress:IsHovered()
-        local fBarH = (dProgress.bar_h * iH)
-
-        dProgress.approach_w = math.min(math.Approach(dProgress.approach_w, iW - 2, RealFrameTime() * 512), iW)
-
-        surface.SetDrawColor(bHovered and dProgress.color_hover or TLib2.Colors.Accent)
-        surface.DrawRect(1, (iH - fBarH) * 0.5, dProgress.approach_w, fBarH)
-        
         local bOldClipping = DisableClipping(true)
-            local iInfoX = (dProgress.approach_w)
+            draw.RoundedBox(TLib2.BorderRadius, fApproachW - (iValueW * 0.5), (iH - iValueH) * 0.5, iValueW, iValueH, TLib2.Colors.Base2)
+            draw.RoundedBox(TLib2.BorderRadius - 2, fApproachW - (iValueW * 0.5) + 1, (iH - iValueH) * 0.5 + 1, iValueW - 2, iValueH - 2, TLib2.Colors.Base1)
 
-            draw.RoundedBox(TLib2.BorderRadius, iInfoX - (iValueW * 0.5), (iH - iValueH) * 0.5, iValueW, iValueH, TLib2.Colors.Base2)
-            draw.RoundedBox(TLib2.BorderRadius - 2, iInfoX - (iValueW * 0.5) + 1, (iH - iValueH) * 0.5 + 1, iValueW - 2, iValueH - 2, TLib2.Colors.Base1)
-
-            iValueW, iValueH = draw.SimpleText(self.y_axis.format_value(iKey, fValue), "TLib2.7", iInfoX, (iH * 0.5), TLib2.Colors.Base4, 1, 1)
+            iValueW, iValueH = draw.SimpleText(self.y_axis.format_value(iKey, fValue), "TLib2.7", fApproachW, (iH * 0.5), TLib2.Colors.Base4, 1, 1)
             iValueW = (iValueW + TLib2.Padding3)
 
             draw.SimpleText(sLabel, "TLib2.7", -TLib2.Padding2, (iH * 0.5), bHovered and TLib2.Colors.Base4 or TLib2.Colors.Base3, 2, 1)
         DisableClipping(bOldClipping)
     end
-
-    self:InvalidateLayout()
 
     return iKey
 end
