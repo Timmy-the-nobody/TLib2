@@ -74,12 +74,12 @@ function TLib2.GetMoney(pPlayer)
         return pPlayer:getDarkRPVar("money") or 0
     end
     if nut and pPlayer.GetMoney then
-        return pPlayer:GetMoney()
+        return pPlayer:GetMoney() or 0
     end
     if ix and pPlayer.GetCharacter then
         local eChar = pPlayer:GetCharacter()
         if not eChar or not eChar.GetMoney then return 0 end
-        return eChar:GetMoney()
+        return eChar:GetMoney() or 0
     end
     return 0
 end

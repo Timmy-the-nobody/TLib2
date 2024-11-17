@@ -94,7 +94,7 @@ function TLib2.Blur(dPanel, fAmount)
 
     surface.SetDrawColor(color_white)
     surface.SetMaterial(matBlur)
-    
+
     for i = 1, 3 do
         matBlur:SetFloat("$blur", (i / 3) * fAmount)
         matBlur:Recompute()
