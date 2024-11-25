@@ -66,7 +66,7 @@ function TLib2.GetMinSignedInt(iBitCount)
 end
 
 ---`🔸 Client`<br>`🔹 Server`<br>
----Returns the money of the given player (wrapper for DarkRP, nutscript, and helix)
+---Returns the money of the given player (wrapper for DarkRP, nutscript, helix, and possibly more if there's a `ply:[get/Get]Money` method available)
 ---@param pPlayer Player @The player
 ---@return number
 function TLib2.GetMoney(pPlayer)
@@ -81,11 +81,18 @@ function TLib2.GetMoney(pPlayer)
         if not eChar or not eChar.GetMoney then return 0 end
         return eChar:GetMoney() or 0
     end
+    if (type(pPlayer.getMoney) == "function") then
+        return pPlayer:getMoney() or 0
+    end
+    if (type(pPlayer.GetMoney) == "function") then
+        return pPlayer:GetMoney() or 0
+    end
     return 0
 end
 
 ---`🔸 Client`<br>`🔹 Server`<br>
----Sets the money of the given player (wrapper for DarkRP, nutscript, and helix), does nothing when called on the client
+---Sets the money of the given player (wrapper for DarkRP, nutscript, helix, and possibly more if there's a `ply:[set/Set]Money` method available)<br>
+---This does nothing when called on the client
 ---@param pPlayer Player @The player
 ---@param iMoney number @The money
 function TLib2.SetMoney(pPlayer, iMoney)
@@ -99,15 +106,23 @@ function TLib2.SetMoney(pPlayer, iMoney)
     if ix and pPlayer.GetCharacter then
         local eChar = pPlayer:GetCharacter()
         if not eChar or not eChar.SetMoney then return end
-        eChar:SetMoney(iMoney)
+        return eChar:SetMoney(iMoney)
+    end
+    if (type(pPlayer.setMoney) == "function") then
+        return pPlayer:setMoney(iMoney)
+    end
+    if (type(pPlayer.SetMoney) == "function") then
+        return pPlayer:SetMoney(iMoney)
     end
 end
 
 ---`🔸 Client`<br>`🔹 Server`<br>
----Adds money to the given player (wrapper for DarkRP, nutscript, and helix)
+---Adds money to the given player (wrapper for DarkRP, nutscript, helix, and possibly more if there's a `ply:[add/Add]Money` method available)<br>
+---This does nothing when called on the client
 ---@param pPlayer Player @The player
 ---@param iMoney number @The money
 function TLib2.AddMoney(pPlayer, iMoney)
+    if CLIENT then return end
     if DarkRP then
         return pPlayer:addMoney(iMoney)
     end
@@ -116,6 +131,12 @@ function TLib2.AddMoney(pPlayer, iMoney)
     end
     if ix and pPlayer.GetCharacter then
         return TLib2.SetMoney(pPlayer, TLib2.GetMoney(pPlayer) + iMoney)
+    end
+    if (type(pPlayer.addMoney) == "function") then
+        return pPlayer:addMoney(iMoney)
+    end
+    if (type(pPlayer.AddMoney) == "function") then
+        return pPlayer:AddMoney(iMoney)
     end
 end
 
