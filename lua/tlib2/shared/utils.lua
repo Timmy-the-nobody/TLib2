@@ -24,6 +24,10 @@ function TLib2.GetUsergroupsList(bIgnoreULX, bIgnoreGExtension, bIgnoreXAdmin)
         tGroups = table.GetKeys(xAdmin.Groups)
     end
 
+    if CAMI and CAMI.GetUsergroups then
+        tGroups = table.GetKeys(CAMI.GetUsergroups())
+    end
+
     return tGroups
 end
 
@@ -35,6 +39,7 @@ function TLib2.GetTeamsList()
 
     for iID, tTeam in SortedPairsByMemberValue(team.GetAllTeams(), "Name") do
         if (iID <= 0) or (iID > 1000) then continue end
+
         tTeams[#tTeams + 1] = tTeam
     end
 
