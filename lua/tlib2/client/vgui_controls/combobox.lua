@@ -129,7 +129,7 @@ function PANEL:OpenMenu()
 
     for i = 1, #tOptions do
         local dOption = self.menu.scroll:Add("TLib2:Button")
-        dOption:SetText(tOptions[i].label)
+        dOption:SetText(tOptions[i].label or tostring(tOptions[i]))
         dOption:SetFont("TLib2.7")
         dOption:Dock(TOP)
         dOption:SetContentAlignment(4)
