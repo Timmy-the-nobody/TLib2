@@ -97,10 +97,10 @@ function PANEL:Init()
             surface.SetDrawColor(TLib2.Colors.Base3)
             surface.DrawRect(0, 0, iW, iH)
 
-            TLib2.DrawFAIcon("f2d0", "TLib2.FA.6", (iW * 0.5), (iH * 0.5) + 1, TLib2.Colors.Base0, 1, 1)
-            TLib2.DrawFAIcon("f2d0", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base5, 1, 1)
+            TLib2.DrawFAIcon("f31e", "TLib2.FA.6", (iW * 0.5), (iH * 0.5) + 1, TLib2.Colors.Base0, 1, 1)
+            TLib2.DrawFAIcon("f31e", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base5, 1, 1)
         else
-            TLib2.DrawFAIcon("f2d0", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
+            TLib2.DrawFAIcon("f31e", "TLib2.FA.6", (iW * 0.5), (iH * 0.5), TLib2.Colors.Base3, 1, 1)
         end
     end
     function self.expand_btn:DoClick()

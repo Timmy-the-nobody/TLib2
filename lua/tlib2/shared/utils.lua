@@ -40,7 +40,12 @@ function TLib2.GetTeamsList()
     for iID, tTeam in SortedPairsByMemberValue(team.GetAllTeams(), "Name") do
         if (iID <= 0) or (iID > 1000) then continue end
 
-        tTeams[#tTeams + 1] = tTeam
+        local iInd = #tTeams + 1
+        tTeams[iInd] = tTeam
+
+        if not tTeams[iInd].Name then
+            tTeams[iInd].Name = tTeam.name or tTeam.jobName or tostring(iID)
+        end
     end
 
     return tTeams
