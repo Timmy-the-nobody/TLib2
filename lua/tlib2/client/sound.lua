@@ -51,9 +51,4 @@ function TLib2.FadeAudioChannel(oAudioChannel, fDuration, fEndVol, onFinish)
         local fNewVolume = fStartVol + (fEndVol - fStartVol) * (fElapsed / fDuration)
         oAudioChannel:SetVolume(fNewVolume)
     end)
-
-    local iState = oAudioChannel:GetState()
-    if (iState == GMOD_CHANNEL_STOPPED) or (iState == GMOD_CHANNEL_PAUSED) then
-        oAudioChannel:Play()
-    end
 end
