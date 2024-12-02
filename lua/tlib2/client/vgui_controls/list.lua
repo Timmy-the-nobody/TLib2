@@ -29,7 +29,7 @@ function PANEL:Init()
     self.search_bar:Dock(FILL)
     self.search_bar:DockMargin(0, 0, TLib2.Padding4, 0)
 
-    function self.search_bar:OnValueChange(sValue)
+    self.search_bar.OnValueChange = function(_, sValue)
         sValue = sValue:lower()
 
         for i = 1, #self.lines do
