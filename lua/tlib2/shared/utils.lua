@@ -12,20 +12,28 @@ local type = type
 function TLib2.GetUsergroupsList(bIgnoreULX, bIgnoreGExtension, bIgnoreXAdmin)
     local tGroups = {}
 
+    local function addGroups(tNewGroups)
+        for _, sGroup in ipairs(tNewGroups) do
+            if not table.HasValue(tGroups, sGroup) then
+                tGroups[#tGroups + 1] = sGroup
+            end
+        end
+    end
+
     if not bIgnoreULX and xgui and xgui.data and xgui.data.groups then
-        tGroups = xgui.data.groups
+        addGroups(table.GetKeys(xgui.data.groups))
     end
 
     if not bIgnoreGExtension and GExtension and GExtension.Groups then
-        tGroups = table.GetKeys(GExtension.Groups)
+        addGroups(table.GetKeys(GExtension.Groups))
     end
 
     if not bIgnoreXAdmin and xAdmin and xAdmin.Groups then
-        tGroups = table.GetKeys(xAdmin.Groups)
+        addGroups(table.GetKeys(xAdmin.Groups))
     end
 
     if CAMI and CAMI.GetUsergroups then
-        tGroups = table.GetKeys(CAMI.GetUsergroups())
+        addGroups(table.GetKeys(CAMI.GetUsergroups()))
     end
 
     return tGroups
